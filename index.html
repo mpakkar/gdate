@@ -116,12 +116,6 @@
             stroke-width: 0.4;
         }
 
-        .industrial-building {
-            fill: #2d2d2d;
-            stroke: #3d3d3d;
-            stroke-width: 0.3;
-        }
-
         /* Синие точки */
         .map-point {
             position: absolute;
@@ -134,6 +128,7 @@
             box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.4);
             z-index: 50;
             border: 1.5px solid white;
+            cursor: pointer;
         }
 
         /* Карточки мест */
@@ -151,6 +146,7 @@
             font-size: 0.65rem;
             border: 1px solid #e2e8f0;
             backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
         }
 
         .place-card h3 {
@@ -173,17 +169,11 @@
         }
 
         /* Позиции точек */
-        .point-1 { top: 28%; left: 32%; animation-delay: 0.2s; }
-        .point-2 { top: 45%; left: 58%; animation-delay: 0.7s; }
-        .point-3 { top: 62%; left: 42%; animation-delay: 1.2s; }
-        .point-4 { top: 35%; left: 68%; animation-delay: 1.7s; }
-        .point-5 { top: 72%; left: 28%; animation-delay: 2.2s; }
-        .point-6 { top: 52%; left: 22%; animation-delay: 2.7s; }
-
-        /* Позиции карточек */
-        .card-1 { top: 15%; left: 8%; }
-        .card-2 { top: 38%; right: 6%; }
-        .card-3 { bottom: 12%; left: 8%; }
+        .point-1 { top: 25%; left: 30%; animation-delay: 0.2s; }
+        .point-2 { top: 45%; left: 60%; animation-delay: 0.7s; }
+        .point-3 { top: 65%; left: 40%; animation-delay: 1.2s; }
+        .point-4 { top: 35%; left: 70%; animation-delay: 1.7s; }
+        .point-5 { top: 75%; left: 25%; animation-delay: 2.2s; }
 
         /* Анимации */
         @keyframes pulse {
@@ -223,23 +213,6 @@
             transform: translateY(-2px);
             box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
         }
-
-        /* Адаптивность */
-        @media (max-width: 480px) {
-            .title {
-                font-size: 2.4rem;
-            }
-            
-            .map-animation {
-                width: 300px;
-                height: 300px;
-            }
-            
-            .start-button {
-                padding: 14px 38px;
-                font-size: 1.1rem;
-            }
-        }
     </style>
 </head>
 <body>
@@ -252,194 +225,152 @@
         <div class="map-animation">
             <div class="map-container">
                 <svg width="100%" height="100%" viewBox="0 0 400 400">
-                    <!-- Река, протекающая через город -->
-                    <path class="water" d="M-10,120 Q50,80 120,100 Q200,130 250,90 Q320,60 380,110 Q400,160 380,220 Q350,280 300,300 Q250,320 180,310 Q120,300 80,260 Q50,230 40,180 Q30,140 50,100 L-10,120 Z" />
+                    <!-- Водные объекты -->
+                    <path class="water" d="M50,80 Q120,50 180,70 Q250,100 300,60 Q350,40 380,90 L380,120 Q340,150 300,130 Q250,110 200,140 Q150,170 100,150 Q60,130 50,80 Z" />
+                    <path class="water" d="M20,250 Q80,220 150,240 Q200,260 250,230 Q300,200 350,230 L350,280 Q300,310 250,290 Q200,270 150,300 Q100,330 50,300 Q20,280 20,250 Z" />
                     
-                    <!-- Крупные парковые зоны -->
-                    <path class="park" d="M20,20 L120,20 L120,80 L20,80 Z" />
-                    <path class="park" d="M280,320 L360,320 L360,380 L280,380 Z" />
-                    <path class="park" d="M180,180 Q220,160 260,180 Q280,200 260,220 Q240,240 200,230 Q180,220 180,180 Z" />
+                    <!-- Парковые зоны -->
+                    <path class="park" d="M30,30 L120,30 L120,100 L30,100 Z" />
+                    <path class="park" d="M280,300 L360,300 L360,370 L280,370 Z" />
+                    <path class="park" d="M200,180 Q240,160 280,180 Q300,200 280,220 Q250,240 200,230 Q180,220 200,180 Z" />
+                    <path class="park" d="M150,320 L230,320 L230,380 L150,380 Z" />
                     
-                    <!-- Основная дорожная сеть -->
-                    <!-- Главные магистрали (выходят за пределы карты) -->
-                    <path class="main-road" d="M-10,200 L410,200" />
-                    <path class="main-road" d="M200,-10 L200,410" />
-                    <path class="main-road" d="M-10,80 L150,80 L200,120 L250,80 L410,80" />
-                    <path class="main-road" d="M-10,320 L100,320 L150,280 L250,280 L300,320 L410,320" />
+                    <!-- Дорожная сеть -->
+                    <!-- Главные дороги -->
+                    <path class="main-road" d="M0,200 L400,200" />
+                    <path class="main-road" d="M200,0 L200,400" />
+                    <path class="main-road" d="M50,50 L150,150 L250,50 L350,150" />
+                    <path class="main-road" d="M50,350 L150,250 L250,350 L350,250" />
                     
                     <!-- Второстепенные дороги -->
-                    <path class="secondary-road" d="M50,0 L50,400" />
                     <path class="secondary-road" d="M100,0 L100,400" />
-                    <path class="secondary-road" d="M150,0 L150,400" />
-                    <path class="secondary-road" d="M250,0 L250,400" />
                     <path class="secondary-road" d="M300,0 L300,400" />
-                    <path class="secondary-road" d="M350,0 L350,400" />
-                    
-                    <path class="secondary-road" d="M0,50 L400,50" />
                     <path class="secondary-road" d="M0,100 L400,100" />
-                    <path class="secondary-road" d="M0,150 L400,150" />
-                    <path class="secondary-road" d="M0,250 L400,250" />
                     <path class="secondary-road" d="M0,300 L400,300" />
-                    <path class="secondary-road" d="M0,350 L400,350" />
+                    <path class="secondary-road" d="M50,150 L350,150" />
+                    <path class="secondary-road" d="M50,250 L350,250" />
                     
-                    <!-- Диагональные дороги для лучшей связности -->
-                    <path class="secondary-road" d="M0,0 L400,400" />
-                    <path class="secondary-road" d="M400,0 L0,400" />
-                    <path class="secondary-road" d="M0,100 L300,400" />
-                    <path class="secondary-road" d="M100,0 L400,300" />
+                    <!-- Жилые здания -->
+                    <!-- Квартал 1 -->
+                    <rect class="residential-building" x="20" y="20" width="25" height="15" transform="rotate(15,32.5,27.5)" />
+                    <rect class="residential-building" x="50" y="25" width="20" height="12" transform="rotate(-10,60,31)" />
+                    <rect class="residential-building" x="75" y="20" width="22" height="14" transform="rotate(5,86,27)" />
+                    <rect class="residential-building" x="20" y="40" width="18" height="11" transform="rotate(-15,29,45.5)" />
+                    <rect class="residential-building" x="45" y="42" width="24" height="16" transform="rotate(20,57,50)" />
+                    <rect class="residential-building" x="75" y="38" width="20" height="13" transform="rotate(-5,85,44.5)" />
                     
-                    <!-- Жилые районы -->
-                    <!-- Квартал 1 (северо-запад) -->
-                    <rect class="residential-building" x="10" y="10" width="25" height="15" transform="rotate(2,22.5,17.5)" />
-                    <rect class="residential-building" x="40" y="10" width="20" height="12" transform="rotate(-1,50,16)" />
-                    <rect class="residential-building" x="65" y="10" width="18" height="14" transform="rotate(3,74,17)" />
-                    <rect class="residential-building" x="88" y="10" width="22" height="16" transform="rotate(-2,99,18)" />
+                    <!-- Квартал 2 -->
+                    <rect class="residential-building" x="120" y="20" width="23" height="14" transform="rotate(-20,131.5,27)" />
+                    <rect class="residential-building" x="150" y="25" width="19" height="12" transform="rotate(25,159.5,31)" />
+                    <rect class="residential-building" x="175" y="20" width="21" height="13" transform="rotate(-15,185.5,26.5)" />
+                    <rect class="residential-building" x="120" y="42" width="25" height="16" transform="rotate(10,132.5,50)" />
+                    <rect class="residential-building" x="150" y="40" width="17" height="11" transform="rotate(-25,158.5,45.5)" />
+                    <rect class="residential-building" x="175" y="38" width="22" height="14" transform="rotate(15,186,45)" />
                     
-                    <rect class="residential-building" x="10" y="30" width="24" height="14" transform="rotate(1,22,37)" />
-                    <rect class="residential-building" x="39" y="28" width="19" height="13" transform="rotate(-3,48.5,34.5)" />
-                    <rect class="residential-building" x="63" y="30" width="21" height="15" transform="rotate(2,73.5,37.5)" />
-                    <rect class="residential-building" x="89" y="32" width="17" height="12" transform="rotate(-1,97.5,38)" />
+                    <!-- Квартал 3 -->
+                    <rect class="residential-building" x="20" y="120" width="26" height="16" transform="rotate(30,33,128)" />
+                    <rect class="residential-building" x="50" y="125" width="21" height="13" transform="rotate(-30,60.5,131.5)" />
+                    <rect class="residential-building" x="75" y="120" width="19" height="12" transform="rotate(35,84.5,126)" />
+                    <rect class="residential-building" x="20" y="142" width="23" height="14" transform="rotate(-35,31.5,149)" />
+                    <rect class="residential-building" x="45" y="145" width="24" height="15" transform="rotate(40,57,152.5)" />
+                    <rect class="residential-building" x="75" y="140" width="20" height="13" transform="rotate(-40,85,146.5)" />
                     
-                    <rect class="residential-building" x="10" y="50" width="26" height="16" transform="rotate(-2,23,58)" />
-                    <rect class="residential-building" x="41" y="48" width="18" height="14" transform="rotate(1,50,55)" />
-                    <rect class="residential-building" x="64" y="50" width="22" height="15" transform="rotate(-3,75,57.5)" />
-                    <rect class="residential-building" x="91" y="52" width="19" height="13" transform="rotate(2,100.5,58.5)" />
+                    <!-- Квартал 4 -->
+                    <rect class="residential-building" x="120" y="120" width="22" height="14" transform="rotate(45,131,127)" />
+                    <rect class="residential-building" x="150" y="125" width="18" height="11" transform="rotate(-45,159,130.5)" />
+                    <rect class="residential-building" x="175" y="120" width="25" height="16" transform="rotate(50,187.5,128)" />
+                    <rect class="residential-building" x="120" y="145" width="20" height="13" transform="rotate(-50,130,151.5)" />
+                    <rect class="residential-building" x="145" y="142" width="23" height="14" transform="rotate(55,156.5,149)" />
+                    <rect class="residential-building" x="175" y="140" width="19" height="12" transform="rotate(-55,184.5,146)" />
                     
-                    <!-- Квартал 2 (северо-восток) -->
-                    <rect class="residential-building" x="210" y="10" width="23" height="14" transform="rotate(-1,221.5,17)" />
-                    <rect class="residential-building" x="238" y="10" width="20" height="16" transform="rotate(2,248,18)" />
-                    <rect class="residential-building" x="263" y="10" width="25" height="15" transform="rotate(-3,275.5,17.5)" />
-                    <rect class="residential-building" x="293" y="10" width="22" height="13" transform="rotate(1,304,16.5)" />
+                    <!-- Коммерческие здания -->
+                    <rect class="commercial-building" x="220" y="30" width="35" height="25" transform="rotate(10,237.5,42.5)" />
+                    <rect class="commercial-building" x="260" y="25" width="30" height="22" transform="rotate(-15,275,36)" />
+                    <rect class="commercial-building" x="300" y="30" width="32" height="24" transform="rotate(20,316,42)" />
+                    <rect class="commercial-building" x="340" y="25" width="28" height="20" transform="rotate(-25,354,35)" />
                     
-                    <rect class="residential-building" x="210" y="32" width="21" height="15" transform="rotate(3,220.5,39.5)" />
-                    <rect class="residential-building" x="236" y="30" width="24" height="14" transform="rotate(-2,248,37)" />
-                    <rect class="residential-building" x="265" y="32" width="19" height="12" transform="rotate(1,274.5,38)" />
-                    <rect class="residential-building" x="289" y="30" width="26" height="16" transform="rotate(-3,302,38)" />
+                    <rect class="commercial-building" x="220" y="60" width="33" height="23" transform="rotate(5,236.5,71.5)" />
+                    <rect class="commercial-building" x="260" y="55" width="29" height="21" transform="rotate(-20,274.5,65.5)" />
+                    <rect class="commercial-building" x="300" y="60" width="31" height="22" transform="rotate(15,315.5,71)" />
+                    <rect class="commercial-building" x="340" y="55" width="27" height="19" transform="rotate(-10,353.5,64.5)" />
                     
-                    <rect class="residential-building" x="210" y="52" width="25" height="15" transform="rotate(-2,222.5,59.5)" />
-                    <rect class="residential-building" x="240" y="50" width="20" height="14" transform="rotate(1,250,57)" />
-                    <rect class="residential-building" x="265" y="52" width="23" height="16" transform="rotate(3,276.5,60)" />
-                    <rect class="residential-building" x="293" y="50" width="21" height="13" transform="rotate(-1,303.5,56.5)" />
-                    
-                    <!-- Квартал 3 (юго-запад) -->
-                    <rect class="residential-building" x="10" y="210" width="22" height="14" transform="rotate(1,21,217)" />
-                    <rect class="residential-building" x="37" y="210" width="19" height="13" transform="rotate(-3,46.5,216.5)" />
-                    <rect class="residential-building" x="61" y="210" width="24" height="15" transform="rotate(2,73,217.5)" />
-                    <rect class="residential-building" x="90" y="210" width="20" height="12" transform="rotate(-1,100,216)" />
-                    
-                    <rect class="residential-building" x="10" y="230" width="25" height="16" transform="rotate(-2,22.5,238)" />
-                    <rect class="residential-building" x="40" y="230" width="21" height="14" transform="rotate(1,50.5,237)" />
-                    <rect class="residential-building" x="66" y="230" width="18" height="13" transform="rotate(3,75,236.5)" />
-                    <rect class="residential-building" x="89" y="230" width="23" height="15" transform="rotate(-2,100.5,237.5)" />
-                    
-                    <rect class="residential-building" x="10" y="250" width="20" height="12" transform="rotate(1,20,256)" />
-                    <rect class="residential-building" x="35" y="250" width="24" height="16" transform="rotate(-3,47,258)" />
-                    <rect class="residential-building" x="64" y="250" width="21" height="14" transform="rotate(2,74.5,257)" />
-                    <rect class="residential-building" x="90" y="250" width="19" height="13" transform="rotate(-1,99.5,256.5)" />
-                    
-                    <!-- Квартал 4 (юго-восток) -->
-                    <rect class="residential-building" x="210" y="210" width="23" height="15" transform="rotate(-1,221.5,217.5)" />
-                    <rect class="residential-building" x="238" y="210" width="20" height="13" transform="rotate(2,248,216.5)" />
-                    <rect class="residential-building" x="263" y="210" width="25" height="16" transform="rotate(-3,275.5,218)" />
-                    <rect class="residential-building" x="293" y="210" width="22" height="14" transform="rotate(1,304,217)" />
-                    
-                    <rect class="residential-building" x="210" y="235" width="21" height="14" transform="rotate(3,220.5,242)" />
-                    <rect class="residential-building" x="236" y="235" width="24" height="15" transform="rotate(-2,248,242.5)" />
-                    <rect class="residential-building" x="265" y="235" width="19" height="12" transform="rotate(1,274.5,241)" />
-                    <rect class="residential-building" x="289" y="235" width="26" height="16" transform="rotate(-3,302,243)" />
-                    
-                    <rect class="residential-building" x="210" y="260" width="25" height="15" transform="rotate(-2,222.5,267.5)" />
-                    <rect class="residential-building" x="240" y="260" width="20" height="14" transform="rotate(1,250,267)" />
-                    <rect class="residential-building" x="265" y="260" width="23" height="16" transform="rotate(3,276.5,268)" />
-                    <rect class="residential-building" x="293" y="260" width="21" height="13" transform="rotate(-1,303.5,266.5)" />
-                    
-                    <!-- Центральный коммерческий район -->
-                    <!-- Левый берег реки -->
-                    <rect class="commercial-building" x="120" y="50" width="35" height="25" transform="rotate(1,137.5,62.5)" />
-                    <rect class="commercial-building" x="160" y="50" width="30" height="22" transform="rotate(-2,175,61)" />
-                    <rect class="large-building" x="120" y="80" width="40" height="30" transform="rotate(-1,140,95)" />
-                    <rect class="commercial-building" x="165" y="80" width="32" height="24" transform="rotate(2,181,92)" />
-                    
-                    <!-- Правый берег реки -->
-                    <rect class="commercial-building" x="240" y="50" width="33" height="24" transform="rotate(-1,256.5,62)" />
-                    <rect class="large-building" x="278" y="50" width="38" height="28" transform="rotate(2,297,64)" />
-                    <rect class="commercial-building" x="240" y="85" width="35" height="26" transform="rotate(1,257.5,98)" />
-                    <rect class="commercial-building" x="280" y="85" width="31" height="23" transform="rotate(-2,295.5,96.5)" />
-                    
-                    <!-- Центральный район между мостами -->
-                    <rect class="large-building" x="170" y="130" width="45" height="35" transform="rotate(1,192.5,147.5)" />
-                    <rect class="commercial-building" x="220" y="130" width="40" height="30" transform="rotate(-1,240,145)" />
-                    <rect class="large-building" x="170" y="170" width="42" height="32" transform="rotate(-2,191,186)" />
-                    <rect class="commercial-building" x="217" y="170" width="38" height="28" transform="rotate(1,236,184)" />
-                    
-                    <!-- Южный коммерческий район -->
-                    <rect class="commercial-building" x="120" y="250" width="34" height="26" transform="rotate(2,137,263)" />
-                    <rect class="large-building" x="159" y="250" width="41" height="31" transform="rotate(-1,179.5,265.5)" />
-                    <rect class="commercial-building" x="205" y="250" width="36" height="27" transform="rotate(1,223,263.5)" />
-                    <rect class="large-building" x="246" y="250" width="39" height="29" transform="rotate(-2,265.5,264.5)" />
-                    <rect class="commercial-building" x="290" y="250" width="33" height="25" transform="rotate(1,306.5,262.5)" />
-                    
-                    <!-- Промышленная зона (север) -->
-                    <rect class="industrial-building" x="20" y="120" width="50" height="40" transform="rotate(-1,45,140)" />
-                    <rect class="industrial-building" x="75" y="120" width="45" height="35" transform="rotate(2,97.5,137.5)" />
-                    
-                    <!-- Промышленная зона (юг) -->
-                    <rect class="industrial-building" x="320" y="120" width="48" height="36" transform="rotate(1,344,138)" />
-                    <rect class="industrial-building" x="320" y="165" width="52" height="38" transform="rotate(-2,346,184)" />
-                    
-                    <!-- Крупные общественные здания -->
-                    <rect class="large-building" x="50" y="280" width="55" height="40" transform="rotate(1,77.5,300)" />
-                    <rect class="large-building" x="290" y="280" width="60" height="42" transform="rotate(-1,320,301)" />
-                    <rect class="large-building" x="160" y="290" width="65" height="45" transform="rotate(2,192.5,312.5)" />
-                    
-                    <!-- Мелкие здания для заполнения пространства -->
-                    <!-- Северный район -->
-                    <rect class="residential-building" x="130" y="10" width="18" height="12" transform="rotate(1,139,16)" />
-                    <rect class="residential-building" x="150" y="10" width="16" height="11" transform="rotate(-2,158,15.5)" />
-                    <rect class="residential-building" x="170" y="10" width="19" height="13" transform="rotate(3,179.5,16.5)" />
+                    <!-- Крупные здания -->
+                    <rect class="large-building" x="250" y="120" width="45" height="35" transform="rotate(5,272.5,137.5)" />
+                    <rect class="large-building" x="305" y="120" width="40" height="30" transform="rotate(-5,325,135)" />
+                    <rect class="large-building" x="250" y="165" width="42" height="32" transform="rotate(10,271,181)" />
+                    <rect class="large-building" x="305" y="160" width="38" height="28" transform="rotate(-10,324,174)" />
                     
                     <!-- Южный район -->
-                    <rect class="residential-building" x="130" y="370" width="20" height="14" transform="rotate(-1,140,377)" />
-                    <rect class="residential-building" x="155" y="370" width="17" height="12" transform="rotate(2,163.5,376)" />
-                    <rect class="residential-building" x="175" y="370" width="19" height="13" transform="rotate(-3,184.5,376.5)" />
-                    <rect class="residential-building" x="200" y="370" width="18" height="12" transform="rotate(1,209,376)" />
+                    <rect class="residential-building" x="20" y="220" width="24" height="15" transform="rotate(15,32,227.5)" />
+                    <rect class="residential-building" x="50" y="225" width="19" height="12" transform="rotate(-15,59.5,231)" />
+                    <rect class="residential-building" x="75" y="220" width="22" height="14" transform="rotate(20,86,227)" />
+                    <rect class="residential-building" x="20" y="242" width="18" height="11" transform="rotate(-20,29,247.5)" />
+                    <rect class="residential-building" x="45" y="245" width="25" height="16" transform="rotate(25,57.5,253)" />
+                    <rect class="residential-building" x="75" y="240" width="20" height="13" transform="rotate(-25,85,246.5)" />
                     
-                    <!-- Западный район -->
-                    <rect class="residential-building" x="10" y="130" width="16" height="11" transform="rotate(2,18,135.5)" />
-                    <rect class="residential-building" x="10" y="150" width="18" height="12" transform="rotate(-1,19,156)" />
-                    <rect class="residential-building" x="10" y="170" width="15" height="10" transform="rotate(3,17.5,175)" />
+                    <rect class="residential-building" x="120" y="220" width="23" height="14" transform="rotate(30,131.5,227)" />
+                    <rect class="residential-building" x="150" y="225" width="21" height="13" transform="rotate(-30,160.5,231.5)" />
+                    <rect class="residential-building" x="175" y="220" width="26" height="16" transform="rotate(35,188,228)" />
+                    <rect class="residential-building" x="120" y="245" width="20" height="13" transform="rotate(-35,130,251.5)" />
+                    <rect class="residential-building" x="145" y="242" width="24" height="15" transform="rotate(40,157,249.5)" />
+                    <rect class="residential-building" x="175" y="240" width="19" height="12" transform="rotate(-40,184.5,246)" />
                     
-                    <!-- Восточный район -->
-                    <rect class="residential-building" x="370" y="130" width="17" height="12" transform="rotate(-2,378.5,136)" />
-                    <rect class="residential-building" x="370" y="150" width="19" height="13" transform="rotate(1,379.5,156.5)" />
-                    <rect class="residential-building" x="370" y="170" width="16" height="11" transform="rotate(-3,378,175.5)" />
+                    <!-- Промышленная зона -->
+                    <rect class="large-building" x="220" y="220" width="50" height="40" transform="rotate(5,245,240)" />
+                    <rect class="large-building" x="280" y="220" width="45" height="35" transform="rotate(-5,302.5,237.5)" />
+                    <rect class="large-building" x="220" y="270" width="48" height="36" transform="rotate(10,244,288)" />
+                    <rect class="large-building" x="280" y="265" width="42" height="32" transform="rotate(-10,301,281)" />
+                    
+                    <!-- Дополнительные здания для заполнения -->
+                    <rect class="residential-building" x="320" y="220" width="22" height="14" transform="rotate(15,331,227)" />
+                    <rect class="residential-building" x="350" y="225" width="18" height="11" transform="rotate(-15,359,230.5)" />
+                    <rect class="residential-building" x="320" y="242" width="25" height="16" transform="rotate(20,332.5,250)" />
+                    <rect class="residential-building" x="350" y="240" width="20" height="13" transform="rotate(-20,360,246.5)" />
+                    
+                    <rect class="residential-building" x="20" y="320" width="23" height="14" transform="rotate(25,31.5,327)" />
+                    <rect class="residential-building" x="50" y="325" width="19" height="12" transform="rotate(-25,59.5,331)" />
+                    <rect class="residential-building" x="75" y="320" width="21" height="13" transform="rotate(30,85.5,326.5)" />
+                    <rect class="residential-building" x="20" y="342" width="18" height="11" transform="rotate(-30,29,347.5)" />
+                    <rect class="residential-building" x="45" y="345" width="24" height="15" transform="rotate(35,57,352.5)" />
+                    <rect class="residential-building" x="75" y="340" width="20" height="13" transform="rotate(-35,85,346.5)" />
                 </svg>
 
                 <!-- Синие точки мест -->
-                <div class="map-point point-1"></div>
-                <div class="map-point point-2"></div>
-                <div class="map-point point-3"></div>
-                <div class="map-point point-4"></div>
-                <div class="map-point point-5"></div>
-                <div class="map-point point-6"></div>
+                <div class="map-point point-1" onclick="showCard(0)"></div>
+                <div class="map-point point-2" onclick="showCard(1)"></div>
+                <div class="map-point point-3" onclick="showCard(2)"></div>
+                <div class="map-point point-4" onclick="showCard(3)"></div>
+                <div class="map-point point-5" onclick="showCard(4)"></div>
 
                 <!-- Карточки мест -->
-                <div class="place-card card-1">
+                <div class="place-card" id="card-0" style="top: 15%; left: 8%;">
                     <h3>🍝 Итальянский ресторан</h3>
                     <p>Паста и вино</p>
                     <p class="rating">⭐ 4.7</p>
                 </div>
                 
-                <div class="place-card card-2">
+                <div class="place-card" id="card-1" style="top: 38%; right: 6%;">
                     <h3>☕ Кофейня "Уют"</h3>
                     <p>Свежая выпечка</p>
                     <p class="rating">⭐ 4.8</p>
                 </div>
                 
-                <div class="place-card card-3">
+                <div class="place-card" id="card-2" style="bottom: 12%; left: 8%;">
                     <h3>🎨 Галерея искусств</h3>
                     <p>Современное искусство</p>
                     <p class="rating">⭐ 4.6</p>
+                </div>
+
+                <div class="place-card" id="card-3" style="top: 25%; right: 8%;">
+                    <h3>🏛️ Музей истории</h3>
+                    <p>Исторические экспонаты</p>
+                    <p class="rating">⭐ 4.5</p>
+                </div>
+
+                <div class="place-card" id="card-4" style="bottom: 25%; right: 8%;">
+                    <h3>🍦 Кафе-мороженое</h3>
+                    <p>Домашние десерты</p>
+                    <p class="rating">⭐ 4.9</p>
                 </div>
             </div>
         </div>
@@ -461,40 +392,36 @@
                 message: 'Ищем интересные места поблизости...',
                 buttons: [{ type: 'ok' }]
             });
+        }
+
+        let currentCard = 0;
+        const cards = document.querySelectorAll('.place-card');
+
+        function showCard(cardIndex) {
+            // Скрываем все карточки
+            cards.forEach(card => {
+                card.style.animation = 'hideCard 0.3s forwards';
+            });
             
+            // Показываем выбранную карточку
             setTimeout(() => {
-                showMap();
-            }, 2000);
+                cards[cardIndex].style.animation = 'showCard 0.5s forwards';
+            }, 300);
         }
 
-        function showMap() {
-            Telegram.WebApp.showAlert('Интерактивная карта скоро будет доступна!');
+        // Автоматическая анимация карточек
+        function autoAnimateCards() {
+            showCard(currentCard);
+            currentCard = (currentCard + 1) % cards.length;
         }
 
-        // Анимация карточек мест
-        function animatePlaces() {
-            const cards = document.querySelectorAll('.place-card');
-            let currentCard = 0;
-            
-            function showNextCard() {
-                cards.forEach(card => {
-                    card.style.animation = 'hideCard 0.5s forwards';
-                });
-                
-                if (cards[currentCard]) {
-                    cards[currentCard].style.animation = 'showCard 0.8s forwards';
-                }
-                
-                currentCard = (currentCard + 1) % cards.length;
-            }
-            
-            showNextCard();
-            setInterval(showNextCard, 3000);
-        }
+        // Запускаем автоматическую анимацию каждые 3 секунды
+        setInterval(autoAnimateCards, 3000);
 
         window.onload = function() {
             initTelegram();
-            animatePlaces();
+            // Начинаем анимацию через секунду после загрузки
+            setTimeout(autoAnimateCards, 1000);
         };
     </script>
 </body>
