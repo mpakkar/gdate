@@ -169,6 +169,13 @@
             border: 2px solid rgba(102, 126, 234, 0.25);
             width: 100%;
             max-width: 280px;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .start-button.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .start-button:hover {
@@ -277,16 +284,23 @@
             console.log("Приложение запущено");
         }
 
-        // Функция для последовательного появления карточек
+        // Функция для последовательного появления карточек и кнопки
         function animateCards() {
             const cards = document.querySelectorAll('.profile-card');
+            const button = document.querySelector('.start-button');
             let delay = 300;
             
+            // Анимируем карточки
             cards.forEach((card, index) => {
                 setTimeout(() => {
                     card.classList.add('visible');
                 }, delay * index);
             });
+            
+            // Анимируем кнопку после всех карточек
+            setTimeout(() => {
+                button.classList.add('visible');
+            }, delay * cards.length + 200);
         }
 
         window.onload = function() {
