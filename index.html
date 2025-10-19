@@ -53,182 +53,118 @@
             color: #cccccc;
         }
 
-        /* Новая стильная карта */
-        .floating-islands {
-            position: relative;
-            width: 340px;
-            height: 340px;
-            margin: 20px auto;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 
-                0 15px 35px rgba(0,0,0,0.5),
-                inset 0 0 0 1px rgba(255,255,255,0.1);
-            background: linear-gradient(160deg, #0f1b33 0%, #1d2b45 100%);
-            perspective: 1000px;
+        /* Контейнер для профилей */
+        .profiles-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 400px;
+            margin: 20px 0;
         }
 
-        .island {
-            position: absolute;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #2d3748, #4a5568);
-            box-shadow: 
-                0 10px 25px rgba(0,0,0,0.3),
-                inset 0 -5px 10px rgba(0,0,0,0.2);
-            transition: all 0.5s ease;
-            cursor: pointer;
-            border: 2px solid rgba(255,255,255,0.1);
-        }
-
-        .island::before {
-            content: '';
-            position: absolute;
-            top: 10%;
-            left: 20%;
-            width: 30%;
-            height: 20%;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            filter: blur(5px);
-        }
-
-        .island-1 {
-            width: 80px;
-            height: 80px;
-            top: 20%;
-            left: 25%;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .island-2 {
-            width: 100px;
-            height: 100px;
-            top: 50%;
-            left: 60%;
-            animation: float 8s ease-in-out infinite 1s;
-        }
-
-        .island-3 {
-            width: 70px;
-            height: 70px;
-            top: 65%;
-            left: 30%;
-            animation: float 7s ease-in-out infinite 0.5s;
-        }
-
-        .island-4 {
-            width: 90px;
-            height: 90px;
-            top: 35%;
-            left: 70%;
-            animation: float 9s ease-in-out infinite 1.5s;
-        }
-
-        .island-5 {
-            width: 85px;
-            height: 85px;
-            top: 75%;
-            left: 15%;
-            animation: float 7.5s ease-in-out infinite 2s;
-        }
-
-        /* Соединительные линии */
-        .connection {
-            position: absolute;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #667eea, transparent);
-            transform-origin: left center;
-            opacity: 0.6;
-            filter: blur(0.5px);
-        }
-
-        /* Точки интереса */
-        .interest-point {
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            box-shadow: 
-                0 0 20px rgba(102, 126, 234, 0.6),
-                0 0 40px rgba(102, 126, 234, 0.3);
-            cursor: pointer;
-            z-index: 10;
-            border: 2px solid white;
-            animation: glow 2s ease-in-out infinite alternate;
-            transition: all 0.3s ease;
-        }
-
-        .interest-point:hover {
-            transform: scale(1.3);
-            box-shadow: 
-                0 0 30px rgba(102, 126, 234, 0.8),
-                0 0 60px rgba(102, 126, 234, 0.4);
-        }
-
-        .point-1 { top: 25%; left: 30%; }
-        .point-2 { top: 45%; left: 60%; }
-        .point-3 { top: 65%; left: 40%; }
-        .point-4 { top: 35%; left: 70%; }
-        .point-5 { top: 75%; left: 25%; }
-
-        /* Карточки мест */
-        .place-card {
-            position: absolute;
+        /* Мини-профили */
+        .profile-card {
             background: rgba(255, 255, 255, 0.95);
-            color: #2d3748;
-            padding: 12px;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            min-width: 150px;
-            transform: scale(0) translateY(20px);
-            opacity: 0;
-            z-index: 100;
-            font-size: 0.75rem;
-            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.2);
             backdrop-filter: blur(10px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
 
-        .place-card h3 {
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .profile-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .profile-1 .profile-icon { background: linear-gradient(45deg, #ff6b6b, #ee5a52); }
+        .profile-2 .profile-icon { background: linear-gradient(45deg, #48dbfb, #0abde3); }
+        .profile-3 .profile-icon { background: linear-gradient(45deg, #1dd1a1, #10ac84); }
+
+        .profile-info {
+            text-align: left;
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+
+        .profile-category {
             font-size: 0.85rem;
-            margin-bottom: 5px;
-            color: #2b6cb0;
+            color: #718096;
         }
 
-        .place-card p {
-            font-size: 0.7rem;
-            opacity: 0.8;
-            margin-bottom: 3px;
-            color: #4a5568;
+        .profile-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
         }
 
-        .place-card .rating {
+        .profile-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
             color: #d69e2e;
             font-weight: bold;
-            font-size: 0.7rem;
+            font-size: 0.9rem;
         }
 
-        /* Анимации */
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(1deg); }
+        .profile-price {
+            font-size: 0.85rem;
+            color: #718096;
+            background: rgba(113, 128, 150, 0.1);
+            padding: 4px 8px;
+            border-radius: 8px;
         }
 
-        @keyframes glow {
-            0% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.6), 0 0 40px rgba(102, 126, 234, 0.3); }
-            100% { box-shadow: 0 0 25px rgba(102, 126, 234, 0.8), 0 0 50px rgba(102, 126, 234, 0.4); }
+        .profile-features {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
         }
 
-        @keyframes showCard {
-            0% { transform: scale(0) translateY(20px); opacity: 0; }
-            70% { transform: scale(1.05) translateY(-5px); opacity: 1; }
-            100% { transform: scale(1) translateY(0); opacity: 1; }
+        .feature-tag {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
         }
 
-        @keyframes hideCard {
-            0% { transform: scale(1) translateY(0); opacity: 1; }
-            100% { transform: scale(0) translateY(20px); opacity: 0; }
+        .profile-description {
+            text-align: left;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: #4a5568;
+            line-height: 1.4;
         }
 
         /* Кнопка */
@@ -252,88 +188,119 @@
             box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
         }
 
-        /* Звездный фон */
-        .stars {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
+        /* Анимация появления */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle 3s infinite;
+        .profile-card {
+            animation: fadeInUp 0.6s ease-out;
         }
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
+        .profile-card:nth-child(1) { animation-delay: 0.1s; }
+        .profile-card:nth-child(2) { animation-delay: 0.3s; }
+        .profile-card:nth-child(3) { animation-delay: 0.5s; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1 class="title">Great Date</h1>
-            <p class="subtitle">Найди лучшие места для встречи</p>
+            <p class="subtitle">Лучшие места для вашей встречи</p>
         </div>
 
-        <div class="floating-islands">
-            <!-- Звездный фон -->
-            <div class="stars" id="stars"></div>
-            
-            <!-- Острова -->
-            <div class="island island-1"></div>
-            <div class="island island-2"></div>
-            <div class="island island-3"></div>
-            <div class="island island-4"></div>
-            <div class="island island-5"></div>
-
-            <!-- Точки интереса -->
-            <div class="interest-point point-1" onclick="showCard(0)"></div>
-            <div class="interest-point point-2" onclick="showCard(1)"></div>
-            <div class="interest-point point-3" onclick="showCard(2)"></div>
-            <div class="interest-point point-4" onclick="showCard(3)"></div>
-            <div class="interest-point point-5" onclick="showCard(4)"></div>
-
-            <!-- Карточки мест -->
-            <div class="place-card" id="card-0" style="top: 15%; left: 8%;">
-                <h3>🍝 Итальянский ресторан</h3>
-                <p>Паста и вино</p>
-                <p class="rating">⭐ 4.7</p>
-            </div>
-            
-            <div class="place-card" id="card-1" style="top: 38%; right: 6%;">
-                <h3>☕ Кофейня "Уют"</h3>
-                <p>Свежая выпечка</p>
-                <p class="rating">⭐ 4.8</p>
-            </div>
-            
-            <div class="place-card" id="card-2" style="bottom: 12%; left: 8%;">
-                <h3>🎨 Галерея искусств</h3>
-                <p>Современное искусство</p>
-                <p class="rating">⭐ 4.6</p>
+        <div class="profiles-container">
+            <!-- Профиль 1 -->
+            <div class="profile-card profile-1" onclick="selectPlace(0)">
+                <div class="profile-header">
+                    <div class="profile-icon">🍝</div>
+                    <div class="profile-info">
+                        <div class="profile-name">Bella Italia</div>
+                        <div class="profile-category">Итальянский ресторан</div>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <div class="profile-rating">
+                        ⭐ 4.7
+                    </div>
+                    <div class="profile-price">
+                        💰💰
+                    </div>
+                </div>
+                <div class="profile-features">
+                    <span class="feature-tag">Романтично</span>
+                    <span class="feature-tag">Паста</span>
+                    <span class="feature-tag">Вино</span>
+                </div>
+                <div class="profile-description">
+                    Уютный ресторан с аутентичной итальянской кухней и отличной винной картой. Идеально для романтического ужина.
+                </div>
             </div>
 
-            <div class="place-card" id="card-3" style="top: 25%; right: 8%;">
-                <h3>🏛️ Музей истории</h3>
-                <p>Исторические экспонаты</p>
-                <p class="rating">⭐ 4.5</p>
+            <!-- Профиль 2 -->
+            <div class="profile-card profile-2" onclick="selectPlace(1)">
+                <div class="profile-header">
+                    <div class="profile-icon">☕</div>
+                    <div class="profile-info">
+                        <div class="profile-name">Кофейня "Уют"</div>
+                        <div class="profile-category">Кафе и выпечка</div>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <div class="profile-rating">
+                        ⭐ 4.8
+                    </div>
+                    <div class="profile-price">
+                        💰
+                    </div>
+                </div>
+                <div class="profile-features">
+                    <span class="feature-tag">Уютно</span>
+                    <span class="feature-tag">Кофе</span>
+                    <span class="feature-tag">Десерты</span>
+                </div>
+                <div class="profile-description">
+                    Теплая атмосфера, ароматный кофе и свежая выпечка. Отличное место для первой встречи или спокойного общения.
+                </div>
             </div>
 
-            <div class="place-card" id="card-4" style="bottom: 25%; right: 8%;">
-                <h3>🍦 Кафе-мороженое</h3>
-                <p>Домашние десерты</p>
-                <p class="rating">⭐ 4.9</p>
+            <!-- Профиль 3 -->
+            <div class="profile-card profile-3" onclick="selectPlace(2)">
+                <div class="profile-header">
+                    <div class="profile-icon">🎨</div>
+                    <div class="profile-info">
+                        <div class="profile-name">Арт-галерея "Модерн"</div>
+                        <div class="profile-category">Культура и искусство</div>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <div class="profile-rating">
+                        ⭐ 4.6
+                    </div>
+                    <div class="profile-price">
+                        💰💰💰
+                    </div>
+                </div>
+                <div class="profile-features">
+                    <span class="feature-tag">Культурно</span>
+                    <span class="feature-tag">Искусство</span>
+                    <span class="feature-tag">Интересно</span>
+                </div>
+                <div class="profile-description">
+                    Современная галерея с интерактивными выставками. Прекрасное место для интеллектуального свидания.
+                </div>
             </div>
         </div>
 
         <button class="start-button" onclick="startApp()">
-            Начать
+            Начать поиск
         </button>
     </div>
 
@@ -345,92 +312,24 @@
 
         function startApp() {
             Telegram.WebApp.showPopup({
-                title: 'Добро пожаловать!',
-                message: 'Ищем интересные места поблизости...',
+                title: 'Отлично!',
+                message: 'Выберите понравившееся место для свидания',
                 buttons: [{ type: 'ok' }]
             });
         }
 
-        // Создание звездного фона
-        function createStars() {
-            const starsContainer = document.getElementById('stars');
-            for (let i = 0; i < 50; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.width = Math.random() * 2 + 1 + 'px';
-                star.style.height = star.style.width;
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 3 + 's';
-                starsContainer.appendChild(star);
-            }
-        }
-
-        let currentCard = 0;
-        const cards = document.querySelectorAll('.place-card');
-
-        function showCard(cardIndex) {
-            // Скрываем все карточки
-            cards.forEach(card => {
-                card.style.animation = 'hideCard 0.3s forwards';
-            });
+        function selectPlace(placeIndex) {
+            const placeNames = ['Bella Italia', 'Кофейня "Уют"', 'Арт-галерея "Модерн"'];
             
-            // Показываем выбранную карточку
-            setTimeout(() => {
-                cards[cardIndex].style.animation = 'showCard 0.5s forwards';
-            }, 300);
-        }
-
-        // Автоматическая анимация карточек
-        function autoAnimateCards() {
-            showCard(currentCard);
-            currentCard = (currentCard + 1) % cards.length;
-        }
-
-        // Создание соединительных линий
-        function createConnections() {
-            const islands = document.querySelectorAll('.island');
-            const container = document.querySelector('.floating-islands');
-            
-            islands.forEach((island, index) => {
-                if (index < islands.length - 1) {
-                    const nextIsland = islands[index + 1];
-                    
-                    const line = document.createElement('div');
-                    line.className = 'connection';
-                    
-                    // Расчет позиции и длины линии
-                    const rect1 = island.getBoundingClientRect();
-                    const rect2 = nextIsland.getBoundingClientRect();
-                    
-                    const x1 = rect1.left + rect1.width/2;
-                    const y1 = rect1.top + rect1.height/2;
-                    const x2 = rect2.left + rect2.width/2;
-                    const y2 = rect2.top + rect2.height/2;
-                    
-                    const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-                    const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
-                    
-                    line.style.width = length + 'px';
-                    line.style.left = x1 + 'px';
-                    line.style.top = y1 + 'px';
-                    line.style.transform = `rotate(${angle}deg)`;
-                    
-                    container.appendChild(line);
-                }
+            Telegram.WebApp.showPopup({
+                title: 'Отличный выбор!',
+                message: `Вы выбрали: ${placeNames[placeIndex]}`,
+                buttons: [{ type: 'ok' }]
             });
         }
 
         window.onload = function() {
             initTelegram();
-            createStars();
-            createConnections();
-            
-            // Начинаем анимацию через секунду после загрузки
-            setTimeout(() => {
-                autoAnimateCards();
-                setInterval(autoAnimateCards, 3000);
-            }, 1000);
         };
     </script>
 </body>
