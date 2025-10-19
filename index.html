@@ -201,11 +201,11 @@
         }
 
         .category-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(30, 30, 46, 0.8);
             border-radius: 16px;
             padding: 15px 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border: 2px solid rgba(255,255,255,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border: 2px solid rgba(255,255,255,0.1);
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -215,6 +215,7 @@
             gap: 8px;
             opacity: 0;
             transform: translateY(10px);
+            color: white;
         }
 
         .category-card.visible {
@@ -224,8 +225,9 @@
 
         .category-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
             border-color: rgba(102, 126, 234, 0.4);
+            background: rgba(40, 40, 60, 0.9);
         }
 
         .category-card.selected {
@@ -277,10 +279,10 @@
         }
 
         .next-button:disabled {
-            background: #718096;
+            background: #4a5568;
             cursor: not-allowed;
             transform: none;
-            box-shadow: 0 4px 12px rgba(113, 128, 150, 0.35);
+            box-shadow: 0 4px 12px rgba(74, 85, 104, 0.35);
         }
     </style>
 </head>
