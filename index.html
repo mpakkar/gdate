@@ -22,16 +22,23 @@
             overflow-x: hidden;
         }
 
-        .container {
+        /* Страницы */
+        .page {
+            display: none;
             flex: 1;
-            display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
             padding: 15px 12px;
             text-align: center;
+            width: 100%;
         }
 
+        .page.active {
+            display: flex;
+        }
+
+        /* Общие стили заголовков */
         .header {
             margin-bottom: 15px;
         }
@@ -53,7 +60,7 @@
             color: #cccccc;
         }
 
-        /* Контейнер для профилей */
+        /* СТРАНИЦА 1: Мини-профили */
         .profiles-container {
             display: flex;
             flex-direction: column;
@@ -65,7 +72,6 @@
             justify-content: center;
         }
 
-        /* Мини-профили */
         .profile-card {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 6px;
@@ -153,7 +159,7 @@
             border-radius: 3px;
         }
 
-        /* Кнопка */
+        /* Кнопка на странице 1 */
         .start-button {
             background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
@@ -182,10 +188,105 @@
             transform: translateY(-1px);
             box-shadow: 0 6px 15px rgba(102, 126, 234, 0.5);
         }
+
+        /* СТРАНИЦА 2: Категории */
+        .categories-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            max-width: 320px;
+            margin: 15px 0;
+            flex: 1;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 15px 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .category-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .category-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border-color: rgba(102, 126, 234, 0.4);
+        }
+
+        .category-card.selected {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-color: rgba(102, 126, 234, 0.6);
+        }
+
+        .category-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .category-name {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: inherit;
+            text-align: center;
+        }
+
+        /* Кнопка на странице 2 */
+        .next-button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border-radius: 45px;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(102, 126, 234, 0.35);
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            border: 2px solid rgba(102, 126, 234, 0.25);
+            width: 100%;
+            max-width: 280px;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .next-button.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .next-button:disabled {
+            background: #718096;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 12px rgba(113, 128, 150, 0.35);
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Страница 1: Примеры мест -->
+    <div class="page active" id="page1">
         <div class="header">
             <h1 class="title">Great Date</h1>
             <p class="subtitle">Лучшие места для вашей встречи</p>
@@ -268,8 +369,73 @@
             </div>
         </div>
 
-        <button class="start-button" onclick="startApp()">
+        <button class="start-button" onclick="goToCategories()">
             Начать поиск
+        </button>
+    </div>
+
+    <!-- Страница 2: Выбор категорий -->
+    <div class="page" id="page2">
+        <div class="header">
+            <h1 class="title">Выберите категории</h1>
+            <p class="subtitle">Отметьте интересные вам виды мест</p>
+        </div>
+
+        <div class="categories-container">
+            <!-- Категории -->
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🍝</div>
+                <div class="category-name">Рестораны</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">☕</div>
+                <div class="category-name">Кофейни</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎭</div>
+                <div class="category-name">Театры</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎨</div>
+                <div class="category-name">Галереи</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎬</div>
+                <div class="category-name">Кино</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏛️</div>
+                <div class="category-name">Музеи</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🍻</div>
+                <div class="category-name">Бары</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🌳</div>
+                <div class="category-name">Парки</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎳</div>
+                <div class="category-name">Развлечения</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🛍️</div>
+                <div class="category-name">Шоппинг</div>
+            </div>
+        </div>
+
+        <button class="next-button" id="nextButton" onclick="findPlaces()" disabled>
+            Найти места
         </button>
     </div>
 
@@ -279,34 +445,72 @@
             Telegram.WebApp.expand();
         }
 
-        function startApp() {
-            // Логика перехода к следующему экрану
-            console.log("Приложение запущено");
+        let selectedCategories = 0;
+
+        // Переход к выбору категорий
+        function goToCategories() {
+            document.getElementById('page1').classList.remove('active');
+            document.getElementById('page2').classList.add('active');
+            
+            // Анимация появления категорий
+            animateCategories();
         }
 
-        // Функция для последовательного появления карточек и кнопки
-        function animateCards() {
+        // Анимация карточек на первой странице
+        function animateFirstPage() {
             const cards = document.querySelectorAll('.profile-card');
             const button = document.querySelector('.start-button');
             let delay = 300;
             
-            // Анимируем карточки
             cards.forEach((card, index) => {
                 setTimeout(() => {
                     card.classList.add('visible');
                 }, delay * index);
             });
             
-            // Анимируем кнопку после всех карточек
             setTimeout(() => {
                 button.classList.add('visible');
             }, delay * cards.length + 200);
         }
 
+        // Анимация категорий на второй странице
+        function animateCategories() {
+            const categories = document.querySelectorAll('.category-card');
+            const button = document.querySelector('.next-button');
+            let delay = 100;
+            
+            categories.forEach((category, index) => {
+                setTimeout(() => {
+                    category.classList.add('visible');
+                }, delay * index);
+            });
+            
+            setTimeout(() => {
+                button.classList.add('visible');
+            }, delay * categories.length + 200);
+        }
+
+        // Переключение выбора категории
+        function toggleCategory(element) {
+            element.classList.toggle('selected');
+            
+            // Считаем выбранные категории
+            selectedCategories = document.querySelectorAll('.category-card.selected').length;
+            
+            // Активируем кнопку если выбрана хотя бы одна категория
+            const nextButton = document.getElementById('nextButton');
+            nextButton.disabled = selectedCategories === 0;
+        }
+
+        // Поиск мест (заглушка)
+        function findPlaces() {
+            console.log("Поиск мест по выбранным категориям:", selectedCategories);
+            // Здесь будет логика поиска мест
+        }
+
         window.onload = function() {
             initTelegram();
-            // Запускаем анимацию карточек через небольшую задержку после загрузки
-            setTimeout(animateCards, 500);
+            setTimeout(animateFirstPage, 500);
         };
     </script>
 </body>
