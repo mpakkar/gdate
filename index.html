@@ -28,26 +28,26 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            padding: 30px 20px;
+            padding: 20px 15px;
             text-align: center;
         }
 
         .header {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .title {
-            font-size: 2.8rem;
+            font-size: 2.2rem;
             font-weight: bold;
             background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-            margin-bottom: 8px;
+            margin-bottom: 5px;
         }
 
         .subtitle {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             opacity: 0.8;
             font-weight: 300;
             color: #cccccc;
@@ -57,18 +57,20 @@
         .profiles-container {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 12px;
             width: 100%;
-            max-width: 400px;
-            margin: 20px 0;
+            max-width: 350px;
+            margin: 15px 0;
+            flex: 1;
+            justify-content: center;
         }
 
         /* Мини-профили */
         .profile-card {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
             border: 1px solid rgba(255,255,255,0.2);
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
@@ -76,25 +78,25 @@
         }
 
         .profile-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
         }
 
         .profile-header {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 12px;
+            gap: 12px;
+            margin-bottom: 8px;
         }
 
         .profile-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             flex-shrink: 0;
         }
 
@@ -108,14 +110,14 @@
         }
 
         .profile-name {
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             font-weight: bold;
             color: #2d3748;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .profile-category {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: #718096;
         }
 
@@ -123,48 +125,48 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         .profile-rating {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 3px;
             color: #d69e2e;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
 
         .profile-price {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: #718096;
             background: rgba(113, 128, 150, 0.1);
-            padding: 4px 8px;
-            border-radius: 8px;
+            padding: 3px 6px;
+            border-radius: 6px;
         }
 
         .profile-features {
             display: flex;
-            gap: 10px;
-            margin-top: 12px;
+            gap: 6px;
+            margin-top: 8px;
             flex-wrap: wrap;
         }
 
         .feature-tag {
             background: rgba(102, 126, 234, 0.1);
             color: #667eea;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.65rem;
             font-weight: 500;
         }
 
         .profile-description {
             text-align: left;
-            margin-top: 12px;
-            font-size: 0.85rem;
+            margin-top: 8px;
+            font-size: 0.75rem;
             color: #4a5568;
-            line-height: 1.4;
+            line-height: 1.3;
         }
 
         /* Кнопка */
@@ -172,27 +174,29 @@
             background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             border: none;
-            padding: 16px 45px;
-            font-size: 1.2rem;
+            padding: 14px 40px;
+            font-size: 1rem;
             font-weight: bold;
             border-radius: 45px;
             cursor: pointer;
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.35);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.35);
             transition: all 0.3s ease;
-            margin-top: 25px;
+            margin-top: 10px;
             border: 2px solid rgba(102, 126, 234, 0.25);
+            width: 100%;
+            max-width: 350px;
         }
 
         .start-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
         }
 
         /* Анимация появления */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
@@ -201,12 +205,12 @@
         }
 
         .profile-card {
-            animation: fadeInUp 0.6s ease-out;
+            animation: fadeInUp 0.5s ease-out;
         }
 
         .profile-card:nth-child(1) { animation-delay: 0.1s; }
-        .profile-card:nth-child(2) { animation-delay: 0.3s; }
-        .profile-card:nth-child(3) { animation-delay: 0.5s; }
+        .profile-card:nth-child(2) { animation-delay: 0.2s; }
+        .profile-card:nth-child(3) { animation-delay: 0.3s; }
     </style>
 </head>
 <body>
@@ -218,7 +222,7 @@
 
         <div class="profiles-container">
             <!-- Профиль 1 -->
-            <div class="profile-card profile-1" onclick="selectPlace(0)">
+            <div class="profile-card profile-1">
                 <div class="profile-header">
                     <div class="profile-icon">🍝</div>
                     <div class="profile-info">
@@ -237,15 +241,11 @@
                 <div class="profile-features">
                     <span class="feature-tag">Романтично</span>
                     <span class="feature-tag">Паста</span>
-                    <span class="feature-tag">Вино</span>
-                </div>
-                <div class="profile-description">
-                    Уютный ресторан с аутентичной итальянской кухней и отличной винной картой. Идеально для романтического ужина.
                 </div>
             </div>
 
             <!-- Профиль 2 -->
-            <div class="profile-card profile-2" onclick="selectPlace(1)">
+            <div class="profile-card profile-2">
                 <div class="profile-header">
                     <div class="profile-icon">☕</div>
                     <div class="profile-info">
@@ -264,15 +264,11 @@
                 <div class="profile-features">
                     <span class="feature-tag">Уютно</span>
                     <span class="feature-tag">Кофе</span>
-                    <span class="feature-tag">Десерты</span>
-                </div>
-                <div class="profile-description">
-                    Теплая атмосфера, ароматный кофе и свежая выпечка. Отличное место для первой встречи или спокойного общения.
                 </div>
             </div>
 
             <!-- Профиль 3 -->
-            <div class="profile-card profile-3" onclick="selectPlace(2)">
+            <div class="profile-card profile-3">
                 <div class="profile-header">
                     <div class="profile-icon">🎨</div>
                     <div class="profile-info">
@@ -291,10 +287,6 @@
                 <div class="profile-features">
                     <span class="feature-tag">Культурно</span>
                     <span class="feature-tag">Искусство</span>
-                    <span class="feature-tag">Интересно</span>
-                </div>
-                <div class="profile-description">
-                    Современная галерея с интерактивными выставками. Прекрасное место для интеллектуального свидания.
                 </div>
             </div>
         </div>
@@ -311,21 +303,9 @@
         }
 
         function startApp() {
-            Telegram.WebApp.showPopup({
-                title: 'Отлично!',
-                message: 'Выберите понравившееся место для свидания',
-                buttons: [{ type: 'ok' }]
-            });
-        }
-
-        function selectPlace(placeIndex) {
-            const placeNames = ['Bella Italia', 'Кофейня "Уют"', 'Арт-галерея "Модерн"'];
-            
-            Telegram.WebApp.showPopup({
-                title: 'Отличный выбор!',
-                message: `Вы выбрали: ${placeNames[placeIndex]}`,
-                buttons: [{ type: 'ok' }]
-            });
+            // Здесь будет логика перехода к следующему экрану
+            // Пока просто показываем, что приложение готово
+            console.log("Приложение запущено");
         }
 
         window.onload = function() {
