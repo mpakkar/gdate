@@ -57,9 +57,9 @@
         .profiles-container {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             width: 100%;
-            max-width: 320px;
+            max-width: 300px;
             margin: 10px 0;
             flex: 1;
             justify-content: center;
@@ -68,40 +68,49 @@
         /* Мини-профили */
         .profile-card {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 8px;
-            padding: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 6px;
+            padding: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
             border: 1px solid rgba(255,255,255,0.15);
             transition: all 0.2s ease;
             cursor: pointer;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .profile-card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .profile-card:hover {
             transform: translateY(-1px);
-            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
         }
 
         .profile-header {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 4px;
+            gap: 6px;
+            margin-bottom: 3px;
         }
 
         .profile-icon {
-            width: 24px;
-            height: 24px;
-            border-radius: 6px;
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             flex-shrink: 0;
         }
 
         .profile-1 .profile-icon { background: linear-gradient(45deg, #ff6b6b, #ee5a52); }
         .profile-2 .profile-icon { background: linear-gradient(45deg, #48dbfb, #0abde3); }
         .profile-3 .profile-icon { background: linear-gradient(45deg, #1dd1a1, #10ac84); }
+        .profile-4 .profile-icon { background: linear-gradient(45deg, #f368e0, #ff9ff3); }
+        .profile-5 .profile-icon { background: linear-gradient(45deg, #ff9f43, #feca57); }
 
         .profile-info {
             text-align: left;
@@ -109,14 +118,14 @@
         }
 
         .profile-name {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: bold;
             color: #2d3748;
             margin-bottom: 1px;
         }
 
         .profile-category {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             color: #718096;
         }
 
@@ -124,24 +133,24 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 4px;
+            margin-top: 3px;
         }
 
         .profile-rating {
             display: flex;
             align-items: center;
-            gap: 2px;
+            gap: 1px;
             color: #d69e2e;
             font-weight: bold;
-            font-size: 0.6rem;
+            font-size: 0.55rem;
         }
 
         .profile-price {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             color: #718096;
             background: rgba(113, 128, 150, 0.1);
-            padding: 2px 4px;
-            border-radius: 4px;
+            padding: 1px 3px;
+            border-radius: 3px;
         }
 
         /* Кнопка */
@@ -149,43 +158,23 @@
             background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             border: none;
-            padding: 12px 30px;
-            font-size: 0.9rem;
+            padding: 10px 25px;
+            font-size: 0.8rem;
             font-weight: bold;
             border-radius: 45px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.35);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
             transition: all 0.3s ease;
             margin-top: 10px;
             border: 2px solid rgba(102, 126, 234, 0.25);
             width: 100%;
-            max-width: 320px;
+            max-width: 280px;
         }
 
         .start-button:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.5);
         }
-
-        /* Анимация появления */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .profile-card {
-            animation: fadeInUp 0.4s ease-out;
-        }
-
-        .profile-card:nth-child(1) { animation-delay: 0.1s; }
-        .profile-card:nth-child(2) { animation-delay: 0.15s; }
-        .profile-card:nth-child(3) { animation-delay: 0.2s; }
     </style>
 </head>
 <body>
@@ -240,6 +229,36 @@
                     <div class="profile-price">💰💰💰</div>
                 </div>
             </div>
+
+            <!-- Профиль 4 -->
+            <div class="profile-card profile-4">
+                <div class="profile-header">
+                    <div class="profile-icon">🎭</div>
+                    <div class="profile-info">
+                        <div class="profile-name">Театр "Современник"</div>
+                        <div class="profile-category">Театр и искусство</div>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <div class="profile-rating">⭐ 4.9</div>
+                    <div class="profile-price">💰💰</div>
+                </div>
+            </div>
+
+            <!-- Профиль 5 -->
+            <div class="profile-card profile-5">
+                <div class="profile-header">
+                    <div class="profile-icon">🍣</div>
+                    <div class="profile-info">
+                        <div class="profile-name">Tokyo Sushi</div>
+                        <div class="profile-category">Японский ресторан</div>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <div class="profile-rating">⭐ 4.5</div>
+                    <div class="profile-price">💰💰💰</div>
+                </div>
+            </div>
         </div>
 
         <button class="start-button" onclick="startApp()">
@@ -258,8 +277,22 @@
             console.log("Приложение запущено");
         }
 
+        // Функция для последовательного появления карточек
+        function animateCards() {
+            const cards = document.querySelectorAll('.profile-card');
+            let delay = 300;
+            
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('visible');
+                }, delay * index);
+            });
+        }
+
         window.onload = function() {
             initTelegram();
+            // Запускаем анимацию карточек через небольшую задержку после загрузки
+            setTimeout(animateCards, 500);
         };
     </script>
 </body>
