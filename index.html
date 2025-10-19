@@ -14,7 +14,7 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: #0f0f0f;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -39,7 +39,7 @@
         .title {
             font-size: 2.8rem;
             font-weight: bold;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
@@ -53,144 +53,182 @@
             color: #cccccc;
         }
 
-        /* Карта */
-        .map-animation {
+        /* Новая стильная карта */
+        .floating-islands {
             position: relative;
             width: 340px;
             height: 340px;
             margin: 20px auto;
-            border-radius: 12px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-            background: #1a1a1a;
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.5),
+                inset 0 0 0 1px rgba(255,255,255,0.1);
+            background: linear-gradient(160deg, #0f1b33 0%, #1d2b45 100%);
+            perspective: 1000px;
         }
 
-        .map-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-        /* Стили для карты */
-        .water {
-            fill: #1e3a5f;
-            stroke: #2d4f7c;
-            stroke-width: 0.5;
-        }
-
-        .park {
-            fill: #1e3e1e;
-            stroke: #2d5a2d;
-            stroke-width: 0.5;
-        }
-
-        .main-road {
-            fill: none;
-            stroke: #4a5568;
-            stroke-width: 3.5;
-            stroke-linecap: round;
-        }
-
-        .secondary-road {
-            fill: none;
-            stroke: #2d3748;
-            stroke-width: 2;
-            stroke-linecap: round;
-        }
-
-        .residential-building {
-            fill: #2a2a2a;
-            stroke: #3a3a3a;
-            stroke-width: 0.3;
-        }
-
-        .commercial-building {
-            fill: #333333;
-            stroke: #444444;
-            stroke-width: 0.3;
-        }
-
-        .large-building {
-            fill: #3a3a3a;
-            stroke: #4a4a4a;
-            stroke-width: 0.4;
-        }
-
-        /* Синие точки */
-        .map-point {
+        .island {
             position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #4299e1;
             border-radius: 50%;
-            transform: scale(0);
-            animation: pulse 2s infinite;
-            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.4);
-            z-index: 50;
-            border: 1.5px solid white;
+            background: linear-gradient(145deg, #2d3748, #4a5568);
+            box-shadow: 
+                0 10px 25px rgba(0,0,0,0.3),
+                inset 0 -5px 10px rgba(0,0,0,0.2);
+            transition: all 0.5s ease;
             cursor: pointer;
+            border: 2px solid rgba(255,255,255,0.1);
         }
+
+        .island::before {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 20%;
+            width: 30%;
+            height: 20%;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            filter: blur(5px);
+        }
+
+        .island-1 {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 25%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .island-2 {
+            width: 100px;
+            height: 100px;
+            top: 50%;
+            left: 60%;
+            animation: float 8s ease-in-out infinite 1s;
+        }
+
+        .island-3 {
+            width: 70px;
+            height: 70px;
+            top: 65%;
+            left: 30%;
+            animation: float 7s ease-in-out infinite 0.5s;
+        }
+
+        .island-4 {
+            width: 90px;
+            height: 90px;
+            top: 35%;
+            left: 70%;
+            animation: float 9s ease-in-out infinite 1.5s;
+        }
+
+        .island-5 {
+            width: 85px;
+            height: 85px;
+            top: 75%;
+            left: 15%;
+            animation: float 7.5s ease-in-out infinite 2s;
+        }
+
+        /* Соединительные линии */
+        .connection {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            transform-origin: left center;
+            opacity: 0.6;
+            filter: blur(0.5px);
+        }
+
+        /* Точки интереса */
+        .interest-point {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            box-shadow: 
+                0 0 20px rgba(102, 126, 234, 0.6),
+                0 0 40px rgba(102, 126, 234, 0.3);
+            cursor: pointer;
+            z-index: 10;
+            border: 2px solid white;
+            animation: glow 2s ease-in-out infinite alternate;
+            transition: all 0.3s ease;
+        }
+
+        .interest-point:hover {
+            transform: scale(1.3);
+            box-shadow: 
+                0 0 30px rgba(102, 126, 234, 0.8),
+                0 0 60px rgba(102, 126, 234, 0.4);
+        }
+
+        .point-1 { top: 25%; left: 30%; }
+        .point-2 { top: 45%; left: 60%; }
+        .point-3 { top: 65%; left: 40%; }
+        .point-4 { top: 35%; left: 70%; }
+        .point-5 { top: 75%; left: 25%; }
 
         /* Карточки мест */
         .place-card {
             position: absolute;
             background: rgba(255, 255, 255, 0.95);
             color: #2d3748;
-            padding: 8px;
-            border-radius: 6px;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.3);
-            min-width: 130px;
-            transform: scale(0);
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            min-width: 150px;
+            transform: scale(0) translateY(20px);
             opacity: 0;
             z-index: 100;
-            font-size: 0.65rem;
+            font-size: 0.75rem;
             border: 1px solid #e2e8f0;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .place-card h3 {
-            font-size: 0.75rem;
-            margin-bottom: 3px;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
             color: #2b6cb0;
         }
 
         .place-card p {
-            font-size: 0.6rem;
+            font-size: 0.7rem;
             opacity: 0.8;
-            margin-bottom: 2px;
+            margin-bottom: 3px;
             color: #4a5568;
         }
 
         .place-card .rating {
             color: #d69e2e;
             font-weight: bold;
-            font-size: 0.6rem;
+            font-size: 0.7rem;
         }
 
-        /* Позиции точек */
-        .point-1 { top: 25%; left: 30%; animation-delay: 0.2s; }
-        .point-2 { top: 45%; left: 60%; animation-delay: 0.7s; }
-        .point-3 { top: 65%; left: 40%; animation-delay: 1.2s; }
-        .point-4 { top: 35%; left: 70%; animation-delay: 1.7s; }
-        .point-5 { top: 75%; left: 25%; animation-delay: 2.2s; }
-
         /* Анимации */
-        @keyframes pulse {
-            0% { transform: scale(0); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.7; }
-            100% { transform: scale(0); opacity: 1; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(1deg); }
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.6), 0 0 40px rgba(102, 126, 234, 0.3); }
+            100% { box-shadow: 0 0 25px rgba(102, 126, 234, 0.8), 0 0 50px rgba(102, 126, 234, 0.4); }
         }
 
         @keyframes showCard {
-            0% { transform: scale(0) translateY(15px); opacity: 0; }
-            50% { transform: scale(1.05) translateY(-3px); opacity: 1; }
+            0% { transform: scale(0) translateY(20px); opacity: 0; }
+            70% { transform: scale(1.05) translateY(-5px); opacity: 1; }
             100% { transform: scale(1) translateY(0); opacity: 1; }
         }
 
         @keyframes hideCard {
             0% { transform: scale(1) translateY(0); opacity: 1; }
-            100% { transform: scale(0) translateY(15px); opacity: 0; }
+            100% { transform: scale(0) translateY(20px); opacity: 0; }
         }
 
         /* Кнопка */
@@ -213,6 +251,28 @@
             transform: translateY(-2px);
             box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
         }
+
+        /* Звездный фон */
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -222,156 +282,53 @@
             <p class="subtitle">Найди лучшие места для встречи</p>
         </div>
 
-        <div class="map-animation">
-            <div class="map-container">
-                <svg width="100%" height="100%" viewBox="0 0 400 400">
-                    <!-- Водные объекты -->
-                    <path class="water" d="M50,80 Q120,50 180,70 Q250,100 300,60 Q350,40 380,90 L380,120 Q340,150 300,130 Q250,110 200,140 Q150,170 100,150 Q60,130 50,80 Z" />
-                    <path class="water" d="M20,250 Q80,220 150,240 Q200,260 250,230 Q300,200 350,230 L350,280 Q300,310 250,290 Q200,270 150,300 Q100,330 50,300 Q20,280 20,250 Z" />
-                    
-                    <!-- Парковые зоны -->
-                    <path class="park" d="M30,30 L120,30 L120,100 L30,100 Z" />
-                    <path class="park" d="M280,300 L360,300 L360,370 L280,370 Z" />
-                    <path class="park" d="M200,180 Q240,160 280,180 Q300,200 280,220 Q250,240 200,230 Q180,220 200,180 Z" />
-                    <path class="park" d="M150,320 L230,320 L230,380 L150,380 Z" />
-                    
-                    <!-- Дорожная сеть -->
-                    <!-- Главные дороги -->
-                    <path class="main-road" d="M0,200 L400,200" />
-                    <path class="main-road" d="M200,0 L200,400" />
-                    <path class="main-road" d="M50,50 L150,150 L250,50 L350,150" />
-                    <path class="main-road" d="M50,350 L150,250 L250,350 L350,250" />
-                    
-                    <!-- Второстепенные дороги -->
-                    <path class="secondary-road" d="M100,0 L100,400" />
-                    <path class="secondary-road" d="M300,0 L300,400" />
-                    <path class="secondary-road" d="M0,100 L400,100" />
-                    <path class="secondary-road" d="M0,300 L400,300" />
-                    <path class="secondary-road" d="M50,150 L350,150" />
-                    <path class="secondary-road" d="M50,250 L350,250" />
-                    
-                    <!-- Жилые здания -->
-                    <!-- Квартал 1 -->
-                    <rect class="residential-building" x="20" y="20" width="25" height="15" transform="rotate(15,32.5,27.5)" />
-                    <rect class="residential-building" x="50" y="25" width="20" height="12" transform="rotate(-10,60,31)" />
-                    <rect class="residential-building" x="75" y="20" width="22" height="14" transform="rotate(5,86,27)" />
-                    <rect class="residential-building" x="20" y="40" width="18" height="11" transform="rotate(-15,29,45.5)" />
-                    <rect class="residential-building" x="45" y="42" width="24" height="16" transform="rotate(20,57,50)" />
-                    <rect class="residential-building" x="75" y="38" width="20" height="13" transform="rotate(-5,85,44.5)" />
-                    
-                    <!-- Квартал 2 -->
-                    <rect class="residential-building" x="120" y="20" width="23" height="14" transform="rotate(-20,131.5,27)" />
-                    <rect class="residential-building" x="150" y="25" width="19" height="12" transform="rotate(25,159.5,31)" />
-                    <rect class="residential-building" x="175" y="20" width="21" height="13" transform="rotate(-15,185.5,26.5)" />
-                    <rect class="residential-building" x="120" y="42" width="25" height="16" transform="rotate(10,132.5,50)" />
-                    <rect class="residential-building" x="150" y="40" width="17" height="11" transform="rotate(-25,158.5,45.5)" />
-                    <rect class="residential-building" x="175" y="38" width="22" height="14" transform="rotate(15,186,45)" />
-                    
-                    <!-- Квартал 3 -->
-                    <rect class="residential-building" x="20" y="120" width="26" height="16" transform="rotate(30,33,128)" />
-                    <rect class="residential-building" x="50" y="125" width="21" height="13" transform="rotate(-30,60.5,131.5)" />
-                    <rect class="residential-building" x="75" y="120" width="19" height="12" transform="rotate(35,84.5,126)" />
-                    <rect class="residential-building" x="20" y="142" width="23" height="14" transform="rotate(-35,31.5,149)" />
-                    <rect class="residential-building" x="45" y="145" width="24" height="15" transform="rotate(40,57,152.5)" />
-                    <rect class="residential-building" x="75" y="140" width="20" height="13" transform="rotate(-40,85,146.5)" />
-                    
-                    <!-- Квартал 4 -->
-                    <rect class="residential-building" x="120" y="120" width="22" height="14" transform="rotate(45,131,127)" />
-                    <rect class="residential-building" x="150" y="125" width="18" height="11" transform="rotate(-45,159,130.5)" />
-                    <rect class="residential-building" x="175" y="120" width="25" height="16" transform="rotate(50,187.5,128)" />
-                    <rect class="residential-building" x="120" y="145" width="20" height="13" transform="rotate(-50,130,151.5)" />
-                    <rect class="residential-building" x="145" y="142" width="23" height="14" transform="rotate(55,156.5,149)" />
-                    <rect class="residential-building" x="175" y="140" width="19" height="12" transform="rotate(-55,184.5,146)" />
-                    
-                    <!-- Коммерческие здания -->
-                    <rect class="commercial-building" x="220" y="30" width="35" height="25" transform="rotate(10,237.5,42.5)" />
-                    <rect class="commercial-building" x="260" y="25" width="30" height="22" transform="rotate(-15,275,36)" />
-                    <rect class="commercial-building" x="300" y="30" width="32" height="24" transform="rotate(20,316,42)" />
-                    <rect class="commercial-building" x="340" y="25" width="28" height="20" transform="rotate(-25,354,35)" />
-                    
-                    <rect class="commercial-building" x="220" y="60" width="33" height="23" transform="rotate(5,236.5,71.5)" />
-                    <rect class="commercial-building" x="260" y="55" width="29" height="21" transform="rotate(-20,274.5,65.5)" />
-                    <rect class="commercial-building" x="300" y="60" width="31" height="22" transform="rotate(15,315.5,71)" />
-                    <rect class="commercial-building" x="340" y="55" width="27" height="19" transform="rotate(-10,353.5,64.5)" />
-                    
-                    <!-- Крупные здания -->
-                    <rect class="large-building" x="250" y="120" width="45" height="35" transform="rotate(5,272.5,137.5)" />
-                    <rect class="large-building" x="305" y="120" width="40" height="30" transform="rotate(-5,325,135)" />
-                    <rect class="large-building" x="250" y="165" width="42" height="32" transform="rotate(10,271,181)" />
-                    <rect class="large-building" x="305" y="160" width="38" height="28" transform="rotate(-10,324,174)" />
-                    
-                    <!-- Южный район -->
-                    <rect class="residential-building" x="20" y="220" width="24" height="15" transform="rotate(15,32,227.5)" />
-                    <rect class="residential-building" x="50" y="225" width="19" height="12" transform="rotate(-15,59.5,231)" />
-                    <rect class="residential-building" x="75" y="220" width="22" height="14" transform="rotate(20,86,227)" />
-                    <rect class="residential-building" x="20" y="242" width="18" height="11" transform="rotate(-20,29,247.5)" />
-                    <rect class="residential-building" x="45" y="245" width="25" height="16" transform="rotate(25,57.5,253)" />
-                    <rect class="residential-building" x="75" y="240" width="20" height="13" transform="rotate(-25,85,246.5)" />
-                    
-                    <rect class="residential-building" x="120" y="220" width="23" height="14" transform="rotate(30,131.5,227)" />
-                    <rect class="residential-building" x="150" y="225" width="21" height="13" transform="rotate(-30,160.5,231.5)" />
-                    <rect class="residential-building" x="175" y="220" width="26" height="16" transform="rotate(35,188,228)" />
-                    <rect class="residential-building" x="120" y="245" width="20" height="13" transform="rotate(-35,130,251.5)" />
-                    <rect class="residential-building" x="145" y="242" width="24" height="15" transform="rotate(40,157,249.5)" />
-                    <rect class="residential-building" x="175" y="240" width="19" height="12" transform="rotate(-40,184.5,246)" />
-                    
-                    <!-- Промышленная зона -->
-                    <rect class="large-building" x="220" y="220" width="50" height="40" transform="rotate(5,245,240)" />
-                    <rect class="large-building" x="280" y="220" width="45" height="35" transform="rotate(-5,302.5,237.5)" />
-                    <rect class="large-building" x="220" y="270" width="48" height="36" transform="rotate(10,244,288)" />
-                    <rect class="large-building" x="280" y="265" width="42" height="32" transform="rotate(-10,301,281)" />
-                    
-                    <!-- Дополнительные здания для заполнения -->
-                    <rect class="residential-building" x="320" y="220" width="22" height="14" transform="rotate(15,331,227)" />
-                    <rect class="residential-building" x="350" y="225" width="18" height="11" transform="rotate(-15,359,230.5)" />
-                    <rect class="residential-building" x="320" y="242" width="25" height="16" transform="rotate(20,332.5,250)" />
-                    <rect class="residential-building" x="350" y="240" width="20" height="13" transform="rotate(-20,360,246.5)" />
-                    
-                    <rect class="residential-building" x="20" y="320" width="23" height="14" transform="rotate(25,31.5,327)" />
-                    <rect class="residential-building" x="50" y="325" width="19" height="12" transform="rotate(-25,59.5,331)" />
-                    <rect class="residential-building" x="75" y="320" width="21" height="13" transform="rotate(30,85.5,326.5)" />
-                    <rect class="residential-building" x="20" y="342" width="18" height="11" transform="rotate(-30,29,347.5)" />
-                    <rect class="residential-building" x="45" y="345" width="24" height="15" transform="rotate(35,57,352.5)" />
-                    <rect class="residential-building" x="75" y="340" width="20" height="13" transform="rotate(-35,85,346.5)" />
-                </svg>
+        <div class="floating-islands">
+            <!-- Звездный фон -->
+            <div class="stars" id="stars"></div>
+            
+            <!-- Острова -->
+            <div class="island island-1"></div>
+            <div class="island island-2"></div>
+            <div class="island island-3"></div>
+            <div class="island island-4"></div>
+            <div class="island island-5"></div>
 
-                <!-- Синие точки мест -->
-                <div class="map-point point-1" onclick="showCard(0)"></div>
-                <div class="map-point point-2" onclick="showCard(1)"></div>
-                <div class="map-point point-3" onclick="showCard(2)"></div>
-                <div class="map-point point-4" onclick="showCard(3)"></div>
-                <div class="map-point point-5" onclick="showCard(4)"></div>
+            <!-- Точки интереса -->
+            <div class="interest-point point-1" onclick="showCard(0)"></div>
+            <div class="interest-point point-2" onclick="showCard(1)"></div>
+            <div class="interest-point point-3" onclick="showCard(2)"></div>
+            <div class="interest-point point-4" onclick="showCard(3)"></div>
+            <div class="interest-point point-5" onclick="showCard(4)"></div>
 
-                <!-- Карточки мест -->
-                <div class="place-card" id="card-0" style="top: 15%; left: 8%;">
-                    <h3>🍝 Итальянский ресторан</h3>
-                    <p>Паста и вино</p>
-                    <p class="rating">⭐ 4.7</p>
-                </div>
-                
-                <div class="place-card" id="card-1" style="top: 38%; right: 6%;">
-                    <h3>☕ Кофейня "Уют"</h3>
-                    <p>Свежая выпечка</p>
-                    <p class="rating">⭐ 4.8</p>
-                </div>
-                
-                <div class="place-card" id="card-2" style="bottom: 12%; left: 8%;">
-                    <h3>🎨 Галерея искусств</h3>
-                    <p>Современное искусство</p>
-                    <p class="rating">⭐ 4.6</p>
-                </div>
+            <!-- Карточки мест -->
+            <div class="place-card" id="card-0" style="top: 15%; left: 8%;">
+                <h3>🍝 Итальянский ресторан</h3>
+                <p>Паста и вино</p>
+                <p class="rating">⭐ 4.7</p>
+            </div>
+            
+            <div class="place-card" id="card-1" style="top: 38%; right: 6%;">
+                <h3>☕ Кофейня "Уют"</h3>
+                <p>Свежая выпечка</p>
+                <p class="rating">⭐ 4.8</p>
+            </div>
+            
+            <div class="place-card" id="card-2" style="bottom: 12%; left: 8%;">
+                <h3>🎨 Галерея искусств</h3>
+                <p>Современное искусство</p>
+                <p class="rating">⭐ 4.6</p>
+            </div>
 
-                <div class="place-card" id="card-3" style="top: 25%; right: 8%;">
-                    <h3>🏛️ Музей истории</h3>
-                    <p>Исторические экспонаты</p>
-                    <p class="rating">⭐ 4.5</p>
-                </div>
+            <div class="place-card" id="card-3" style="top: 25%; right: 8%;">
+                <h3>🏛️ Музей истории</h3>
+                <p>Исторические экспонаты</p>
+                <p class="rating">⭐ 4.5</p>
+            </div>
 
-                <div class="place-card" id="card-4" style="bottom: 25%; right: 8%;">
-                    <h3>🍦 Кафе-мороженое</h3>
-                    <p>Домашние десерты</p>
-                    <p class="rating">⭐ 4.9</p>
-                </div>
+            <div class="place-card" id="card-4" style="bottom: 25%; right: 8%;">
+                <h3>🍦 Кафе-мороженое</h3>
+                <p>Домашние десерты</p>
+                <p class="rating">⭐ 4.9</p>
             </div>
         </div>
 
@@ -392,6 +349,21 @@
                 message: 'Ищем интересные места поблизости...',
                 buttons: [{ type: 'ok' }]
             });
+        }
+
+        // Создание звездного фона
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 2 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
         }
 
         let currentCard = 0;
@@ -415,13 +387,50 @@
             currentCard = (currentCard + 1) % cards.length;
         }
 
-        // Запускаем автоматическую анимацию каждые 3 секунды
-        setInterval(autoAnimateCards, 3000);
+        // Создание соединительных линий
+        function createConnections() {
+            const islands = document.querySelectorAll('.island');
+            const container = document.querySelector('.floating-islands');
+            
+            islands.forEach((island, index) => {
+                if (index < islands.length - 1) {
+                    const nextIsland = islands[index + 1];
+                    
+                    const line = document.createElement('div');
+                    line.className = 'connection';
+                    
+                    // Расчет позиции и длины линии
+                    const rect1 = island.getBoundingClientRect();
+                    const rect2 = nextIsland.getBoundingClientRect();
+                    
+                    const x1 = rect1.left + rect1.width/2;
+                    const y1 = rect1.top + rect1.height/2;
+                    const x2 = rect2.left + rect2.width/2;
+                    const y2 = rect2.top + rect2.height/2;
+                    
+                    const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                    const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+                    
+                    line.style.width = length + 'px';
+                    line.style.left = x1 + 'px';
+                    line.style.top = y1 + 'px';
+                    line.style.transform = `rotate(${angle}deg)`;
+                    
+                    container.appendChild(line);
+                }
+            });
+        }
 
         window.onload = function() {
             initTelegram();
+            createStars();
+            createConnections();
+            
             // Начинаем анимацию через секунду после загрузки
-            setTimeout(autoAnimateCards, 1000);
+            setTimeout(() => {
+                autoAnimateCards();
+                setInterval(autoAnimateCards, 3000);
+            }, 1000);
         };
     </script>
 </body>
