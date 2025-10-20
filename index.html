@@ -205,6 +205,25 @@
             padding: 5px;
         }
 
+        /* Темный скроллбар */
+        .categories-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .categories-container::-webkit-scrollbar-track {
+            background: rgba(30, 30, 46, 0.5);
+            border-radius: 3px;
+        }
+
+        .categories-container::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.6);
+            border-radius: 3px;
+        }
+
+        .categories-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.8);
+        }
+
         .category-card {
             background: rgba(30, 30, 46, 0.8);
             border-radius: 16px;
@@ -440,7 +459,7 @@
                 <div class="category-name">Шоппинг</div>
             </div>
 
-            <!-- Новые 10 категорий -->
+            <!-- Вторые 10 категорий -->
             <div class="category-card" onclick="toggleCategory(this)">
                 <div class="category-icon">🏟️</div>
                 <div class="category-name">Концерты</div>
@@ -490,6 +509,57 @@
                 <div class="category-icon">🚴</div>
                 <div class="category-name">Велопрогулки</div>
             </div>
+
+            <!-- Третьи 10 категорий -->
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏖️</div>
+                <div class="category-name">Пляжи</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🚣</div>
+                <div class="category-name">Лодки</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏕️</div>
+                <div class="category-name">Кемпинг</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">♨️</div>
+                <div class="category-name">Спа</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏋️</div>
+                <div class="category-name">Спортзалы</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🧘</div>
+                <div class="category-name">Йога</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎲</div>
+                <div class="category-name">Настолки</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏺</div>
+                <div class="category-name">Выставки</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">📚</div>
+                <div class="category-name">Библиотеки</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎡</div>
+                <div class="category-name">Аттракционы</div>
+            </div>
         </div>
 
         <button class="next-button" id="nextButton" onclick="findPlaces()" disabled>
@@ -535,7 +605,7 @@
         function animateCategories() {
             const categories = document.querySelectorAll('.category-card');
             const button = document.querySelector('.next-button');
-            let delay = 80; // Уменьшили задержку для большего количества элементов
+            let delay = 60; // Еще меньше задержка для большего количества элементов
             
             categories.forEach((category, index) => {
                 setTimeout(() => {
