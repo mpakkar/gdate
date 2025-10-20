@@ -200,6 +200,9 @@
             max-width: 320px;
             margin: 15px 0;
             flex: 1;
+            overflow-y: auto;
+            max-height: 60vh;
+            padding: 5px;
         }
 
         .category-card {
@@ -386,7 +389,7 @@
         </div>
 
         <div class="categories-container">
-            <!-- Категории -->
+            <!-- Первые 10 категорий -->
             <div class="category-card" onclick="toggleCategory(this)">
                 <div class="category-icon">🍝</div>
                 <div class="category-name">Рестораны</div>
@@ -436,6 +439,57 @@
                 <div class="category-icon">🛍️</div>
                 <div class="category-name">Шоппинг</div>
             </div>
+
+            <!-- Новые 10 категорий -->
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏟️</div>
+                <div class="category-name">Концерты</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎪</div>
+                <div class="category-name">Цирк</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🚶</div>
+                <div class="category-name">Прогулки</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏊</div>
+                <div class="category-name">Бассейны</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎯</div>
+                <div class="category-name">Квесты</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎮</div>
+                <div class="category-name">Игровые клубы</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏹</div>
+                <div class="category-name">Тир</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎤</div>
+                <div class="category-name">Караоке</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🍩</div>
+                <div class="category-name">Десертные</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🚴</div>
+                <div class="category-name">Велопрогулки</div>
+            </div>
         </div>
 
         <button class="next-button" id="nextButton" onclick="findPlaces()" disabled>
@@ -481,7 +535,7 @@
         function animateCategories() {
             const categories = document.querySelectorAll('.category-card');
             const button = document.querySelector('.next-button');
-            let delay = 100;
+            let delay = 80; // Уменьшили задержку для большего количества элементов
             
             categories.forEach((category, index) => {
                 setTimeout(() => {
