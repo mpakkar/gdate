@@ -6,7 +6,6 @@
     <title>Great Date</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* Все предыдущие стили остаются без изменений */
         * {
             margin: 0;
             padding: 0;
@@ -23,6 +22,7 @@
             overflow-x: hidden;
         }
 
+        /* Страницы */
         .page {
             display: none;
             flex: 1;
@@ -38,6 +38,7 @@
             display: flex;
         }
 
+        /* Общие стили заголовков */
         .header {
             margin-bottom: 15px;
         }
@@ -57,6 +58,255 @@
             opacity: 0.8;
             font-weight: 300;
             color: #cccccc;
+        }
+
+        /* СТРАНИЦА 1: Мини-профили */
+        .profiles-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            width: 100%;
+            max-width: 300px;
+            margin: 10px 0;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .profile-card {
+            background: rgba(30, 30, 46, 0.8);
+            border-radius: 6px;
+            padding: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(10px);
+            color: white;
+        }
+
+        .profile-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .profile-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+            background: rgba(40, 40, 60, 0.9);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 3px;
+        }
+
+        .profile-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+        }
+
+        .profile-1 .profile-icon { background: linear-gradient(45deg, #ff6b6b, #ee5a52); }
+        .profile-2 .profile-icon { background: linear-gradient(45deg, #48dbfb, #0abde3); }
+        .profile-3 .profile-icon { background: linear-gradient(45deg, #1dd1a1, #10ac84); }
+        .profile-4 .profile-icon { background: linear-gradient(45deg, #f368e0, #ff9ff3); }
+        .profile-5 .profile-icon { background: linear-gradient(45deg, #ff9f43, #feca57); }
+
+        .profile-info {
+            text-align: left;
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 0.65rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 1px;
+        }
+
+        .profile-category {
+            font-size: 0.55rem;
+            color: #a0aec0;
+        }
+
+        .profile-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3px;
+        }
+
+        .profile-rating {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            color: #f6e05e;
+            font-weight: bold;
+            font-size: 0.55rem;
+        }
+
+        .profile-price {
+            font-size: 0.55rem;
+            color: #a0aec0;
+            background: rgba(160, 174, 192, 0.1);
+            padding: 1px 3px;
+            border-radius: 3px;
+        }
+
+        /* Кнопка на странице 1 */
+        .start-button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border-radius: 45px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            border: 2px solid rgba(102, 126, 234, 0.25);
+            width: 100%;
+            max-width: 280px;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .start-button.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .start-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.5);
+        }
+
+        /* СТРАНИЦА 2: Категории */
+        .categories-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            max-width: 320px;
+            margin: 15px 0;
+            flex: 1;
+            overflow-y: auto;
+            max-height: 60vh;
+            padding: 5px;
+        }
+
+        /* Темный скроллбар */
+        .categories-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .categories-container::-webkit-scrollbar-track {
+            background: rgba(30, 30, 46, 0.5);
+            border-radius: 3px;
+        }
+
+        .categories-container::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.6);
+            border-radius: 3px;
+        }
+
+        .categories-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.8);
+        }
+
+        .category-card {
+            background: rgba(30, 30, 46, 0.8);
+            border-radius: 16px;
+            padding: 15px 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border: 2px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            opacity: 0;
+            transform: translateY(10px);
+            color: white;
+        }
+
+        .category-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .category-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border-color: rgba(102, 126, 234, 0.4);
+            background: rgba(40, 40, 60, 0.9);
+        }
+
+        .category-card.selected {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-color: rgba(102, 126, 234, 0.6);
+        }
+
+        .category-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .category-name {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: inherit;
+            text-align: center;
+        }
+
+        /* Кнопка на странице 2 */
+        .next-button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border-radius: 45px;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(102, 126, 234, 0.35);
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            border: 2px solid rgba(102, 126, 234, 0.25);
+            width: 100%;
+            max-width: 280px;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .next-button.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .next-button:disabled {
+            background: #4a5568;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 12px rgba(74, 85, 104, 0.35);
         }
 
         /* Стили для страницы маршрута */
@@ -197,12 +447,6 @@
         .route-button.secondary {
             background: rgba(74, 85, 104, 0.8);
         }
-
-        /* Остальные стили из предыдущих версий */
-        .profiles-container, .categories-container, .profile-card, .category-card, 
-        .start-button, .next-button {
-            /* Стили остаются без изменений */
-        }
     </style>
 </head>
 <body>
@@ -214,7 +458,80 @@
         </div>
 
         <div class="profiles-container">
-            <!-- Профили остаются без изменений -->
+            <!-- Профиль 1 -->
+            <div class="profile-card profile-1">
+                <div class="profile-header">
+                    <div class="profile-icon">🍝</div>
+                    <div class="profile-info">
+                        <div class="profile-name">Bella Italia</div>
+                        <div class="profile-category">Итальянский ресторан</div>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <div class="profile-rating">⭐ 4.7</div>
+                    <div class="profile-price">💰💰</div>
+                </div>
+            </div>
+
+            <!-- Профиль 2 -->
+            <div class="profile-card profile-2">
+                <div class="profile-header">
+                    <div class="profile-icon">☕</div>
+                    <div class="profile-info">
+                        <div class="profile-name">Кофейня "Уют"</div>
+                        <div class="profile-category">Кафе и выпечка</div>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <div class="profile-rating">⭐ 4.8</div>
+                    <div class="profile-price">💰</div>
+                </div>
+            </div>
+
+            <!-- Профиль 3 -->
+            <div class="profile-card profile-3">
+                <div class="profile-header">
+                    <div class="profile-icon">🎨</div>
+                    <div class="profile-info">
+                        <div class="profile-name">Арт-галерея</div>
+                        <div class="profile-category">Культура и искусство</div>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <div class="profile-rating">⭐ 4.6</div>
+                    <div class="profile-price">💰💰💰</div>
+                </div>
+            </div>
+
+            <!-- Профиль 4 -->
+            <div class="profile-card profile-4">
+                <div class="profile-header">
+                    <div class="profile-icon">🎭</div>
+                    <div class="profile-info">
+                        <div class="profile-name">Театр "Современник"</div>
+                        <div class="profile-category">Театр и искусство</div>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <div class="profile-rating">⭐ 4.9</div>
+                    <div class="profile-price">💰💰</div>
+                </div>
+            </div>
+
+            <!-- Профиль 5 -->
+            <div class="profile-card profile-5">
+                <div class="profile-header">
+                    <div class="profile-icon">🍣</div>
+                    <div class="profile-info">
+                        <div class="profile-name">Tokyo Sushi</div>
+                        <div class="profile-category">Японский ресторан</div>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <div class="profile-rating">⭐ 4.5</div>
+                    <div class="profile-price">💰💰💰</div>
+                </div>
+            </div>
         </div>
 
         <button class="start-button" onclick="goToCategories()">
@@ -230,7 +547,260 @@
         </div>
 
         <div class="categories-container">
-            <!-- 50 категорий остаются без изменений -->
+            <!-- Первые 10 категорий -->
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🍝</div>
+                <div class="category-name">Рестораны</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">☕</div>
+                <div class="category-name">Кофейни</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎭</div>
+                <div class="category-name">Театры</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎨</div>
+                <div class="category-name">Галереи</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎬</div>
+                <div class="category-name">Кино</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏛️</div>
+                <div class="category-name">Музеи</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🍻</div>
+                <div class="category-name">Бары</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🌳</div>
+                <div class="category-name">Парки</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎳</div>
+                <div class="category-name">Развлечения</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🛍️</div>
+                <div class="category-name">Шоппинг</div>
+            </div>
+
+            <!-- Вторые 10 категорий -->
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏟️</div>
+                <div class="category-name">Концерты</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎪</div>
+                <div class="category-name">Цирк</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🚶</div>
+                <div class="category-name">Прогулки</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏊</div>
+                <div class="category-name">Бассейны</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎯</div>
+                <div class="category-name">Квесты</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎮</div>
+                <div class="category-name">Игровые клубы</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏹</div>
+                <div class="category-name">Тир</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎤</div>
+                <div class="category-name">Караоке</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🍩</div>
+                <div class="category-name">Десертные</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🚴</div>
+                <div class="category-name">Велопрогулки</div>
+            </div>
+
+            <!-- Третьи 10 категорий -->
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏖️</div>
+                <div class="category-name">Пляжи</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🚣</div>
+                <div class="category-name">Лодки</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏕️</div>
+                <div class="category-name">Кемпинг</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">♨️</div>
+                <div class="category-name">Спа</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏋️</div>
+                <div class="category-name">Спортзалы</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🧘</div>
+                <div class="category-name">Йога</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎲</div>
+                <div class="category-name">Настолки</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏺</div>
+                <div class="category-name">Выставки</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">📚</div>
+                <div class="category-name">Библиотеки</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎡</div>
+                <div class="category-name">Аттракционы</div>
+            </div>
+
+            <!-- Четвертые 10 категорий -->
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎪</div>
+                <div class="category-name">Фестивали</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏇</div>
+                <div class="category-name">Верховая езда</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">⛷️</div>
+                <div class="category-name">Лыжи</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏄</div>
+                <div class="category-name">Серфинг</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🚁</div>
+                <div class="category-name">Вертолеты</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏎️</div>
+                <div class="category-name">Картинг</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎷</div>
+                <div class="category-name">Джаз-клубы</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🍷</div>
+                <div class="category-name">Винные бары</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏰</div>
+                <div class="category-name">Замки</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🌌</div>
+                <div class="category-name">Планетарии</div>
+            </div>
+
+            <!-- Пятые 10 категорий -->
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎭</div>
+                <div class="category-name">Опера</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🕌</div>
+                <div class="category-name">Архитектура</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🍵</div>
+                <div class="category-name">Чайные церемонии</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏹</div>
+                <div class="category-name">Стрельба из лука</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🚵</div>
+                <div class="category-name">Горные велосипеды</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🏜️</div>
+                <div class="category-name">Пустыни</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🦜</div>
+                <div class="category-name">Парки птиц</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🎪</div>
+                <div class="category-name">Цирковые школы</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🍫</div>
+                <div class="category-name">Шоколадные фабрики</div>
+            </div>
+
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-icon">🚂</div>
+                <div class="category-name">Железные дороги</div>
+            </div>
         </div>
 
         <button class="next-button" id="nextButton" onclick="generateRoute()" disabled>
