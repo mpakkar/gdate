@@ -201,7 +201,7 @@
             margin: 15px 0;
             flex: 1;
             overflow-y: auto;
-            max-height: 60vh;
+            max-height: 50vh;
             padding: 5px;
         }
 
@@ -270,6 +270,39 @@
             font-weight: bold;
             color: inherit;
             text-align: center;
+        }
+
+        /* Фильтры */
+        .filters-container {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            max-width: 320px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-select {
+            background: rgba(30, 30, 46, 0.8);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .filter-select:hover {
+            border-color: rgba(102, 126, 234, 0.4);
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: rgba(102, 126, 234, 0.6);
         }
 
         /* Кнопка на странице 2 */
@@ -417,6 +450,20 @@
             font-size: 0.7rem;
         }
 
+        .route-place-distance {
+            margin-top: 8px;
+            font-size: 0.75rem;
+            color: #a0aec0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .distance-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
         .route-buttons {
             display: flex;
             gap: 10px;
@@ -446,6 +493,80 @@
 
         .route-button.secondary {
             background: rgba(74, 85, 104, 0.8);
+        }
+
+        /* Индикатор загрузки */
+        .loading {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .loading.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(102, 126, 234, 0.3);
+            border-left: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            font-size: 0.9rem;
+            color: #a0aec0;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Адаптивность для мобильных */
+        @media (max-width: 480px) {
+            .categories-container {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .title {
+                font-size: 1.5rem;
+            }
+            
+            .profile-card {
+                padding: 8px;
+            }
+            
+            .filters-container {
+                flex-direction: column;
+            }
+            
+            .filter-select {
+                min-width: auto;
+            }
+            
+            .route-buttons {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .page {
+                padding: 10px 8px;
+            }
+            
+            .title {
+                font-size: 1.3rem;
+            }
+            
+            .categories-container {
+                max-height: 45vh;
+            }
         }
     </style>
 </head>
@@ -546,261 +667,30 @@
             <p class="subtitle">Отметьте интересные вам виды мест</p>
         </div>
 
-        <div class="categories-container">
-            <!-- Первые 10 категорий -->
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🍝</div>
-                <div class="category-name">Рестораны</div>
-            </div>
+        <!-- Фильтры -->
+        <div class="filters-container">
+            <select class="filter-select" id="priceFilter" onchange="applyFilters()">
+                <option value="">Любой бюджет</option>
+                <option value="1">💰</option>
+                <option value="2">💰💰</option>
+                <option value="3">💰💰💰</option>
+            </select>
 
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">☕</div>
-                <div class="category-name">Кофейни</div>
-            </div>
+            <select class="filter-select" id="ratingFilter" onchange="applyFilters()">
+                <option value="">Любой рейтинг</option>
+                <option value="4.5">⭐ 4.5+</option>
+                <option value="4.0">⭐ 4.0+</option>
+                <option value="3.5">⭐ 3.5+</option>
+            </select>
+        </div>
 
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎭</div>
-                <div class="category-name">Театры</div>
-            </div>
+        <div class="categories-container" id="categoriesContainer">
+            <!-- Категории будут генерироваться динамически -->
+        </div>
 
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎨</div>
-                <div class="category-name">Галереи</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎬</div>
-                <div class="category-name">Кино</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏛️</div>
-                <div class="category-name">Музеи</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🍻</div>
-                <div class="category-name">Бары</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🌳</div>
-                <div class="category-name">Парки</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎳</div>
-                <div class="category-name">Развлечения</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🛍️</div>
-                <div class="category-name">Шоппинг</div>
-            </div>
-
-            <!-- Вторые 10 категорий -->
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏟️</div>
-                <div class="category-name">Концерты</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎪</div>
-                <div class="category-name">Цирк</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🚶</div>
-                <div class="category-name">Прогулки</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏊</div>
-                <div class="category-name">Бассейны</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎯</div>
-                <div class="category-name">Квесты</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎮</div>
-                <div class="category-name">Игровые клубы</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏹</div>
-                <div class="category-name">Тир</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎤</div>
-                <div class="category-name">Караоке</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🍩</div>
-                <div class="category-name">Десертные</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🚴</div>
-                <div class="category-name">Велопрогулки</div>
-            </div>
-
-            <!-- Третьи 10 категорий -->
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏖️</div>
-                <div class="category-name">Пляжи</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🚣</div>
-                <div class="category-name">Лодки</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏕️</div>
-                <div class="category-name">Кемпинг</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">♨️</div>
-                <div class="category-name">Спа</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏋️</div>
-                <div class="category-name">Спортзалы</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🧘</div>
-                <div class="category-name">Йога</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎲</div>
-                <div class="category-name">Настолки</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏺</div>
-                <div class="category-name">Выставки</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">📚</div>
-                <div class="category-name">Библиотеки</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎡</div>
-                <div class="category-name">Аттракционы</div>
-            </div>
-
-            <!-- Четвертые 10 категорий -->
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎪</div>
-                <div class="category-name">Фестивали</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏇</div>
-                <div class="category-name">Верховая езда</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">⛷️</div>
-                <div class="category-name">Лыжи</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏄</div>
-                <div class="category-name">Серфинг</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🚁</div>
-                <div class="category-name">Вертолеты</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏎️</div>
-                <div class="category-name">Картинг</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎷</div>
-                <div class="category-name">Джаз-клубы</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🍷</div>
-                <div class="category-name">Винные бары</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏰</div>
-                <div class="category-name">Замки</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🌌</div>
-                <div class="category-name">Планетарии</div>
-            </div>
-
-            <!-- Пятые 10 категорий -->
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎭</div>
-                <div class="category-name">Опера</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🕌</div>
-                <div class="category-name">Архитектура</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🍵</div>
-                <div class="category-name">Чайные церемонии</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏹</div>
-                <div class="category-name">Стрельба из лука</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🚵</div>
-                <div class="category-name">Горные велосипеды</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏜️</div>
-                <div class="category-name">Пустыни</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🦜</div>
-                <div class="category-name">Парки птиц</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎪</div>
-                <div class="category-name">Цирковые школы</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🍫</div>
-                <div class="category-name">Шоколадные фабрики</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🚂</div>
-                <div class="category-name">Железные дороги</div>
-            </div>
+        <div class="loading" id="loadingRoute">
+            <div class="spinner"></div>
+            <div class="loading-text">Ищем лучшие места для вас...</div>
         </div>
 
         <button class="next-button" id="nextButton" onclick="generateRoute()" disabled>
@@ -840,6 +730,7 @@
                 icon: "🍝",
                 rating: 4.7,
                 price: "💰💰",
+                priceLevel: 2,
                 description: "Уютный ресторан с аутентичной итальянской кухней",
                 features: ["Паста", "Вино", "Романтично"],
                 coordinates: { lat: 55.7558, lng: 37.6176 }
@@ -851,6 +742,7 @@
                 icon: "🍣",
                 rating: 4.5,
                 price: "💰💰💰",
+                priceLevel: 3,
                 description: "Японская кухня от шеф-повара из Токио",
                 features: ["Суши", "Сашими", "Японская атмосфера"],
                 coordinates: { lat: 55.7560, lng: 37.6178 }
@@ -862,6 +754,7 @@
                 icon: "🥖",
                 rating: 4.8,
                 price: "💰💰💰",
+                priceLevel: 3,
                 description: "Французская кухня в элегантной обстановке",
                 features: ["Французская кухня", "Вино", "Уютно"],
                 coordinates: { lat: 55.7556, lng: 37.6172 }
@@ -875,6 +768,7 @@
                 icon: "☕",
                 rating: 4.8,
                 price: "💰",
+                priceLevel: 1,
                 description: "Ароматный кофе и свежая выпечка в теплой атмосфере",
                 features: ["Кофе", "Выпечка", "Бесплатный Wi-Fi"],
                 coordinates: { lat: 55.7559, lng: 37.6180 }
@@ -886,6 +780,7 @@
                 icon: "🔬",
                 rating: 4.6,
                 price: "💰",
+                priceLevel: 1,
                 description: "Инновационные методы приготовления кофе",
                 features: ["Спешиалти кофе", "Десерты", "Современно"],
                 coordinates: { lat: 55.7562, lng: 37.6174 }
@@ -899,6 +794,7 @@
                 icon: "🎨",
                 rating: 4.6,
                 price: "💰💰",
+                priceLevel: 2,
                 description: "Современное искусство и интерактивные выставки",
                 features: ["Современное искусство", "Выставки", "Интерактивно"],
                 coordinates: { lat: 55.7557, lng: 37.6182 }
@@ -910,6 +806,7 @@
                 icon: "🏛️",
                 rating: 4.5,
                 price: "💰💰",
+                priceLevel: 2,
                 description: "Исторические экспонаты и увлекательные экскурсии",
                 features: ["История", "Экскурсии", "Образовательно"],
                 coordinates: { lat: 55.7555, lng: 37.6179 }
@@ -923,6 +820,7 @@
                 icon: "🎬",
                 rating: 4.4,
                 price: "💰💰",
+                priceLevel: 2,
                 description: "Новейшие фильмы в комфортных залах",
                 features: ["Премьеры", "Dolby Atmos", "Комфорт"],
                 coordinates: { lat: 55.7561, lng: 37.6173 }
@@ -934,6 +832,7 @@
                 icon: "🎳",
                 rating: 4.3,
                 price: "💰💰",
+                priceLevel: 2,
                 description: "Современные дорожки и отличная атмосфера",
                 features: ["Боулинг", "Бар", "Музыка"],
                 coordinates: { lat: 55.7554, lng: 37.6181 }
@@ -947,6 +846,7 @@
                 icon: "🌳",
                 rating: 4.9,
                 price: "Бесплатно",
+                priceLevel: 0,
                 description: "Живописный парк с озерами и аллеями",
                 features: ["Прогулки", "Природа", "Фонтаны"],
                 coordinates: { lat: 55.7563, lng: 37.6185 }
@@ -958,6 +858,7 @@
                 icon: "🌿",
                 rating: 4.7,
                 price: "💰",
+                priceLevel: 1,
                 description: "Уникальная коллекция растений со всего мира",
                 features: ["Растения", "Теплицы", "Экскурсии"],
                 coordinates: { lat: 55.7565, lng: 37.6175 }
@@ -971,6 +872,7 @@
                 icon: "🎷",
                 rating: 4.6,
                 price: "💰💰",
+                priceLevel: 2,
                 description: "Живая музыка и изысканные коктейли",
                 features: ["Джаз", "Коктейли", "Живая музыка"],
                 coordinates: { lat: 55.7553, lng: 37.6177 }
@@ -982,6 +884,7 @@
                 icon: "🍷",
                 rating: 4.8,
                 price: "💰💰💰",
+                priceLevel: 3,
                 description: "Эксклюзивные вина и сырная тарелка",
                 features: ["Вино", "Сыры", "Дегустации"],
                 coordinates: { lat: 55.7564, lng: 37.6171 }
@@ -995,6 +898,7 @@
                 icon: "🏋️",
                 rating: 4.4,
                 price: "💰💰",
+                priceLevel: 2,
                 description: "Современное оборудование и бассейн",
                 features: ["Тренажеры", "Бассейн", "Йога"],
                 coordinates: { lat: 55.7552, lng: 37.6183 }
@@ -1006,6 +910,7 @@
                 icon: "🧗",
                 rating: 4.7,
                 price: "💰💰",
+                priceLevel: 2,
                 description: "Профессиональные трассы для скалолазания",
                 features: ["Скалолазание", "Инструктаж", "Активно"],
                 coordinates: { lat: 55.7566, lng: 37.6170 }
@@ -1019,6 +924,7 @@
                 icon: "🎭",
                 rating: 4.9,
                 price: "💰💰💰",
+                priceLevel: 3,
                 description: "Классические и современные постановки",
                 features: ["Спектакли", "Драма", "Комедия"],
                 coordinates: { lat: 55.7551, lng: 37.6184 }
@@ -1030,6 +936,7 @@
                 icon: "🎭",
                 rating: 4.8,
                 price: "💰💰💰",
+                priceLevel: 3,
                 description: "Великолепные оперные постановки",
                 features: ["Опера", "Балет", "Классика"],
                 coordinates: { lat: 55.7567, lng: 37.6169 }
@@ -1043,6 +950,7 @@
                 icon: "🌌",
                 rating: 4.7,
                 price: "💰💰",
+                priceLevel: 2,
                 description: "Путешествие по звездам и галактикам",
                 features: ["Астрономия", "Наука", "Образовательно"],
                 coordinates: { lat: 55.7550, lng: 37.6186 }
@@ -1054,6 +962,7 @@
                 icon: "🎯",
                 rating: 4.5,
                 price: "💰💰",
+                priceLevel: 2,
                 description: "Интересные головоломки и загадки",
                 features: ["Квесты", "Головоломки", "Командная игра"],
                 coordinates: { lat: 55.7568, lng: 37.6168 }
@@ -1065,23 +974,125 @@
                 icon: "🎤",
                 rating: 4.3,
                 price: "💰💰",
+                priceLevel: 2,
                 description: "Пойте свои любимые песни в кругу друзей",
                 features: ["Караоке", "Музыка", "Весело"],
                 coordinates: { lat: 55.7549, lng: 37.6187 }
             }
         ];
 
+        // Все доступные категории
+        const allCategories = [
+            { name: "Рестораны", icon: "🍝" },
+            { name: "Кофейни", icon: "☕" },
+            { name: "Театры", icon: "🎭" },
+            { name: "Галереи", icon: "🎨" },
+            { name: "Кино", icon: "🎬" },
+            { name: "Музеи", icon: "🏛️" },
+            { name: "Бары", icon: "🍻" },
+            { name: "Парки", icon: "🌳" },
+            { name: "Развлечения", icon: "🎳" },
+            { name: "Шоппинг", icon: "🛍️" },
+            { name: "Концерты", icon: "🏟️" },
+            { name: "Цирк", icon: "🎪" },
+            { name: "Прогулки", icon: "🚶" },
+            { name: "Бассейны", icon: "🏊" },
+            { name: "Квесты", icon: "🎯" },
+            { name: "Игровые клубы", icon: "🎮" },
+            { name: "Тир", icon: "🏹" },
+            { name: "Караоке", icon: "🎤" },
+            { name: "Десертные", icon: "🍩" },
+            { name: "Велопрогулки", icon: "🚴" },
+            { name: "Пляжи", icon: "🏖️" },
+            { name: "Лодки", icon: "🚣" },
+            { name: "Кемпинг", icon: "🏕️" },
+            { name: "Спа", icon: "♨️" },
+            { name: "Спортзалы", icon: "🏋️" },
+            { name: "Йога", icon: "🧘" },
+            { name: "Настолки", icon: "🎲" },
+            { name: "Выставки", icon: "🏺" },
+            { name: "Библиотеки", icon: "📚" },
+            { name: "Аттракционы", icon: "🎡" },
+            { name: "Фестивали", icon: "🎪" },
+            { name: "Верховая езда", icon: "🏇" },
+            { name: "Лыжи", icon: "⛷️" },
+            { name: "Серфинг", icon: "🏄" },
+            { name: "Вертолеты", icon: "🚁" },
+            { name: "Картинг", icon: "🏎️" },
+            { name: "Джаз-клубы", icon: "🎷" },
+            { name: "Винные бары", icon: "🍷" },
+            { name: "Замки", icon: "🏰" },
+            { name: "Планетарии", icon: "🌌" },
+            { name: "Опера", icon: "🎭" },
+            { name: "Архитектура", icon: "🕌" },
+            { name: "Чайные церемонии", icon: "🍵" },
+            { name: "Стрельба из лука", icon: "🏹" },
+            { name: "Горные велосипеды", icon: "🚵" },
+            { name: "Пустыни", icon: "🏜️" },
+            { name: "Парки птиц", icon: "🦜" },
+            { name: "Цирковые школы", icon: "🎪" },
+            { name: "Шоколадные фабрики", icon: "🍫" },
+            { name: "Железные дороги", icon: "🚂" }
+        ];
+
+        let selectedCategories = [];
+        let currentFilters = {
+            price: '',
+            rating: ''
+        };
+        let userLocation = null;
+
         function initTelegram() {
             Telegram.WebApp.ready();
             Telegram.WebApp.expand();
+            
+            // Инициализация аналитики
+            trackEvent('app_loaded');
         }
 
-        let selectedCategories = [];
+        // Получение геолокации пользователя
+        function getUserLocation() {
+            return new Promise((resolve, reject) => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        position => {
+                            const location = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude
+                            };
+                            trackEvent('location_obtained');
+                            resolve(location);
+                        },
+                        error => {
+                            console.log('Геолокация недоступна, используем Москву');
+                            trackEvent('location_fallback');
+                            resolve({ lat: 55.7558, lng: 37.6176 }); // fallback на Москву
+                        },
+                        {
+                            enableHighAccuracy: true,
+                            timeout: 10000,
+                            maximumAge: 60000
+                        }
+                    );
+                } else {
+                    trackEvent('location_not_supported');
+                    resolve({ lat: 55.7558, lng: 37.6176 });
+                }
+            });
+        }
 
         // Переход к выбору категорий
-        function goToCategories() {
+        async function goToCategories() {
+            trackEvent('start_button_clicked');
+            
             document.getElementById('page1').classList.remove('active');
             document.getElementById('page2').classList.add('active');
+            
+            // Загружаем сохраненные настройки
+            loadUserPreferences();
+            
+            // Получаем геолокацию
+            userLocation = await getUserLocation();
             
             // Анимация появления категорий
             animateCategories();
@@ -1106,9 +1117,32 @@
 
         // Анимация категорий на второй странице
         function animateCategories() {
+            const container = document.getElementById('categoriesContainer');
+            
+            // Очищаем контейнер
+            container.innerHTML = '';
+            
+            // Добавляем категории
+            allCategories.forEach(category => {
+                const categoryElement = document.createElement('div');
+                categoryElement.className = 'category-card';
+                categoryElement.innerHTML = `
+                    <div class="category-icon">${category.icon}</div>
+                    <div class="category-name">${category.name}</div>
+                `;
+                categoryElement.onclick = () => toggleCategory(categoryElement, category.name);
+                
+                // Проверяем, была ли категория выбрана ранее
+                if (selectedCategories.includes(category.name)) {
+                    categoryElement.classList.add('selected');
+                }
+                
+                container.appendChild(categoryElement);
+            });
+
             const categories = document.querySelectorAll('.category-card');
             const button = document.querySelector('.next-button');
-            let delay = 40;
+            let delay = 20;
             
             categories.forEach((category, index) => {
                 setTimeout(() => {
@@ -1122,21 +1156,36 @@
         }
 
         // Переключение выбора категории
-        function toggleCategory(element) {
-            const categoryName = element.querySelector('.category-name').textContent;
+        function toggleCategory(element, categoryName) {
             const index = selectedCategories.indexOf(categoryName);
             
             if (index > -1) {
                 selectedCategories.splice(index, 1);
                 element.classList.remove('selected');
+                trackEvent('category_deselected', { category: categoryName });
             } else {
                 selectedCategories.push(categoryName);
                 element.classList.add('selected');
+                trackEvent('category_selected', { category: categoryName });
             }
+            
+            // Сохраняем настройки
+            saveUserPreferences();
             
             // Активируем кнопку если выбрана хотя бы одна категория
             const nextButton = document.getElementById('nextButton');
             nextButton.disabled = selectedCategories.length === 0;
+        }
+
+        // Применение фильтров
+        function applyFilters() {
+            const priceFilter = document.getElementById('priceFilter').value;
+            const ratingFilter = document.getElementById('ratingFilter').value;
+            
+            currentFilters.price = priceFilter;
+            currentFilters.rating = ratingFilter;
+            
+            trackEvent('filters_applied', currentFilters);
         }
 
         // Функция расчета расстояния между двумя точками (формула Гаверсинуса)
@@ -1152,61 +1201,101 @@
             return R * c; // Расстояние в км
         }
 
-        // Алгоритм генерации маршрута
-        function generateRoute() {
-            // Фильтруем места по выбранным категориям
-            let suitablePlaces = placesDatabase.filter(place => 
-                place.categories.some(category => selectedCategories.includes(category))
-            );
+        // Расчет времени транспорта
+        function calculateTransportTime(distanceKm) {
+            const walkingSpeed = 5; // км/ч
+            const drivingSpeed = 40; // км/ч
+            
+            return {
+                walking: Math.round((distanceKm / walkingSpeed) * 60),
+                driving: Math.round((distanceKm / drivingSpeed) * 60)
+            };
+        }
 
-            if (suitablePlaces.length === 0) {
-                alert('По выбранным категориям не найдено мест');
-                return;
-            }
+        // Улучшенный алгоритм генерации маршрута
+        async function generateRoute() {
+            trackEvent('route_generation_started', {
+                categories: selectedCategories,
+                filters: currentFilters
+            });
 
-            // Выбираем случайную начальную точку
-            const startPlace = suitablePlaces[Math.floor(Math.random() * suitablePlaces.length)];
-            let route = [startPlace];
-            let usedPlaces = new Set([startPlace.id]);
+            // Показываем индикатор загрузки
+            document.getElementById('loadingRoute').classList.add('active');
+            document.getElementById('nextButton').disabled = true;
 
-            // Добавляем ещё 2-3 места, близких к предыдущим
-            for (let i = 0; i < 3 && route.length < 4; i++) {
-                let closestPlace = null;
-                let minDistance = Infinity;
+            try {
+                // Имитируем загрузку данных с сервера
+                const places = await loadPlacesFromAPI(selectedCategories, userLocation);
+                
+                if (places.length === 0) {
+                    Telegram.WebApp.showPopup({
+                        title: 'Ничего не найдено',
+                        message: 'Попробуйте выбрать другие категории или изменить фильтры',
+                        buttons: [{ type: 'ok' }]
+                    });
+                    return;
+                }
 
-                // Ищем ближайшее место из оставшихся
-                suitablePlaces.forEach(place => {
-                    if (!usedPlaces.has(place.id)) {
-                        const lastPlace = route[route.length - 1];
-                        const distance = calculateDistance(
-                            lastPlace.coordinates.lat, lastPlace.coordinates.lng,
-                            place.coordinates.lat, place.coordinates.lng
-                        );
-                        
-                        // Если место близко (в пределах 2 км) и не использовано
-                        if (distance < minDistance && distance < 2) {
-                            minDistance = distance;
-                            closestPlace = place;
-                        }
-                    }
+                // Сортируем места по рейтингу и расстоянию
+                places.forEach(place => {
+                    place.distance = calculateDistance(
+                        userLocation.lat, userLocation.lng,
+                        place.coordinates.lat, place.coordinates.lng
+                    );
+                    place.transportTime = calculateTransportTime(place.distance);
+                    // Взвешенная оценка: 70% рейтинг, 30% близость
+                    place.score = place.rating * 0.7 + (1 - Math.min(place.distance / 10, 1)) * 0.3;
                 });
 
-                if (closestPlace) {
-                    route.push(closestPlace);
-                    usedPlaces.add(closestPlace.id);
-                } else {
-                    // Если близких мест нет, добавляем случайное
-                    const availablePlaces = suitablePlaces.filter(p => !usedPlaces.has(p.id));
-                    if (availablePlaces.length > 0) {
-                        const randomPlace = availablePlaces[Math.floor(Math.random() * availablePlaces.length)];
-                        route.push(randomPlace);
-                        usedPlaces.add(randomPlace.id);
-                    }
-                }
+                places.sort((a, b) => b.score - a.score);
+
+                // Выбираем лучшие места (3-5)
+                const route = places.slice(0, 4);
+                
+                trackEvent('route_generated', {
+                    places_count: route.length,
+                    total_distance: route.reduce((sum, place) => sum + place.distance, 0).toFixed(2)
+                });
+
+                // Показываем маршрут
+                showRoute(route);
+            } catch (error) {
+                console.error('Ошибка генерации маршрута:', error);
+                Telegram.WebApp.showPopup({
+                    title: 'Ошибка',
+                    message: 'Не удалось создать маршрут. Попробуйте еще раз.',
+                    buttons: [{ type: 'ok' }]
+                });
+            } finally {
+                document.getElementById('loadingRoute').classList.remove('active');
+                document.getElementById('nextButton').disabled = false;
+            }
+        }
+
+        // Имитация загрузки данных с сервера
+        async function loadPlacesFromAPI(categories, location) {
+            // Имитируем задержку сети
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Фильтруем места по выбранным категориям
+            let suitablePlaces = placesDatabase.filter(place => 
+                place.categories.some(category => categories.includes(category))
+            );
+
+            // Применяем фильтры
+            if (currentFilters.price) {
+                suitablePlaces = suitablePlaces.filter(place => 
+                    place.priceLevel <= parseInt(currentFilters.price)
+                );
             }
 
-            // Показываем маршрут
-            showRoute(route);
+            if (currentFilters.rating) {
+                suitablePlaces = suitablePlaces.filter(place => 
+                    place.rating >= parseFloat(currentFilters.rating)
+                );
+            }
+
+            return suitablePlaces;
         }
 
         // Показ маршрута на странице 3
@@ -1238,6 +1327,17 @@
                             `<span class="route-feature-tag">${feature}</span>`
                         ).join('')}
                     </div>
+                    <div class="route-place-distance">
+                        <div class="distance-item">
+                            <span>📏 ${place.distance.toFixed(1)} км</span>
+                        </div>
+                        <div class="distance-item">
+                            <span>🚶 ${place.transportTime.walking} мин</span>
+                        </div>
+                        <div class="distance-item">
+                            <span>🚗 ${place.transportTime.driving} мин</span>
+                        </div>
+                    </div>
                     <div class="route-place-details">
                         <div class="route-place-rating">⭐ ${place.rating}</div>
                         <div class="route-place-price">${place.price}</div>
@@ -1260,13 +1360,74 @@
             return colors[Math.floor(Math.random() * colors.length)];
         }
 
+        // Сохранение пользовательских предпочтений
+        function saveUserPreferences() {
+            const preferences = {
+                categories: selectedCategories,
+                filters: currentFilters,
+                timestamp: Date.now()
+            };
+            localStorage.setItem('datePlannerPrefs', JSON.stringify(preferences));
+        }
+
+        // Загрузка сохраненных настроек
+        function loadUserPreferences() {
+            const saved = localStorage.getItem('datePlannerPrefs');
+            if (saved) {
+                try {
+                    const prefs = JSON.parse(saved);
+                    selectedCategories = prefs.categories || [];
+                    currentFilters = prefs.filters || {};
+                    
+                    // Восстанавливаем фильтры в UI
+                    if (currentFilters.price) {
+                        document.getElementById('priceFilter').value = currentFilters.price;
+                    }
+                    if (currentFilters.rating) {
+                        document.getElementById('ratingFilter').value = currentFilters.rating;
+                    }
+                    
+                    // Активируем кнопку если есть выбранные категории
+                    const nextButton = document.getElementById('nextButton');
+                    nextButton.disabled = selectedCategories.length === 0;
+                    
+                    trackEvent('preferences_loaded');
+                } catch (error) {
+                    console.error('Ошибка загрузки настроек:', error);
+                }
+            }
+        }
+
         // Функция поделиться маршрутом
         function shareRoute() {
+            trackEvent('route_shared');
+            
             Telegram.WebApp.showPopup({
                 title: 'Поделиться маршрутом',
                 message: 'Маршрут скопирован! Отправьте его своему спутнику.',
                 buttons: [{ type: 'ok' }]
             });
+        }
+
+        // Аналитика
+        function trackEvent(eventName, data = {}) {
+            const eventData = {
+                event: eventName,
+                timestamp: new Date().toISOString(),
+                ...data
+            };
+            
+            console.log('Analytics Event:', eventData);
+            
+            // В реальном приложении здесь будет отправка в аналитическую систему
+            if (window.Telegram && Telegram.WebApp) {
+                Telegram.WebApp.trackEvent(eventName, eventData);
+            }
+            
+            // Сохраняем события в localStorage для отладки
+            const analyticsLog = JSON.parse(localStorage.getItem('analyticsLog') || '[]');
+            analyticsLog.push(eventData);
+            localStorage.setItem('analyticsLog', JSON.stringify(analyticsLog.slice(-100))); // Храним последние 100 событий
         }
 
         window.onload = function() {
