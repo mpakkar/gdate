@@ -419,13 +419,13 @@
 
         .route-buttons {
             display: flex;
+            flex-direction: column;
             gap: 10px;
             width: 100%;
             max-width: 350px;
         }
 
         .route-button {
-            flex: 1;
             background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             border: none;
@@ -447,6 +447,11 @@
         .route-button.secondary {
             background: rgba(74, 85, 104, 0.8);
         }
+
+        .route-button.tertiary {
+            background: rgba(102, 126, 234, 0.3);
+            border: 2px solid rgba(102, 126, 234, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -461,44 +466,44 @@
             <!-- Профиль 1 -->
             <div class="profile-card profile-1">
                 <div class="profile-header">
-                    <div class="profile-icon">🍝</div>
+                    <div class="profile-icon">🍽️</div>
                     <div class="profile-info">
-                        <div class="profile-name">Bella Italia</div>
-                        <div class="profile-category">Итальянский ресторан</div>
+                        <div class="profile-name">Terrassa</div>
+                        <div class="profile-category">Ресторан с панорамным видом</div>
                     </div>
                 </div>
                 <div class="profile-details">
                     <div class="profile-rating">⭐ 4.7</div>
-                    <div class="profile-price">💰💰</div>
+                    <div class="profile-price">💰💰💰</div>
                 </div>
             </div>
 
             <!-- Профиль 2 -->
             <div class="profile-card profile-2">
                 <div class="profile-header">
-                    <div class="profile-icon">☕</div>
+                    <div class="profile-icon">🎭</div>
                     <div class="profile-info">
-                        <div class="profile-name">Кофейня "Уют"</div>
-                        <div class="profile-category">Кафе и выпечка</div>
+                        <div class="profile-name">Мариинский театр</div>
+                        <div class="profile-category">Театр оперы и балета</div>
                     </div>
                 </div>
                 <div class="profile-details">
-                    <div class="profile-rating">⭐ 4.8</div>
-                    <div class="profile-price">💰</div>
+                    <div class="profile-rating">⭐ 4.9</div>
+                    <div class="profile-price">💰💰💰</div>
                 </div>
             </div>
 
             <!-- Профиль 3 -->
             <div class="profile-card profile-3">
                 <div class="profile-header">
-                    <div class="profile-icon">🎨</div>
+                    <div class="profile-icon">🍸</div>
                     <div class="profile-info">
-                        <div class="profile-name">Арт-галерея</div>
-                        <div class="profile-category">Культура и искусство</div>
+                        <div class="profile-name">El Copitas</div>
+                        <div class="profile-category">Спикизи-бар</div>
                     </div>
                 </div>
                 <div class="profile-details">
-                    <div class="profile-rating">⭐ 4.6</div>
+                    <div class="profile-rating">⭐ 4.8</div>
                     <div class="profile-price">💰💰💰</div>
                 </div>
             </div>
@@ -506,14 +511,14 @@
             <!-- Профиль 4 -->
             <div class="profile-card profile-4">
                 <div class="profile-header">
-                    <div class="profile-icon">🎭</div>
+                    <div class="profile-icon">🧀</div>
                     <div class="profile-info">
-                        <div class="profile-name">Театр "Современник"</div>
-                        <div class="profile-category">Театр и искусство</div>
+                        <div class="profile-name">Khachapuri i Vino</div>
+                        <div class="profile-category">Грузинская кухня</div>
                     </div>
                 </div>
                 <div class="profile-details">
-                    <div class="profile-rating">⭐ 4.9</div>
+                    <div class="profile-rating">⭐ 4.8</div>
                     <div class="profile-price">💰💰</div>
                 </div>
             </div>
@@ -521,15 +526,15 @@
             <!-- Профиль 5 -->
             <div class="profile-card profile-5">
                 <div class="profile-header">
-                    <div class="profile-icon">🍣</div>
+                    <div class="profile-icon">🎷</div>
                     <div class="profile-info">
-                        <div class="profile-name">Tokyo Sushi</div>
-                        <div class="profile-category">Японский ресторан</div>
+                        <div class="profile-name">The Hat Jazz Bar</div>
+                        <div class="profile-category">Джаз-бар</div>
                     </div>
                 </div>
                 <div class="profile-details">
-                    <div class="profile-rating">⭐ 4.5</div>
-                    <div class="profile-price">💰💰💰</div>
+                    <div class="profile-rating">⭐ 4.6</div>
+                    <div class="profile-price">💰💰</div>
                 </div>
             </div>
         </div>
@@ -820,8 +825,11 @@
         </div>
 
         <div class="route-buttons">
-            <button class="route-button secondary" onclick="goToCategories()">
-                Новый маршрут
+            <button class="route-button tertiary" onclick="regenerateRoute()">
+                Искать еще раз
+            </button>
+            <button class="route-button secondary" onclick="goToCategoriesFromRoute()">
+                Изменить категории
             </button>
             <button class="route-button" onclick="shareRoute()">
                 Поделиться
@@ -830,130 +838,296 @@
     </div>
 
     <script>
-        // База данных мест
+        // Обновленная база данных мест Санкт-Петербурга
         const placesDatabase = [
             // Рестораны
             {
-                id: 1,
-                name: "Bella Italia",
-                categories: ["Рестораны"],
-                icon: "🍝",
-                rating: 4.7,
-                price: "💰💰",
-                description: "Уютный ресторан с аутентичной итальянской кухней",
-                features: ["Паста", "Вино", "Романтично"],
-                coordinates: { lat: 55.7558, lng: 37.6176 }
+                "id": 1,
+                "name": "Terrassa",
+                "categories": ["Рестораны"],
+                "icon": "🍽️",
+                "rating": 4.7,
+                "price": "💰💰💰",
+                "description": "Популярный ресторан с панорамной террасой с видом на Казанский собор и Дом Зингера",
+                "features": ["Терраса", "Панорамный вид", "Европейская кухня"],
+                "coordinates": { "lat": 59.935413, "lng": 30.325690 }
             },
             {
-                id: 2,
-                name: "Tokyo Sushi",
-                categories: ["Рестораны"],
-                icon: "🍣",
-                rating: 4.5,
-                price: "💰💰💰",
-                description: "Японская кухня от шеф-повара из Токио",
-                features: ["Суши", "Сашими", "Японская атмосфера"],
-                coordinates: { lat: 55.7560, lng: 37.6178 }
+                "id": 2,
+                "name": "Mansarda",
+                "categories": ["Рестораны"],
+                "icon": "🍽️",
+                "rating": 4.8,
+                "price": "💰💰💰💰",
+                "description": "Ресторан с видом на Исаакиевский собор, сочетает современную европейскую и русскую кухни",
+                "features": ["Панорамный вид", "Европейская кухня", "Русская кухня"],
+                "coordinates": { "lat": 59.932951, "lng": 30.308228 }
             },
             {
-                id: 3,
-                name: "Le Français",
-                categories: ["Рестораны"],
-                icon: "🥖",
-                rating: 4.8,
-                price: "💰💰💰",
-                description: "Французская кухня в элегантной обстановке",
-                features: ["Французская кухня", "Вино", "Уютно"],
-                coordinates: { lat: 55.7556, lng: 37.6172 }
+                "id": 3,
+                "name": "Birch",
+                "categories": ["Рестораны"],
+                "icon": "🍽️",
+                "rating": 4.6,
+                "price": "💰💰💰💰",
+                "description": "Современный ресторан с авторской кухней от известного шефа Владимира Чистякова",
+                "features": ["Авторская кухня", "Премиум"],
+                "coordinates": { "lat": 59.943086, "lng": 30.358969 }
+            },
+            {
+                "id": 4,
+                "name": "Percorso",
+                "categories": ["Рестораны"],
+                "icon": "🍝",
+                "rating": 4.9,
+                "price": "💰💰💰💰💰",
+                "description": "Элегантный итальянский ресторан с изысканной кухней и богатой винной картой",
+                "features": ["Итальянская кухня", "Винная карта", "Премиум"],
+                "coordinates": { "lat": 59.936149, "lng": 30.315591 }
+            },
+            {
+                "id": 5,
+                "name": "Betulla",
+                "categories": ["Рестораны"],
+                "icon": "🥗",
+                "rating": 4.5,
+                "price": "💰💰💰",
+                "description": "Ресторан-бистро с меню, вдохновленным средиземноморскими и азиатскими мотивами",
+                "features": ["Бистро", "Средиземноморская кухня"],
+                "coordinates": { "lat": 59.937282, "lng": 30.323969 }
+            },
+            {
+                "id": 6,
+                "name": "Il Lago dei Cigni",
+                "categories": ["Рестораны"],
+                "icon": "🍝",
+                "rating": 4.7,
+                "price": "💰💰💰",
+                "description": "Романтичный ресторан итальянской кухни с видом на Михайловский замок и Летний сад",
+                "features": ["Итальянская кухня", "Романтическая атмосфера"],
+                "coordinates": { "lat": 59.941944, "lng": 30.337778 }
+            },
+            {
+                "id": 7,
+                "name": "Harvest",
+                "categories": ["Рестораны"],
+                "icon": "🍲",
+                "rating": 4.6,
+                "price": "💰💰💰",
+                "description": "Ресторан современной русской кухни с акцентом на локальные фермерские продукты",
+                "features": ["Русская кухня", "Фермерские продукты"],
+                "coordinates": { "lat": 59.928451, "lng": 30.346899 }
+            },
+            {
+                "id": 8,
+                "name": "Bourgeois Bohemians",
+                "categories": ["Рестораны", "Бары"],
+                "icon": "🍸",
+                "rating": 4.4,
+                "price": "💰💰",
+                "description": "Бохо-шик ресторан с эклектичным меню и живой музыкой",
+                "features": ["Живая музыка", "Бар", "Бохо-атмосфера"],
+                "coordinates": { "lat": 59.926944, "lng": 30.346389 }
+            },
+            {
+                "id": 9,
+                "name": "Salone pasta & bar",
+                "categories": ["Рестораны"],
+                "icon": "🍝",
+                "rating": 4.5,
+                "price": "💰💰",
+                "description": "Стильное заведение, специализирующееся на пасте и коктейлях",
+                "features": ["Паста", "Коктейли", "Итальянская кухня"],
+                "coordinates": { "lat": 59.935278, "lng": 30.327222 }
+            },
+            {
+                "id": 10,
+                "name": "Frantsuza Bistro",
+                "categories": ["Рестораны"],
+                "icon": "🥖",
+                "rating": 4.6,
+                "price": "💰💰",
+                "description": "Уютное французское бистро с аутентичной атмосферой",
+                "features": ["Французская кухня", "Бистро", "Уютная атмосфера"],
+                "coordinates": { "lat": 59.944167, "lng": 30.348611 }
             },
 
             // Кофейни
             {
-                id: 4,
-                name: "Кофейня 'Уют'",
-                categories: ["Кофейни"],
-                icon: "☕",
-                rating: 4.8,
-                price: "💰",
-                description: "Ароматный кофе и свежая выпечка в теплой атмосфере",
-                features: ["Кофе", "Выпечка", "Бесплатный Wi-Fi"],
-                coordinates: { lat: 55.7559, lng: 37.6180 }
-            },
-            {
-                id: 5,
-                name: "Coffee Lab",
-                categories: ["Кофейни"],
-                icon: "🔬",
-                rating: 4.6,
-                price: "💰",
-                description: "Инновационные методы приготовления кофе",
-                features: ["Спешиалти кофе", "Десерты", "Современно"],
-                coordinates: { lat: 55.7562, lng: 37.6174 }
+                "id": 11,
+                "name": "Cococrema",
+                "categories": ["Кофейни"],
+                "icon": "🍰",
+                "rating": 4.5,
+                "price": "💰💰",
+                "description": "Кафе-кондитерская и ресторан с изысканными десертами и средиземноморской кухней",
+                "features": ["Десерты", "Средиземноморская кухня", "Кондитерская"],
+                "coordinates": { "lat": 59.957500, "lng": 30.299444 }
             },
 
-            // Галереи и музеи
+            // Театры
             {
-                id: 6,
-                name: "Арт-галерея 'Модерн'",
-                categories: ["Галереи"],
-                icon: "🎨",
-                rating: 4.6,
-                price: "💰💰",
-                description: "Современное искусство и интерактивные выставки",
-                features: ["Современное искусство", "Выставки", "Интерактивно"],
-                coordinates: { lat: 55.7557, lng: 37.6182 }
+                "id": 12,
+                "name": "Мариинский театр",
+                "categories": ["Театры", "Опера"],
+                "icon": "🎭",
+                "rating": 4.9,
+                "price": "💰💰💰",
+                "description": "Всемирно известный театр оперы и балета, один из ведущих музыкальных театров России и мира",
+                "features": ["Оперa", "Балет", "Оркестр"],
+                "coordinates": { "lat": 59.925553, "lng": 30.296044 }
             },
             {
-                id: 7,
-                name: "Музей истории",
-                categories: ["Музеи"],
-                icon: "🏛️",
-                rating: 4.5,
-                price: "💰💰",
-                description: "Исторические экспонаты и увлекательные экскурсии",
-                features: ["История", "Экскурсии", "Образовательно"],
-                coordinates: { lat: 55.7555, lng: 37.6179 }
+                "id": 13,
+                "name": "Александринский театр",
+                "categories": ["Театры"],
+                "icon": "🎭",
+                "rating": 4.8,
+                "price": "💰💰💰",
+                "description": "Старейший национальный театр России, ведущий историю с 1756 года",
+                "features": ["Драма", "Историческое здание"],
+                "coordinates": { "lat": 59.931556, "lng": 30.336361 }
+            },
+            {
+                "id": 14,
+                "name": "Михайловский театр",
+                "categories": ["Театры", "Опера"],
+                "icon": "🎭",
+                "rating": 4.8,
+                "price": "💰💰💰",
+                "description": "Значительный театр оперы и балета в Санкт-Петербурге",
+                "features": ["Оперa", "Балет"],
+                "coordinates": { "lat": 59.939167, "lng": 30.331667 }
+            },
+            {
+                "id": 15,
+                "name": "Большой драматический театр им. Г. А. Товстоногова (БДТ)",
+                "categories": ["Театры"],
+                "icon": "🎪",
+                "rating": 4.7,
+                "price": "💰💰",
+                "description": "Один из первых театров, созданных после Октябрьской революции, знаменит мощной режиссурой и уникальной труппой",
+                "features": ["Драма", "Классика", "Современные постановки"],
+                "coordinates": { "lat": 59.928056, "lng": 30.341389 }
+            },
+            {
+                "id": 16,
+                "name": "Малый драматический театр - Театр Европы",
+                "categories": ["Театры"],
+                "icon": "🎪",
+                "rating": 4.7,
+                "price": "💰💰",
+                "description": "Академический театр под руководством Льва Додина, получивший статус Театра Европы",
+                "features": ["Драма", "Европейские стандарты"],
+                "coordinates": { "lat": 59.928889, "lng": 30.344722 }
             },
 
-            // Развлечения
+            // Бары
             {
-                id: 8,
-                name: "Кинотеатр 'Современник'",
-                categories: ["Кино"],
-                icon: "🎬",
-                rating: 4.4,
-                price: "💰💰",
-                description: "Новейшие фильмы в комфортных залах",
-                features: ["Премьеры", "Dolby Atmos", "Комфорт"],
-                coordinates: { lat: 55.7561, lng: 37.6173 }
+                "id": 17,
+                "name": "El Copitas",
+                "categories": ["Бары"],
+                "icon": "🥃",
+                "rating": 4.8,
+                "price": "💰💰💰",
+                "description": "Легендарный спикизи-бар с мексиканской атмосферой и редким алкоголем",
+                "features": ["Спикизи", "Редкий алкоголь", "Мексиканская кухня"],
+                "coordinates": { "lat": 59.927778, "lng": 30.354722 }
             },
             {
-                id: 9,
-                name: "Боулинг-клуб",
-                categories: ["Развлечения"],
-                icon: "🎳",
-                rating: 4.3,
-                price: "💰💰",
-                description: "Современные дорожки и отличная атмосфера",
-                features: ["Боулинг", "Бар", "Музыка"],
-                coordinates: { lat: 55.7554, lng: 37.6181 }
+                "id": 18,
+                "name": "Bar Quinta",
+                "categories": ["Бары", "Винные бары"],
+                "icon": "🍷",
+                "rating": 4.7,
+                "price": "💰💰💰",
+                "description": "Уютный бар с обширной коллекцией креплёных вин и авторскими коктейлями",
+                "features": ["Винная карта", "Авторские коктейли", "Камерная атмосфера"],
+                "coordinates": { "lat": 59.935000, "lng": 30.351111 }
+            },
+            {
+                "id": 19,
+                "name": "Apotheke Bar",
+                "categories": ["Бары"],
+                "icon": "🍸",
+                "rating": 4.6,
+                "price": "💰💰💰",
+                "description": "Скрытый бар в стиле аптеки с индивидуальным подходом к каждому гостю",
+                "features": ["Спикизи", "Индивидуальные коктейли", "Скрытый бар"],
+                "coordinates": { "lat": 59.928889, "lng": 30.347222 }
+            },
+            {
+                "id": 20,
+                "name": "MoonShine",
+                "categories": ["Бары"],
+                "icon": "🍹",
+                "rating": 4.5,
+                "price": "💰💰",
+                "description": "Бар с качественными коктейлями ручной работы и неброской атмосферой",
+                "features": ["Коктейли ручной работы", "Расслабленная атмосфера"],
+                "coordinates": { "lat": 59.934167, "lng": 30.323611 }
+            },
+            {
+                "id": 21,
+                "name": "Кабинет (Kabinet)",
+                "categories": ["Бары"],
+                "icon": "📚",
+                "rating": 4.4,
+                "price": "💰💰",
+                "description": "Бар в стиле дореволюционного кабинета с атмосферой старого Петербурга",
+                "features": ["Историческая атмосфера", "Классические коктейли"],
+                "coordinates": { "lat": 59.936389, "lng": 30.328056 }
+            },
+            {
+                "id": 22,
+                "name": "Dead Poets",
+                "categories": ["Бары"],
+                "icon": "✒️",
+                "rating": 4.5,
+                "price": "💰💰",
+                "description": "Бар для ценителей качественных классических коктейлей и спокойной атмосферы",
+                "features": ["Классические коктейли", "Расслабленная атмосфера"],
+                "coordinates": { "lat": 59.935833, "lng": 30.352500 }
+            },
+            {
+                "id": 23,
+                "name": "The Hat Jazz Bar",
+                "categories": ["Бары", "Джаз-клубы"],
+                "icon": "🎷",
+                "rating": 4.6,
+                "price": "💰💰",
+                "description": "Легендарный джаз-бар с живыми выступлениями и аутентичной атмосферой",
+                "features": ["Живой джаз", "Аутентичная атмосфера"],
+                "coordinates": { "lat": 59.932778, "lng": 30.343056 }
             },
 
-            // Парки и природа
+            // Дополнительные места для других категорий
             {
-                id: 10,
-                name: "Центральный парк",
-                categories: ["Парки"],
-                icon: "🌳",
-                rating: 4.9,
-                price: "Бесплатно",
-                description: "Живописный парк с озерами и аллеями",
-                features: ["Прогулки", "Природа", "Фонтаны"],
-                coordinates: { lat: 55.7563, lng: 37.6185 }
+                "id": 24,
+                "name": "Эрмитаж",
+                "categories": ["Музеи"],
+                "icon": "🏛️",
+                "rating": 4.9,
+                "price": "💰💰",
+                "description": "Один из крупнейших художественных музеев мира с богатейшей коллекцией",
+                "features": ["Искусство", "История", "Архитектура"],
+                "coordinates": { "lat": 59.939806, "lng": 30.314553 }
+            },
+            {
+                "id": 25,
+                "name": "Летний сад",
+                "categories": ["Парки"],
+                "icon": "🌳",
+                "rating": 4.8,
+                "price": "Бесплатно",
+                "description": "Старейший сад Санкт-Петербурга с фонтанами, скульптурами и красивыми аллеями",
+                "features": ["Прогулки", "Фонтаны", "Скульптуры"],
+                "coordinates": { "lat": 59.945278, "lng": 30.335833 }
             }
         ];
 
         let selectedCategories = [];
+        let usedPlacesHistory = new Set(); // История использованных мест
 
         function initTelegram() {
             // Проверяем, что находимся в Telegram Web App
@@ -963,13 +1137,42 @@
             }
         }
 
-        // Переход к выбору категорий
+        // Переход к выбору категорий с первой страницы
         function goToCategories() {
             document.getElementById('page1').classList.remove('active');
             document.getElementById('page2').classList.add('active');
             
+            // Сбрасываем выбранные категории
+            selectedCategories = [];
+            const selectedCards = document.querySelectorAll('.category-card.selected');
+            selectedCards.forEach(card => card.classList.remove('selected'));
+            
             // Анимация появления категорий
             animateCategories();
+        }
+
+        // Переход к выбору категорий с третьей страницы (изменить категории)
+        function goToCategoriesFromRoute() {
+            document.getElementById('page3').classList.remove('active');
+            document.getElementById('page2').classList.add('active');
+            
+            // Сбрасываем выбранные категории
+            selectedCategories = [];
+            const selectedCards = document.querySelectorAll('.category-card.selected');
+            selectedCards.forEach(card => card.classList.remove('selected'));
+            
+            // Сбрасываем кнопку
+            const nextButton = document.getElementById('nextButton');
+            nextButton.disabled = true;
+            
+            // Очищаем контейнер маршрута
+            document.getElementById('routeContainer').innerHTML = '';
+        }
+
+        // Регенерация маршрута на третьей странице
+        function regenerateRoute() {
+            // Генерируем новый маршрут с теми же категориями
+            generateRoute();
         }
 
         // Анимация карточек на первой странице
@@ -1037,7 +1240,7 @@
             return R * c; // Расстояние в км
         }
 
-        // Алгоритм генерации маршрута
+        // Улучшенный алгоритм генерации маршрута
         function generateRoute() {
             // Фильтруем места по выбранным категориям
             let suitablePlaces = placesDatabase.filter(place => 
@@ -1049,48 +1252,76 @@
                 return;
             }
 
-            // Выбираем случайную начальную точку
-            const startPlace = suitablePlaces[Math.floor(Math.random() * suitablePlaces.length)];
-            let route = [startPlace];
-            let usedPlaces = new Set([startPlace.id]);
+            let route = [];
+            let usedPlacesInCurrentRoute = new Set();
+            
+            // Создаем копию подходящих мест, исключая уже использованные
+            let availablePlaces = suitablePlaces.filter(place => !usedPlacesHistory.has(place.id));
+            
+            // Если доступных мест мало, сбрасываем историю
+            if (availablePlaces.length < 3) {
+                usedPlacesHistory.clear();
+                availablePlaces = [...suitablePlaces];
+            }
 
-            // Добавляем ещё 2-3 места
-            for (let i = 0; i < 3 && route.length < 4; i++) {
-                let closestPlace = null;
-                let minDistance = Infinity;
-
-                // Ищем ближайшее место из оставшихся
-                suitablePlaces.forEach(place => {
-                    if (!usedPlaces.has(place.id)) {
-                        const lastPlace = route[route.length - 1];
-                        const distance = calculateDistance(
-                            lastPlace.coordinates.lat, lastPlace.coordinates.lng,
-                            place.coordinates.lat, place.coordinates.lng
-                        );
-                        
-                        if (distance < minDistance) {
-                            minDistance = distance;
-                            closestPlace = place;
-                        }
-                    }
-                });
-
-                if (closestPlace) {
-                    route.push(closestPlace);
-                    usedPlaces.add(closestPlace.id);
-                } else {
-                    // Если близких мест нет, добавляем случайное
-                    const availablePlaces = suitablePlaces.filter(p => !usedPlaces.has(p.id));
-                    if (availablePlaces.length > 0) {
-                        const randomPlace = availablePlaces[Math.floor(Math.random() * availablePlaces.length)];
+            // Для каждой выбранной категории добавляем 1-2 места
+            selectedCategories.forEach(category => {
+                // Находим места этой категории из доступных
+                const categoryPlaces = availablePlaces.filter(place => 
+                    place.categories.includes(category) && !usedPlacesInCurrentRoute.has(place.id)
+                );
+                
+                if (categoryPlaces.length > 0) {
+                    // Сортируем по рейтингу и берем лучшее место
+                    categoryPlaces.sort((a, b) => b.rating - a.rating);
+                    const bestPlace = categoryPlaces[0];
+                    route.push(bestPlace);
+                    usedPlacesInCurrentRoute.add(bestPlace.id);
+                    usedPlacesHistory.add(bestPlace.id);
+                    
+                    // Если есть еще места в категории, добавляем второе (случайное из топ-3)
+                    if (categoryPlaces.length > 1 && route.length < 3) {
+                        const topPlaces = categoryPlaces.slice(1, 4); // Берем следующие 3 места
+                        const randomPlace = topPlaces[Math.floor(Math.random() * topPlaces.length)];
                         route.push(randomPlace);
-                        usedPlaces.add(randomPlace.id);
+                        usedPlacesInCurrentRoute.add(randomPlace.id);
+                        usedPlacesHistory.add(randomPlace.id);
                     }
+                }
+            });
+
+            // Если маршрут слишком короткий, добавляем случайные места из оставшихся
+            if (route.length < 3) {
+                const remainingPlaces = availablePlaces.filter(place => !usedPlacesInCurrentRoute.has(place.id));
+                while (route.length < 4 && remainingPlaces.length > 0) {
+                    // Выбираем случайное место с учетом разнообразия категорий
+                    const randomIndex = Math.floor(Math.random() * remainingPlaces.length);
+                    const randomPlace = remainingPlaces[randomIndex];
+                    route.push(randomPlace);
+                    usedPlacesInCurrentRoute.add(randomPlace.id);
+                    usedPlacesHistory.add(randomPlace.id);
+                    remainingPlaces.splice(randomIndex, 1);
                 }
             }
 
+            // Перемешиваем маршрут для разнообразия
+            route = shuffleArray(route);
+
+            // Ограничиваем маршрут 4 местами максимум
+            route = route.slice(0, 4);
+
             // Показываем маршрут
             showRoute(route);
+        }
+
+        // Функция для перемешивания массива
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
         }
 
         // Показ маршрута на странице 3
@@ -1100,6 +1331,11 @@
 
             const routeContainer = document.getElementById('routeContainer');
             routeContainer.innerHTML = '';
+
+            if (route.length === 0) {
+                routeContainer.innerHTML = '<div class="route-place"><div class="route-place-description">Не удалось составить маршрут. Попробуйте выбрать другие категории.</div></div>';
+                return;
+            }
 
             route.forEach((place, index) => {
                 const placeElement = document.createElement('div');
