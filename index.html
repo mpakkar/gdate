@@ -1810,7 +1810,7 @@
             nextButton.disabled = selectedCategories.length === 0;
         }
 
-        // Генерация маршрута
+        // Генерация маршрута с новым алгоритмом
         function generateRoute() {
             let suitablePlaces = placesDatabase.filter(place => 
                 place.categories.some(category => selectedCategories.includes(category))
@@ -1823,6 +1823,7 @@
 
             let route = [];
             let usedPlacesInCurrentRoute = new Set();
+            let usedCategoriesInCurrentRoute = new Set();
             
             let availablePlaces = suitablePlaces.filter(place => !usedPlacesHistory.has(place.id));
             
@@ -1831,46 +1832,65 @@
                 availablePlaces = [...suitablePlaces];
             }
 
-            // Выбираем места для маршрута
-            selectedCategories.forEach(category => {
-                const categoryPlaces = availablePlaces.filter(place => 
-                    place.categories.includes(category) && !usedPlacesInCurrentRoute.has(place.id)
-                );
-                
-                if (categoryPlaces.length > 0) {
-                    categoryPlaces.sort((a, b) => b.rating - a.rating);
-                    const bestPlace = categoryPlaces[0];
-                    route.push(bestPlace);
-                    usedPlacesInCurrentRoute.add(bestPlace.id);
-                    usedPlacesHistory.add(bestPlace.id);
-                    
-                    if (categoryPlaces.length > 1 && route.length < 4) {
-                        const topPlaces = categoryPlaces.slice(1, 4);
-                        const randomPlace = topPlaces[Math.floor(Math.random() * topPlaces.length)];
-                        route.push(randomPlace);
-                        usedPlacesInCurrentRoute.add(randomPlace.id);
-                        usedPlacesHistory.add(randomPlace.id);
-                    }
-                }
-            });
+            // Выбираем первое место случайно из всех доступных
+            if (availablePlaces.length > 0) {
+                const firstPlace = availablePlaces[Math.floor(Math.random() * availablePlaces.length)];
+                route.push(firstPlace);
+                usedPlacesInCurrentRoute.add(firstPlace.id);
+                usedPlacesHistory.add(firstPlace.id);
+                firstPlace.categories.forEach(cat => usedCategoriesInCurrentRoute.add(cat));
+            }
 
-            // Добавляем случайные места если маршрут короткий
-            if (route.length < 3) {
-                const remainingPlaces = availablePlaces.filter(place => !usedPlacesInCurrentRoute.has(place.id));
-                while (route.length < 4 && remainingPlaces.length > 0) {
-                    const randomIndex = Math.floor(Math.random() * remainingPlaces.length);
-                    const randomPlace = remainingPlaces[randomIndex];
-                    route.push(randomPlace);
-                    usedPlacesInCurrentRoute.add(randomPlace.id);
-                    usedPlacesHistory.add(randomPlace.id);
-                    remainingPlaces.splice(randomIndex, 1);
-                }
+            // Добавляем остальные места по принципу ближайшего из другой категории
+            while (route.length < 4 && route.length < selectedCategories.length) {
+                const lastPlace = route[route.length - 1];
+                
+                // Находим доступные категории (еще не использованные в маршруте)
+                const availableCategories = selectedCategories.filter(cat => 
+                    !usedCategoriesInCurrentRoute.has(cat)
+                );
+
+                if (availableCategories.length === 0) break;
+
+                // Для каждой доступной категории находим ближайшее место
+                let candidatePlaces = [];
+                
+                availableCategories.forEach(category => {
+                    const placesInCategory = availablePlaces.filter(place => 
+                        place.categories.includes(category) && 
+                        !usedPlacesInCurrentRoute.has(place.id)
+                    );
+
+                    if (placesInCategory.length > 0) {
+                        // Находим ближайшее место в этой категории
+                        const nearestPlace = placesInCategory.reduce((nearest, current) => {
+                            const nearestDist = calculateDistance(lastPlace.coordinates, nearest.coordinates);
+                            const currentDist = calculateDistance(lastPlace.coordinates, current.coordinates);
+                            return currentDist < nearestDist ? current : nearest;
+                        });
+
+                        candidatePlaces.push({
+                            place: nearestPlace,
+                            distance: calculateDistance(lastPlace.coordinates, nearestPlace.coordinates),
+                            category: category
+                        });
+                    }
+                });
+
+                if (candidatePlaces.length === 0) break;
+
+                // Выбираем самое близкое место из кандидатов
+                candidatePlaces.sort((a, b) => a.distance - b.distance);
+                const nextPlace = candidatePlaces[0].place;
+
+                route.push(nextPlace);
+                usedPlacesInCurrentRoute.add(nextPlace.id);
+                usedPlacesHistory.add(nextPlace.id);
+                nextPlace.categories.forEach(cat => usedCategoriesInCurrentRoute.add(cat));
             }
 
             // Оптимизируем порядок мест для автомобильного маршрута
             route = optimizeCarRoute(route);
-
-            route = route.slice(0, 4);
 
             showRoute(route);
         }
@@ -1886,15 +1906,15 @@
             while (remaining.length > 0) {
                 let lastPlace = optimized[optimized.length - 1];
                 let closestIndex = 0;
-                let closestDistance = calculateDrivingDistance(
-                    lastPlace.coordinates[0], lastPlace.coordinates[1],
-                    remaining[0].coordinates[0], remaining[0].coordinates[1]
+                let closestDistance = calculateDistance(
+                    lastPlace.coordinates,
+                    remaining[0].coordinates
                 );
                 
                 for (let i = 1; i < remaining.length; i++) {
-                    let distance = calculateDrivingDistance(
-                        lastPlace.coordinates[0], lastPlace.coordinates[1],
-                        remaining[i].coordinates[0], remaining[i].coordinates[1]
+                    let distance = calculateDistance(
+                        lastPlace.coordinates,
+                        remaining[i].coordinates
                     );
                     if (distance < closestDistance) {
                         closestDistance = distance;
@@ -1909,8 +1929,10 @@
             return optimized;
         }
 
-        // Функция расчета автомобильного расстояния
-        function calculateDrivingDistance(lat1, lon1, lat2, lon2) {
+        // Функция расчета расстояния между двумя точками
+        function calculateDistance(coord1, coord2) {
+            const [lat1, lon1] = coord1;
+            const [lat2, lon2] = coord2;
             const R = 6371;
             const dLat = (lat2 - lat1) * Math.PI / 180;
             const dLon = (lon2 - lon1) * Math.PI / 180;
