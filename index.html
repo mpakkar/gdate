@@ -756,17 +756,96 @@
                 
                 // Определяем иконку для категории
                 let icon = '📍';
-                switch(category) {
-                    case 'Рестораны': icon = '🍽️'; break;
-                    case 'Бары': icon = '🍸'; break;
-                    case 'Музеи': icon = '🏛️'; break;
-                    case 'Театры': icon = '🎭'; break;
-                    case 'Парки': icon = '🌳'; break;
-                    case 'Кино': icon = '🎬'; break;
-                    case 'Джаз-клубы': icon = '🎷'; break;
-                    case 'Винные бары': icon = '🍷'; break;
-                }
-                
+                // В функции initializeCategories обновите блок switch:
+switch(category) {
+    case 'Рестораны': icon = '🍽️'; break;
+    case 'Бары': icon = '🍸'; break;
+    case 'Музеи': icon = '🏛️'; break;
+    case 'Театры': icon = '🎭'; break;
+    case 'Парки': icon = '🌳'; break;
+    case 'Кино': icon = '🎬'; break;
+    case 'Джаз-клубы': icon = '🎷'; break;
+    case 'Винные бары': icon = '🍷'; break;
+    
+    // Новые категории
+    case 'конная прогулка': icon = '🐎'; break;
+    case 'зоопарк': icon = '🦁'; break;
+    case 'животно-кафе': icon = '🐱'; break;
+    case 'ресторан': icon = '🍽️'; break;
+    case 'кофейня': icon = '☕'; break;
+    case 'бар': icon = '🍸'; break;
+    case 'винный бар': icon = '🍷'; break;
+    case 'ужин на крыше': icon = '🏙️'; break;
+    case 'панорамный ресторан': icon = '🌆'; break;
+    case 'необычный ресторан': icon = '🌟'; break;
+    case 'чайная церемония': icon = '🍵'; break;
+    case 'сквош': icon = '🎾'; break;
+    case 'гольф': icon = '⛳'; break;
+    case 'театр': icon = '🎭'; break;
+    case 'музей': icon = '🏛️'; break;
+    case 'галерея': icon = '🖼️'; break;
+    case 'выставка': icon = '📰'; break;
+    case 'кинотеатр': icon = '🎬'; break;
+    case 'кинотеатр для двоих': icon = '💑'; break;
+    case 'кино под открытым небом': icon = '🌌'; break;
+    case 'автокинотеатр': icon = '🚗'; break;
+    case 'сапы': icon = '🛶'; break;
+    case 'аквапарк': icon = '🌊'; break;
+    case 'флотариум': icon = '💫'; break;
+    case 'аренда водного транспорта': icon = '⛵'; break;
+    case 'катание на кораблях': icon = '🚢'; break;
+    case 'серфинг': icon = '🏄'; break;
+    case 'дайвинг': icon = '🤿'; break;
+    case 'каток': icon = '⛸️'; break;
+    case 'горнолыжный курорт': icon = '⛷️'; break;
+    case 'ярмарки': icon = '🎪'; break;
+    case 'пляж': icon = '🏖️'; break;
+    case 'квест': icon = '🔍'; break;
+    case 'гейм зона': icon = '🎮'; break;
+    case 'бильярд': icon = '🎱'; break;
+    case 'боулинг': icon = '🎳'; break;
+    case 'VR': icon = '🥽'; break;
+    case 'пейнтбол': icon = '🔫'; break;
+    case 'парки и сады': icon = '🌳'; break;
+    case 'водопады': icon = '🌊'; break;
+    case 'стендап': icon = '🎤'; break;
+    case 'паблик ток': icon = '🗣️'; break;
+    case 'лекции': icon = '🎓'; break;
+    case 'караоке': icon = '🎤'; break;
+    case 'студия звукозаписи': icon = '🎧'; break;
+    case 'концерты': icon = '🎵'; break;
+    case 'воздушный шар': icon = '🎈'; break;
+    case 'вертолет': icon = '🚁'; break;
+    case 'спа': icon = '🧖'; break;
+    case 'аренда авто': icon = '🚗'; break;
+    case 'мастер класс': icon = '🎨'; break;
+    case 'дегустация вин': icon = '🍇'; break;
+    case 'тур по барам': icon = '🍻'; break;
+    case 'кальянные': icon = '💨'; break;
+    case 'клубы': icon = '🎉'; break;
+    case 'смотровые площадки': icon = '🏙️'; break;
+    case 'лофт': icon = '🏭'; break;
+    case 'мотоциклы': icon = '🏍️'; break;
+    case 'банджи джампинг': icon = '🪂'; break;
+    case 'прыжок с парашютом': icon = '🪂'; break;
+    case 'zip line': icon = '🧗‍♀️'; break;
+    case 'парк аттракционов': icon = '🎢'; break;
+    case 'фотосессия': icon = '📸'; break;
+    case 'планетарий': icon = '🌌'; break;
+    case 'картинг': icon = '🏎️'; break;
+    case 'стрельба из лука': icon = '🏹'; break;
+    case 'стрельба из оружия': icon = '🔫'; break;
+    case 'аэротруба': icon = '🌪️'; break;
+    case 'параплан': icon = '🪂'; break;
+    case 'скалолазание': icon = '🧗‍♂️'; break;
+    case 'веревочный парк': icon = '🧗'; break;
+    case 'необычное': icon = '🌟'; break;
+    case 'комната разгрома': icon = '💥'; break;
+    case 'глэмпинг': icon = '⛺'; break;
+    case 'обсерватория': icon = '🔭'; break;
+    
+    default: icon = '📍'; break;
+}
                 categoryCard.innerHTML = `
                     <div class="category-icon">${icon}</div>
                     <div class="category-name">${category}</div>
