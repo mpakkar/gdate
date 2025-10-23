@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Great Date</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Подключение API Яндекс Карт -->
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=fc21015a-a988-4d6f-91b0-5c86c3db620b&lang=ru_RU" type="text/javascript"></script>
     <style>
         * {
             margin: 0;
@@ -330,11 +332,18 @@
             border: 2px solid rgba(255,255,255,0.1);
             text-align: left;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .route-place:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            border-color: rgba(102, 126, 234, 0.4);
+        }
+
+        .route-place.active {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
         }
 
         .route-place-header {
@@ -451,6 +460,50 @@
         .route-button.tertiary {
             background: rgba(102, 126, 234, 0.3);
             border: 2px solid rgba(102, 126, 234, 0.5);
+        }
+
+        /* Стили для карты */
+        #map {
+            width: 100%;
+            height: 300px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .map-container {
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .route-info {
+            background: rgba(30, 30, 46, 0.8);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 15px;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .route-info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.8rem;
+        }
+
+        .route-info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .route-info-label {
+            color: #a0aec0;
+        }
+
+        .route-info-value {
+            color: white;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -602,210 +655,6 @@
                 <div class="category-icon">🛍️</div>
                 <div class="category-name">Шоппинг</div>
             </div>
-
-            <!-- Вторые 10 категорий -->
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏟️</div>
-                <div class="category-name">Концерты</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎪</div>
-                <div class="category-name">Цирк</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🚶</div>
-                <div class="category-name">Прогулки</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏊</div>
-                <div class="category-name">Бассейны</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎯</div>
-                <div class="category-name">Квесты</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎮</div>
-                <div class="category-name">Игровые клубы</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏹</div>
-                <div class="category-name">Тир</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎤</div>
-                <div class="category-name">Караоке</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🍩</div>
-                <div class="category-name">Десертные</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🚴</div>
-                <div class="category-name">Велопрогулки</div>
-            </div>
-
-            <!-- Третьи 10 категорий -->
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏖️</div>
-                <div class="category-name">Пляжи</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🚣</div>
-                <div class="category-name">Лодки</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏕️</div>
-                <div class="category-name">Кемпинг</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">♨️</div>
-                <div class="category-name">Спа</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏋️</div>
-                <div class="category-name">Спортзалы</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🧘</div>
-                <div class="category-name">Йога</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎲</div>
-                <div class="category-name">Настолки</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏺</div>
-                <div class="category-name">Выставки</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">📚</div>
-                <div class="category-name">Библиотеки</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎡</div>
-                <div class="category-name">Аттракционы</div>
-            </div>
-
-            <!-- Четвертые 10 категорий -->
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎪</div>
-                <div class="category-name">Фестивали</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏇</div>
-                <div class="category-name">Верховая езда</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">⛷️</div>
-                <div class="category-name">Лыжи</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏄</div>
-                <div class="category-name">Серфинг</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🚁</div>
-                <div class="category-name">Вертолеты</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏎️</div>
-                <div class="category-name">Картинг</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎷</div>
-                <div class="category-name">Джаз-клубы</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🍷</div>
-                <div class="category-name">Винные бары</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏰</div>
-                <div class="category-name">Замки</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🌌</div>
-                <div class="category-name">Планетарии</div>
-            </div>
-
-            <!-- Пятые 10 категорий -->
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎭</div>
-                <div class="category-name">Опера</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🕌</div>
-                <div class="category-name">Архитектура</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🍵</div>
-                <div class="category-name">Чайные церемонии</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏹</div>
-                <div class="category-name">Стрельба из лука</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🚵</div>
-                <div class="category-name">Горные велосипеды</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🏜️</div>
-                <div class="category-name">Пустыни</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🦜</div>
-                <div class="category-name">Парки птиц</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🎪</div>
-                <div class="category-name">Цирковые школы</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🍫</div>
-                <div class="category-name">Шоколадные фабрики</div>
-            </div>
-
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-icon">🚂</div>
-                <div class="category-name">Железные дороги</div>
-            </div>
         </div>
 
         <button class="next-button" id="nextButton" onclick="generateRoute()" disabled>
@@ -818,6 +667,14 @@
         <div class="header">
             <h1 class="title">Ваш маршрут</h1>
             <p class="subtitle">Идеальные места для вашего свидания</p>
+        </div>
+
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+
+        <div class="route-info" id="routeInfo">
+            <!-- Информация о маршруте будет здесь -->
         </div>
 
         <div class="route-container" id="routeContainer">
@@ -850,7 +707,7 @@
                 "price": "💰💰💰",
                 "description": "Популярный ресторан с панорамной террасой с видом на Казанский собор и Дом Зингера",
                 "features": ["Терраса", "Панорамный вид", "Европейская кухня"],
-                "coordinates": { "lat": 59.935413, "lng": 30.325690 }
+                "coordinates": [59.935413, 30.325690]
             },
             {
                 "id": 2,
@@ -861,7 +718,7 @@
                 "price": "💰💰💰💰",
                 "description": "Ресторан с видом на Исаакиевский собор, сочетает современную европейскую и русскую кухни",
                 "features": ["Панорамный вид", "Европейская кухня", "Русская кухня"],
-                "coordinates": { "lat": 59.932951, "lng": 30.308228 }
+                "coordinates": [59.932951, 30.308228]
             },
             {
                 "id": 3,
@@ -872,89 +729,23 @@
                 "price": "💰💰💰💰",
                 "description": "Современный ресторан с авторской кухней от известного шефа Владимира Чистякова",
                 "features": ["Авторская кухня", "Премиум"],
-                "coordinates": { "lat": 59.943086, "lng": 30.358969 }
+                "coordinates": [59.943086, 30.358969]
             },
             {
                 "id": 4,
-                "name": "Percorso",
+                "name": "Khachapuri i Vino",
                 "categories": ["Рестораны"],
-                "icon": "🍝",
-                "rating": 4.9,
-                "price": "💰💰💰💰💰",
-                "description": "Элегантный итальянский ресторан с изысканной кухней и богатой винной картой",
-                "features": ["Итальянская кухня", "Винная карта", "Премиум"],
-                "coordinates": { "lat": 59.936149, "lng": 30.315591 }
-            },
-            {
-                "id": 5,
-                "name": "Betulla",
-                "categories": ["Рестораны"],
-                "icon": "🥗",
-                "rating": 4.5,
-                "price": "💰💰💰",
-                "description": "Ресторан-бистро с меню, вдохновленным средиземноморскими и азиатскими мотивами",
-                "features": ["Бистро", "Средиземноморская кухня"],
-                "coordinates": { "lat": 59.937282, "lng": 30.323969 }
-            },
-            {
-                "id": 6,
-                "name": "Il Lago dei Cigni",
-                "categories": ["Рестораны"],
-                "icon": "🍝",
-                "rating": 4.7,
-                "price": "💰💰💰",
-                "description": "Романтичный ресторан итальянской кухни с видом на Михайловский замок и Летний сад",
-                "features": ["Итальянская кухня", "Романтическая атмосфера"],
-                "coordinates": { "lat": 59.941944, "lng": 30.337778 }
-            },
-            {
-                "id": 7,
-                "name": "Harvest",
-                "categories": ["Рестораны"],
-                "icon": "🍲",
-                "rating": 4.6,
-                "price": "💰💰💰",
-                "description": "Ресторан современной русской кухни с акцентом на локальные фермерские продукты",
-                "features": ["Русская кухня", "Фермерские продукты"],
-                "coordinates": { "lat": 59.928451, "lng": 30.346899 }
-            },
-            {
-                "id": 8,
-                "name": "Bourgeois Bohemians",
-                "categories": ["Рестораны", "Бары"],
-                "icon": "🍸",
-                "rating": 4.4,
+                "icon": "🧀",
+                "rating": 4.8,
                 "price": "💰💰",
-                "description": "Бохо-шик ресторан с эклектичным меню и живой музыкой",
-                "features": ["Живая музыка", "Бар", "Бохо-атмосфера"],
-                "coordinates": { "lat": 59.926944, "lng": 30.346389 }
-            },
-            {
-                "id": 9,
-                "name": "Salone pasta & bar",
-                "categories": ["Рестораны"],
-                "icon": "🍝",
-                "rating": 4.5,
-                "price": "💰💰",
-                "description": "Стильное заведение, специализирующееся на пасте и коктейлях",
-                "features": ["Паста", "Коктейли", "Итальянская кухня"],
-                "coordinates": { "lat": 59.935278, "lng": 30.327222 }
-            },
-            {
-                "id": 10,
-                "name": "Frantsuza Bistro",
-                "categories": ["Рестораны"],
-                "icon": "🥖",
-                "rating": 4.6,
-                "price": "💰💰",
-                "description": "Уютное французское бистро с аутентичной атмосферой",
-                "features": ["Французская кухня", "Бистро", "Уютная атмосфера"],
-                "coordinates": { "lat": 59.944167, "lng": 30.348611 }
+                "description": "Уютный ресторан грузинской кухни с аутентичной атмосферой",
+                "features": ["Грузинская кухня", "Уютная атмосфера", "Хачапури"],
+                "coordinates": [59.927778, 30.346389]
             },
 
             // Кофейни
             {
-                "id": 11,
+                "id": 5,
                 "name": "Cococrema",
                 "categories": ["Кофейни"],
                 "icon": "🍰",
@@ -962,12 +753,12 @@
                 "price": "💰💰",
                 "description": "Кафе-кондитерская и ресторан с изысканными десертами и средиземноморской кухней",
                 "features": ["Десерты", "Средиземноморская кухня", "Кондитерская"],
-                "coordinates": { "lat": 59.957500, "lng": 30.299444 }
+                "coordinates": [59.957500, 30.299444]
             },
 
             // Театры
             {
-                "id": 12,
+                "id": 6,
                 "name": "Мариинский театр",
                 "categories": ["Театры", "Опера"],
                 "icon": "🎭",
@@ -975,10 +766,10 @@
                 "price": "💰💰💰",
                 "description": "Всемирно известный театр оперы и балета, один из ведущих музыкальных театров России и мира",
                 "features": ["Оперa", "Балет", "Оркестр"],
-                "coordinates": { "lat": 59.925553, "lng": 30.296044 }
+                "coordinates": [59.925553, 30.296044]
             },
             {
-                "id": 13,
+                "id": 7,
                 "name": "Александринский театр",
                 "categories": ["Театры"],
                 "icon": "🎭",
@@ -986,45 +777,12 @@
                 "price": "💰💰💰",
                 "description": "Старейший национальный театр России, ведущий историю с 1756 года",
                 "features": ["Драма", "Историческое здание"],
-                "coordinates": { "lat": 59.931556, "lng": 30.336361 }
-            },
-            {
-                "id": 14,
-                "name": "Михайловский театр",
-                "categories": ["Театры", "Опера"],
-                "icon": "🎭",
-                "rating": 4.8,
-                "price": "💰💰💰",
-                "description": "Значительный театр оперы и балета в Санкт-Петербурге",
-                "features": ["Оперa", "Балет"],
-                "coordinates": { "lat": 59.939167, "lng": 30.331667 }
-            },
-            {
-                "id": 15,
-                "name": "Большой драматический театр им. Г. А. Товстоногова (БДТ)",
-                "categories": ["Театры"],
-                "icon": "🎪",
-                "rating": 4.7,
-                "price": "💰💰",
-                "description": "Один из первых театров, созданных после Октябрьской революции, знаменит мощной режиссурой и уникальной труппой",
-                "features": ["Драма", "Классика", "Современные постановки"],
-                "coordinates": { "lat": 59.928056, "lng": 30.341389 }
-            },
-            {
-                "id": 16,
-                "name": "Малый драматический театр - Театр Европы",
-                "categories": ["Театры"],
-                "icon": "🎪",
-                "rating": 4.7,
-                "price": "💰💰",
-                "description": "Академический театр под руководством Льва Додина, получивший статус Театра Европы",
-                "features": ["Драма", "Европейские стандарты"],
-                "coordinates": { "lat": 59.928889, "lng": 30.344722 }
+                "coordinates": [59.931556, 30.336361]
             },
 
             // Бары
             {
-                "id": 17,
+                "id": 8,
                 "name": "El Copitas",
                 "categories": ["Бары"],
                 "icon": "🥃",
@@ -1032,65 +790,10 @@
                 "price": "💰💰💰",
                 "description": "Легендарный спикизи-бар с мексиканской атмосферой и редким алкоголем",
                 "features": ["Спикизи", "Редкий алкоголь", "Мексиканская кухня"],
-                "coordinates": { "lat": 59.927778, "lng": 30.354722 }
+                "coordinates": [59.927778, 30.354722]
             },
             {
-                "id": 18,
-                "name": "Bar Quinta",
-                "categories": ["Бары", "Винные бары"],
-                "icon": "🍷",
-                "rating": 4.7,
-                "price": "💰💰💰",
-                "description": "Уютный бар с обширной коллекцией креплёных вин и авторскими коктейлями",
-                "features": ["Винная карта", "Авторские коктейли", "Камерная атмосфера"],
-                "coordinates": { "lat": 59.935000, "lng": 30.351111 }
-            },
-            {
-                "id": 19,
-                "name": "Apotheke Bar",
-                "categories": ["Бары"],
-                "icon": "🍸",
-                "rating": 4.6,
-                "price": "💰💰💰",
-                "description": "Скрытый бар в стиле аптеки с индивидуальным подходом к каждому гостю",
-                "features": ["Спикизи", "Индивидуальные коктейли", "Скрытый бар"],
-                "coordinates": { "lat": 59.928889, "lng": 30.347222 }
-            },
-            {
-                "id": 20,
-                "name": "MoonShine",
-                "categories": ["Бары"],
-                "icon": "🍹",
-                "rating": 4.5,
-                "price": "💰💰",
-                "description": "Бар с качественными коктейлями ручной работы и неброской атмосферой",
-                "features": ["Коктейли ручной работы", "Расслабленная атмосфера"],
-                "coordinates": { "lat": 59.934167, "lng": 30.323611 }
-            },
-            {
-                "id": 21,
-                "name": "Кабинет (Kabinet)",
-                "categories": ["Бары"],
-                "icon": "📚",
-                "rating": 4.4,
-                "price": "💰💰",
-                "description": "Бар в стиле дореволюционного кабинета с атмосферой старого Петербурга",
-                "features": ["Историческая атмосфера", "Классические коктейли"],
-                "coordinates": { "lat": 59.936389, "lng": 30.328056 }
-            },
-            {
-                "id": 22,
-                "name": "Dead Poets",
-                "categories": ["Бары"],
-                "icon": "✒️",
-                "rating": 4.5,
-                "price": "💰💰",
-                "description": "Бар для ценителей качественных классических коктейлей и спокойной атмосферы",
-                "features": ["Классические коктейли", "Расслабленная атмосфера"],
-                "coordinates": { "lat": 59.935833, "lng": 30.352500 }
-            },
-            {
-                "id": 23,
+                "id": 9,
                 "name": "The Hat Jazz Bar",
                 "categories": ["Бары", "Джаз-клубы"],
                 "icon": "🎷",
@@ -1098,12 +801,12 @@
                 "price": "💰💰",
                 "description": "Легендарный джаз-бар с живыми выступлениями и аутентичной атмосферой",
                 "features": ["Живой джаз", "Аутентичная атмосфера"],
-                "coordinates": { "lat": 59.932778, "lng": 30.343056 }
+                "coordinates": [59.932778, 30.343056]
             },
 
-            // Дополнительные места для других категорий
+            // Музеи
             {
-                "id": 24,
+                "id": 10,
                 "name": "Эрмитаж",
                 "categories": ["Музеи"],
                 "icon": "🏛️",
@@ -1111,10 +814,12 @@
                 "price": "💰💰",
                 "description": "Один из крупнейших художественных музеев мира с богатейшей коллекцией",
                 "features": ["Искусство", "История", "Архитектура"],
-                "coordinates": { "lat": 59.939806, "lng": 30.314553 }
+                "coordinates": [59.939806, 30.314553]
             },
+
+            // Парки
             {
-                "id": 25,
+                "id": 11,
                 "name": "Летний сад",
                 "categories": ["Парки"],
                 "icon": "🌳",
@@ -1122,15 +827,136 @@
                 "price": "Бесплатно",
                 "description": "Старейший сад Санкт-Петербурга с фонтанами, скульптурами и красивыми аллеями",
                 "features": ["Прогулки", "Фонтаны", "Скульптуры"],
-                "coordinates": { "lat": 59.945278, "lng": 30.335833 }
+                "coordinates": [59.945278, 30.335833]
+            },
+
+            // Галереи
+            {
+                "id": 12,
+                "name": "Галерея современного искусства",
+                "categories": ["Галереи"],
+                "icon": "🎨",
+                "rating": 4.5,
+                "price": "💰💰",
+                "description": "Пространство современного искусства с выставками российских и зарубежных художников",
+                "features": ["Современное искусство", "Выставки", "Лекции"],
+                "coordinates": [59.933056, 30.355278]
             }
         ];
 
         let selectedCategories = [];
-        let usedPlacesHistory = new Set(); // История использованных мест
+        let usedPlacesHistory = new Set();
+        let map;
+        let route;
+        let currentRoute = [];
+
+        // Инициализация Яндекс Карт
+        function initMap(routePlaces) {
+            if (!routePlaces || routePlaces.length === 0) return;
+            
+            currentRoute = routePlaces;
+            
+            // Уничтожаем предыдущую карту, если она существует
+            if (map) {
+                map.destroy();
+            }
+            
+            // Создаем карту
+            ymaps.ready(function() {
+                map = new ymaps.Map("map", {
+                    center: [59.94, 30.31],
+                    zoom: 12
+                }, {
+                    searchControlProvider: 'yandex#search'
+                });
+                
+                // Создаем многостраничный балун
+                const objectManager = new ymaps.ObjectManager({
+                    clusterize: true,
+                    gridSize: 32,
+                    clusterDisableClickZoom: true
+                });
+                
+                objectManager.objects.options.set('preset', 'islands#blueDotIcon');
+                objectManager.clusters.options.set('preset', 'islands#blueClusterIcons');
+                map.geoObjects.add(objectManager);
+                
+                // Добавляем объекты на карту
+                const objects = routePlaces.map((place, index) => ({
+                    type: 'Feature',
+                    id: place.id,
+                    geometry: {
+                        type: 'Point',
+                        coordinates: place.coordinates
+                    },
+                    properties: {
+                        balloonContent: `
+                            <div style="color: #333; padding: 10px;">
+                                <h3 style="margin: 0 0 10px 0; color: #667eea;">${place.name}</h3>
+                                <p style="margin: 0 0 5px 0;"><strong>Рейтинг:</strong> ${place.rating} ⭐</p>
+                                <p style="margin: 0 0 5px 0;"><strong>Категория:</strong> ${place.categories.join(', ')}</p>
+                                <p style="margin: 0 0 5px 0;"><strong>Цена:</strong> ${place.price}</p>
+                                <p style="margin: 0;">${place.description}</p>
+                            </div>
+                        `,
+                        clusterCaption: place.name,
+                        hintContent: place.name
+                    }
+                }));
+                
+                objectManager.add(objects);
+                
+                // Строим маршрут между точками
+                if (routePlaces.length > 1) {
+                    const points = routePlaces.map(place => place.coordinates);
+                    
+                    ymaps.route(points).then(function(route) {
+                        map.geoObjects.add(route);
+                        
+                        // Получаем информацию о маршруте
+                        const routeLength = Math.round(route.getLength() / 1000); // в км
+                        const routeTime = Math.round(route.getTime() / 60); // в минутах
+                        
+                        // Обновляем информацию о маршруте
+                        updateRouteInfo(routeLength, routeTime, routePlaces.length);
+                        
+                        // Масштабируем карту чтобы показать весь маршрут
+                        map.setBounds(route.getBounds(), {
+                            checkZoomRange: true,
+                            zoomMargin: 20
+                        });
+                    }, function(error) {
+                        console.log('Ошибка построения маршрута: ' + error);
+                        updateRouteInfo(0, 0, routePlaces.length);
+                    });
+                } else {
+                    // Если только одно место, центрируем на нем
+                    map.setCenter(routePlaces[0].coordinates, 15);
+                    updateRouteInfo(0, 0, 1);
+                }
+            });
+        }
+
+        // Обновление информации о маршруте
+        function updateRouteInfo(distance, time, placesCount) {
+            const routeInfo = document.getElementById('routeInfo');
+            routeInfo.innerHTML = `
+                <div class="route-info-item">
+                    <span class="route-info-label">Количество мест:</span>
+                    <span class="route-info-value">${placesCount}</span>
+                </div>
+                <div class="route-info-item">
+                    <span class="route-info-label">Общее расстояние:</span>
+                    <span class="route-info-value">${distance} км</span>
+                </div>
+                <div class="route-info-item">
+                    <span class="route-info-label">Примерное время:</span>
+                    <span class="route-info-value">${time} мин</span>
+                </div>
+            `;
+        }
 
         function initTelegram() {
-            // Проверяем, что находимся в Telegram Web App
             if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
                 Telegram.WebApp.ready();
                 Telegram.WebApp.expand();
@@ -1142,36 +968,35 @@
             document.getElementById('page1').classList.remove('active');
             document.getElementById('page2').classList.add('active');
             
-            // Сбрасываем выбранные категории
             selectedCategories = [];
             const selectedCards = document.querySelectorAll('.category-card.selected');
             selectedCards.forEach(card => card.classList.remove('selected'));
             
-            // Анимация появления категорий
             animateCategories();
         }
 
-        // Переход к выбору категорий с третьей страницы (изменить категории)
+        // Переход к выбору категорий с третьей страницы
         function goToCategoriesFromRoute() {
             document.getElementById('page3').classList.remove('active');
             document.getElementById('page2').classList.add('active');
             
-            // Сбрасываем выбранные категории
             selectedCategories = [];
             const selectedCards = document.querySelectorAll('.category-card.selected');
             selectedCards.forEach(card => card.classList.remove('selected'));
             
-            // Сбрасываем кнопку
             const nextButton = document.getElementById('nextButton');
             nextButton.disabled = true;
             
-            // Очищаем контейнер маршрута
             document.getElementById('routeContainer').innerHTML = '';
+            
+            if (map) {
+                map.destroy();
+                map = null;
+            }
         }
 
-        // Регенерация маршрута на третьей странице
+        // Регенерация маршрута
         function regenerateRoute() {
-            // Генерируем новый маршрут с теми же категориями
             generateRoute();
         }
 
@@ -1222,27 +1047,12 @@
                 element.classList.add('selected');
             }
             
-            // Активируем кнопку если выбрана хотя бы одна категория
             const nextButton = document.getElementById('nextButton');
             nextButton.disabled = selectedCategories.length === 0;
         }
 
-        // Функция расчета расстояния между двумя точками
-        function calculateDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371; // Радиус Земли в км
-            const dLat = (lat2 - lat1) * Math.PI / 180;
-            const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = 
-                Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-                Math.sin(dLon/2) * Math.sin(dLon/2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-            return R * c; // Расстояние в км
-        }
-
-        // Улучшенный алгоритм генерации маршрута
+        // Генерация маршрута
         function generateRoute() {
-            // Фильтруем места по выбранным категориям
             let suitablePlaces = placesDatabase.filter(place => 
                 place.categories.some(category => selectedCategories.includes(category))
             );
@@ -1255,33 +1065,28 @@
             let route = [];
             let usedPlacesInCurrentRoute = new Set();
             
-            // Создаем копию подходящих мест, исключая уже использованные
             let availablePlaces = suitablePlaces.filter(place => !usedPlacesHistory.has(place.id));
             
-            // Если доступных мест мало, сбрасываем историю
             if (availablePlaces.length < 3) {
                 usedPlacesHistory.clear();
                 availablePlaces = [...suitablePlaces];
             }
 
-            // Для каждой выбранной категории добавляем 1-2 места
+            // Выбираем места для маршрута
             selectedCategories.forEach(category => {
-                // Находим места этой категории из доступных
                 const categoryPlaces = availablePlaces.filter(place => 
                     place.categories.includes(category) && !usedPlacesInCurrentRoute.has(place.id)
                 );
                 
                 if (categoryPlaces.length > 0) {
-                    // Сортируем по рейтингу и берем лучшее место
                     categoryPlaces.sort((a, b) => b.rating - a.rating);
                     const bestPlace = categoryPlaces[0];
                     route.push(bestPlace);
                     usedPlacesInCurrentRoute.add(bestPlace.id);
                     usedPlacesHistory.add(bestPlace.id);
                     
-                    // Если есть еще места в категории, добавляем второе (случайное из топ-3)
-                    if (categoryPlaces.length > 1 && route.length < 3) {
-                        const topPlaces = categoryPlaces.slice(1, 4); // Берем следующие 3 места
+                    if (categoryPlaces.length > 1 && route.length < 4) {
+                        const topPlaces = categoryPlaces.slice(1, 4);
                         const randomPlace = topPlaces[Math.floor(Math.random() * topPlaces.length)];
                         route.push(randomPlace);
                         usedPlacesInCurrentRoute.add(randomPlace.id);
@@ -1290,11 +1095,10 @@
                 }
             });
 
-            // Если маршрут слишком короткий, добавляем случайные места из оставшихся
+            // Добавляем случайные места если маршрут короткий
             if (route.length < 3) {
                 const remainingPlaces = availablePlaces.filter(place => !usedPlacesInCurrentRoute.has(place.id));
                 while (route.length < 4 && remainingPlaces.length > 0) {
-                    // Выбираем случайное место с учетом разнообразия категорий
                     const randomIndex = Math.floor(Math.random() * remainingPlaces.length);
                     const randomPlace = remainingPlaces[randomIndex];
                     route.push(randomPlace);
@@ -1304,27 +1108,62 @@
                 }
             }
 
-            // Перемешиваем маршрут для разнообразия
-            route = shuffleArray(route);
+            // Оптимизируем порядок мест для маршрута
+            route = optimizeRouteOrder(route);
 
-            // Ограничиваем маршрут 4 местами максимум
             route = route.slice(0, 4);
 
-            // Показываем маршрут
             showRoute(route);
         }
 
-        // Функция для перемешивания массива
-        function shuffleArray(array) {
-            const newArray = [...array];
-            for (let i = newArray.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+        // Оптимизация порядка мест в маршруте
+        function optimizeRouteOrder(route) {
+            if (route.length <= 1) return route;
+            
+            // Простой алгоритм ближайшего соседа
+            let optimized = [route[0]];
+            let remaining = route.slice(1);
+            
+            while (remaining.length > 0) {
+                let lastPlace = optimized[optimized.length - 1];
+                let closestIndex = 0;
+                let closestDistance = calculateDistance(
+                    lastPlace.coordinates[0], lastPlace.coordinates[1],
+                    remaining[0].coordinates[0], remaining[0].coordinates[1]
+                );
+                
+                for (let i = 1; i < remaining.length; i++) {
+                    let distance = calculateDistance(
+                        lastPlace.coordinates[0], lastPlace.coordinates[1],
+                        remaining[i].coordinates[0], remaining[i].coordinates[1]
+                    );
+                    if (distance < closestDistance) {
+                        closestDistance = distance;
+                        closestIndex = i;
+                    }
+                }
+                
+                optimized.push(remaining[closestIndex]);
+                remaining.splice(closestIndex, 1);
             }
-            return newArray;
+            
+            return optimized;
         }
 
-        // Показ маршрута на странице 3
+        // Функция расчета расстояния
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = 
+                Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+            return R * c;
+        }
+
+        // Показ маршрута
         function showRoute(route) {
             document.getElementById('page2').classList.remove('active');
             document.getElementById('page3').classList.add('active');
@@ -1341,6 +1180,7 @@
                 const placeElement = document.createElement('div');
                 placeElement.className = 'route-place';
                 placeElement.style.animationDelay = `${index * 0.2}s`;
+                placeElement.onclick = () => highlightPlaceOnMap(place.id);
                 
                 placeElement.innerHTML = `
                     <div class="route-place-header">
@@ -1348,7 +1188,7 @@
                             ${place.icon}
                         </div>
                         <div class="route-place-info">
-                            <div class="route-place-name">${place.name}</div>
+                            <div class="route-place-name">${index + 1}. ${place.name}</div>
                             <div class="route-place-category">${place.categories.join(', ')}</div>
                         </div>
                     </div>
@@ -1366,6 +1206,22 @@
                 
                 routeContainer.appendChild(placeElement);
             });
+
+            initMap(route);
+        }
+
+        // Подсветка места на карте
+        function highlightPlaceOnMap(placeId) {
+            const placeElements = document.querySelectorAll('.route-place');
+            placeElements.forEach(el => el.classList.remove('active'));
+            
+            event.currentTarget.classList.add('active');
+            
+            // Находим место в текущем маршруте
+            const place = currentRoute.find(p => p.id === placeId);
+            if (place && map) {
+                map.setCenter(place.coordinates, 16);
+            }
         }
 
         // Вспомогательная функция для случайного цвета
