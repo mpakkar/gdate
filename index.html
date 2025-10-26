@@ -139,6 +139,13 @@
         .profile-category {
             font-size: 0.55rem;
             color: #a0aec0;
+            margin-bottom: 2px;
+        }
+
+        .profile-address {
+            font-size: 0.5rem;
+            color: #888;
+            margin-top: 1px;
         }
 
         .profile-details {
@@ -384,6 +391,13 @@
         .route-place-category {
             font-size: 0.8rem;
             color: #a0aec0;
+            margin-bottom: 2px;
+        }
+
+        .route-place-address {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 2px;
         }
 
         .route-place-details {
@@ -615,6 +629,7 @@
                     <div class="profile-info">
                         <div class="profile-name">Terrassa</div>
                         <div class="profile-category">Ресторан с панорамным видом</div>
+                        <div class="profile-address">Казанская ул., 3А</div>
                     </div>
                 </div>
                 <div class="profile-details">
@@ -630,6 +645,7 @@
                     <div class="profile-info">
                         <div class="profile-name">Мариинский театр</div>
                         <div class="profile-category">Театр оперы и балета</div>
+                        <div class="profile-address">Театральная пл., 1</div>
                     </div>
                 </div>
                 <div class="profile-details">
@@ -645,6 +661,7 @@
                     <div class="profile-info">
                         <div class="profile-name">El Copitas</div>
                         <div class="profile-category">Спикизи-бар</div>
+                        <div class="profile-address">Лиговский пр., 50</div>
                     </div>
                 </div>
                 <div class="profile-details">
@@ -660,6 +677,7 @@
                     <div class="profile-info">
                         <div class="profile-name">Khachapuri i Vino</div>
                         <div class="profile-category">Грузинская кухни</div>
+                        <div class="profile-address">ул. Восстания, 21</div>
                     </div>
                 </div>
                 <div class="profile-details">
@@ -675,6 +693,7 @@
                     <div class="profile-info">
                         <div class="profile-name">The Hat Jazz Bar</div>
                         <div class="profile-category">Джаз-бар</div>
+                        <div class="profile-address">ул. Белинского, 12</div>
                     </div>
                 </div>
                 <div class="profile-details">
@@ -961,6 +980,7 @@
                                 <div style="color: #333; padding: 8px; max-width: 200px;">
                                     <strong style="color: #667eea; font-size: 14px;">${index + 1}. ${place.name}</strong>
                                     <div style="font-size: 12px; margin-top: 4px; color: #666;">${place.categories.join(', ')}</div>
+                                    <div style="font-size: 11px; margin-top: 2px; color: #888;">${place.address}</div>
                                 </div>
                             `,
                             // Подпись с номером
@@ -1509,6 +1529,7 @@ function generateRoute() {
                                 ${isRecommended ? '<span class="recommended-badge">Рекомендуем</span>' : ''}
                             </div>
                             <div class="route-place-category">${place.categories.filter(cat => cat !== "Рекомендуем").join(', ')}</div>
+                            <div class="route-place-address">${place.address}</div>
                         </div>
                     </div>
                     <div class="route-place-description">${place.description}</div>
@@ -1569,6 +1590,7 @@ function generateRoute() {
                 const isRecommended = place.categories.includes("Рекомендуем");
                 routeText += `${index + 1}. ${place.name}${isRecommended ? ' ⭐ Рекомендуем' : ''}\n`;
                 routeText += `   📍 ${place.categories.filter(cat => cat !== "Рекомендуем").join(', ')}\n`;
+                routeText += `   🏠 ${place.address}\n`;
                 routeText += `   ⭐ ${place.rating} | ${place.price}\n`;
                 routeText += `   ${place.description}\n\n`;
             });
