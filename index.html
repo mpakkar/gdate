@@ -600,6 +600,207 @@
             border: 1px solid rgba(255, 215, 0, 0.3);
         }
 
+        /* Стили для модального окна замены места */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: rgba(30, 30, 46, 0.95);
+            border-radius: 16px;
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #a0aec0;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: white;
+        }
+
+        .replace-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .replace-option {
+            background: rgba(40, 40, 60, 0.8);
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .replace-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border-color: rgba(102, 126, 234, 0.4);
+            background: rgba(50, 50, 70, 0.9);
+        }
+
+        .replace-option.selected {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .replace-option-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .replace-option-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .replace-option-name {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .replace-option-category {
+            font-size: 0.75rem;
+            color: #a0aec0;
+        }
+
+        .replace-option-address {
+            font-size: 0.7rem;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .replace-option-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .replace-option-rating {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            color: #f6e05e;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .replace-option-price {
+            font-size: 0.75rem;
+            color: #a0aec0;
+            background: rgba(160, 174, 192, 0.1);
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+
+        .replace-option-description {
+            margin-top: 6px;
+            font-size: 0.75rem;
+            color: #cbd5e0;
+            line-height: 1.3;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-button.primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .modal-button.secondary {
+            background: rgba(74, 85, 104, 0.8);
+            color: white;
+        }
+
+        .modal-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        /* Кнопка замены в карточке места */
+        .replace-place-button {
+            background: rgba(102, 126, 234, 0.2);
+            color: #90cdf4;
+            border: 1px solid rgba(102, 126, 234, 0.4);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+            width: 100%;
+        }
+
+        .replace-place-button:hover {
+            background: rgba(102, 126, 234, 0.3);
+            transform: translateY(-1px);
+        }
+
         @keyframes shimmer {
             0% {
                 background-position: 0% 50%;
@@ -760,6 +961,23 @@
         </div>
     </div>
 
+    <!-- Модальное окно для замены места -->
+    <div class="modal-overlay" id="replaceModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Заменить место в маршруте</div>
+                <button class="modal-close" onclick="closeReplaceModal()">×</button>
+            </div>
+            <div class="replace-options" id="replaceOptions">
+                <!-- Варианты замены будут генерироваться здесь -->
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-button secondary" onclick="closeReplaceModal()">Отмена</button>
+                <button class="modal-button primary" onclick="confirmReplace()">Заменить</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Глобальные переменные
         let selectedCategories = [];
@@ -769,6 +987,8 @@
         let currentRoute = [];
         let userLocation = null;
         let placesDatabase = []; // Инициализируем пустым массивом
+        let currentReplacementIndex = -1;
+        let selectedReplacementPlace = null;
 
         // Функция для проверки загрузки базы данных
         function checkDatabaseLoaded() {
@@ -1261,192 +1481,193 @@
 
         // Генерация маршрута с новым алгоритмом (с учетом рекомендуемых мест)
         // Генерация маршрута с обновленным алгоритмом
-function generateRoute() {
-    // Проверяем, загружена ли база данных
-    if (placesDatabase.length === 0) {
-        alert('База данных еще не загружена. Пожалуйста, подождите...');
-        return;
-    }
-    
-    // Определяем, выбрана ли категория "Рекомендуем"
-    const hasRecommendedCategory = selectedCategories.includes("Рекомендуем");
-    
-    // Фильтруем места по выбранным категориям (исключая "Рекомендуем" из фильтрации мест)
-    const selectedCategoriesWithoutRecommended = selectedCategories.filter(cat => cat !== "Рекомендуем");
-    
-    let suitablePlaces = placesDatabase.filter(place => 
-        place.categories.some(category => selectedCategoriesWithoutRecommended.includes(category))
-    );
-
-    if (suitablePlaces.length === 0) {
-        alert('По выбранным категориям не найдено мест');
-        return;
-    }
-
-    // Разделяем места на рекомендуемые и обычные
-    let recommendedPlaces = suitablePlaces.filter(place => 
-        place.categories.includes("Рекомендуем")
-    );
-    
-    let otherPlaces = suitablePlaces.filter(place => 
-        !place.categories.includes("Рекомендуем")
-    );
-
-    let route = [];
-    let usedPlacesInCurrentRoute = new Set();
-    let usedCategoriesInCurrentRoute = new Set();
-    
-    // Определяем доступные места (исключая уже использованные)
-    let availableRecommended = recommendedPlaces.filter(place => !usedPlacesHistory.has(place.id));
-    let availableOther = otherPlaces.filter(place => !usedPlacesHistory.has(place.id));
-    
-    // Определяем, будем ли использовать рекомендуемые места
-    const useRecommended = hasRecommendedCategory || availableRecommended.length > 0;
-    
-    // Если доступных мест мало, очищаем историю
-    if ((useRecommended && availableRecommended.length + availableOther.length < 3) || 
-        (!useRecommended && availableOther.length < 3)) {
-        usedPlacesHistory.clear();
-        availableRecommended = [...recommendedPlaces];
-        availableOther = [...otherPlaces];
-    }
-
-    // Стратегия выбора первого места:
-    let firstPlace;
-    if (useRecommended && availableRecommended.length > 0) {
-        // Используем рекомендуемые места (если они есть или выбрана категория)
-        firstPlace = availableRecommended[Math.floor(Math.random() * availableRecommended.length)];
-    } else if (availableOther.length > 0) {
-        // Иначе берем из обычных мест
-        firstPlace = availableOther[Math.floor(Math.random() * availableOther.length)];
-    } else {
-        alert('Не удалось найти подходящие места');
-        return;
-    }
-
-    route.push(firstPlace);
-    usedPlacesInCurrentRoute.add(firstPlace.id);
-    usedPlacesHistory.add(firstPlace.id);
-    firstPlace.categories.forEach(cat => {
-        if (cat !== "Рекомендуем") {
-            usedCategoriesInCurrentRoute.add(cat);
-        }
-    });
-
-    // Добавляем остальные места
-    while (route.length < 4 && route.length < selectedCategoriesWithoutRecommended.length + 1) {
-        const lastPlace = route[route.length - 1];
-        
-        // Находим доступные категории (еще не использованные в маршруте)
-        const availableCategories = selectedCategoriesWithoutRecommended.filter(cat => 
-            !usedCategoriesInCurrentRoute.has(cat)
-        );
-
-        if (availableCategories.length === 0) break;
-
-        // Для каждой доступной категории находим ближайшее место
-        let candidatePlaces = [];
-        
-        availableCategories.forEach(category => {
-            // Определяем, из каких мест искать - приоритет рекомендуемым
-            let placesToSearch = [];
+        function generateRoute() {
+            // Проверяем, загружена ли база данных
+            if (placesDatabase.length === 0) {
+                alert('База данных еще не загружена. Пожалуйста, подождите...');
+                return;
+            }
             
-            if (useRecommended) {
-                // Сначала ищем в рекомендуемых
-                placesToSearch = availableRecommended.filter(place => 
-                    place.categories.includes(category) && 
+            // Определяем, выбрана ли категория "Рекомендуем"
+            const hasRecommendedCategory = selectedCategories.includes("Рекомендуем");
+            
+            // Фильтруем места по выбранным категориям (исключая "Рекомендуем" из фильтрации мест)
+            const selectedCategoriesWithoutRecommended = selectedCategories.filter(cat => cat !== "Рекомендуем");
+            
+            let suitablePlaces = placesDatabase.filter(place => 
+                place.categories.some(category => selectedCategoriesWithoutRecommended.includes(category))
+            );
+
+            if (suitablePlaces.length === 0) {
+                alert('По выбранным категориям не найдено мест');
+                return;
+            }
+
+            // Разделяем места на рекомендуемые и обычные
+            let recommendedPlaces = suitablePlaces.filter(place => 
+                place.categories.includes("Рекомендуем")
+            );
+            
+            let otherPlaces = suitablePlaces.filter(place => 
+                !place.categories.includes("Рекомендуем")
+            );
+
+            let route = [];
+            let usedPlacesInCurrentRoute = new Set();
+            let usedCategoriesInCurrentRoute = new Set();
+            
+            // Определяем доступные места (исключая уже использованные)
+            let availableRecommended = recommendedPlaces.filter(place => !usedPlacesHistory.has(place.id));
+            let availableOther = otherPlaces.filter(place => !usedPlacesHistory.has(place.id));
+            
+            // Определяем, будем ли использовать рекомендуемые места
+            const useRecommended = hasRecommendedCategory || availableRecommended.length > 0;
+            
+            // Если доступных мест мало, очищаем историю
+            if ((useRecommended && availableRecommended.length + availableOther.length < 3) || 
+                (!useRecommended && availableOther.length < 3)) {
+                usedPlacesHistory.clear();
+                availableRecommended = [...recommendedPlaces];
+                availableOther = [...otherPlaces];
+            }
+
+            // Стратегия выбора первого места:
+            let firstPlace;
+            if (useRecommended && availableRecommended.length > 0) {
+                // Используем рекомендуемые места (если они есть или выбрана категория)
+                firstPlace = availableRecommended[Math.floor(Math.random() * availableRecommended.length)];
+            } else if (availableOther.length > 0) {
+                // Иначе берем из обычных мест
+                firstPlace = availableOther[Math.floor(Math.random() * availableOther.length)];
+            } else {
+                alert('Не удалось найти подходящие места');
+                return;
+            }
+
+            route.push(firstPlace);
+            usedPlacesInCurrentRoute.add(firstPlace.id);
+            usedPlacesHistory.add(firstPlace.id);
+            firstPlace.categories.forEach(cat => {
+                if (cat !== "Рекомендуем") {
+                    usedCategoriesInCurrentRoute.add(cat);
+                }
+            });
+
+            // Добавляем остальные места
+            while (route.length < 4 && route.length < selectedCategoriesWithoutRecommended.length + 1) {
+                const lastPlace = route[route.length - 1];
+                
+                // Находим доступные категории (еще не использованные в маршруте)
+                const availableCategories = selectedCategoriesWithoutRecommended.filter(cat => 
+                    !usedCategoriesInCurrentRoute.has(cat)
+                );
+
+                if (availableCategories.length === 0) break;
+
+                // Для каждой доступной категории находим ближайшее место
+                let candidatePlaces = [];
+                
+                availableCategories.forEach(category => {
+                    // Определяем, из каких мест искать - приоритет рекомендуемым
+                    let placesToSearch = [];
+                    
+                    if (useRecommended) {
+                        // Сначала ищем в рекомендуемых
+                        placesToSearch = availableRecommended.filter(place => 
+                            place.categories.includes(category) && 
+                            !usedPlacesInCurrentRoute.has(place.id)
+                        );
+                        
+                        // Если рекомендуемых нет, ищем в обычных
+                        if (placesToSearch.length === 0) {
+                            placesToSearch = availableOther.filter(place => 
+                                place.categories.includes(category) && 
+                                !usedPlacesInCurrentRoute.has(place.id)
+                            );
+                        }
+                    } else {
+                        // Если не используем рекомендуемые, ищем только в обычных
+                        placesToSearch = availableOther.filter(place => 
+                            place.categories.includes(category) && 
+                            !usedPlacesInCurrentRoute.has(place.id)
+                        );
+                    }
+
+                    if (placesToSearch.length > 0) {
+                        // Находим ближайшее место в этой категории
+                        const nearestPlace = placesToSearch.reduce((nearest, current) => {
+                            const nearestDist = calculateDistance(lastPlace.coordinates, nearest.coordinates);
+                            const currentDist = calculateDistance(lastPlace.coordinates, current.coordinates);
+                            return currentDist < nearestDist ? current : nearest;
+                        });
+
+                        candidatePlaces.push({
+                            place: nearestPlace,
+                            distance: calculateDistance(lastPlace.coordinates, nearestPlace.coordinates),
+                            category: category,
+                            isRecommended: nearestPlace.categories.includes("Рекомендуем")
+                        });
+                    }
+                });
+
+                if (candidatePlaces.length === 0) break;
+
+                // Сортируем кандидатов: сначала рекомендуемые, потом по расстоянию
+                candidatePlaces.sort((a, b) => {
+                    if (a.isRecommended && !b.isRecommended) return -1;
+                    if (!a.isRecommended && b.isRecommended) return 1;
+                    return a.distance - b.distance;
+                });
+
+                const nextPlace = candidatePlaces[0].place;
+
+                route.push(nextPlace);
+                usedPlacesInCurrentRoute.add(nextPlace.id);
+                usedPlacesHistory.add(nextPlace.id);
+                nextPlace.categories.forEach(cat => {
+                    if (cat !== "Рекомендуем") {
+                        usedCategoriesInCurrentRoute.add(cat);
+                    }
+                });
+            }
+
+            // Если у нас мало мест в маршруте, добавляем дополнительные места
+            if (route.length < 3) {
+                const lastPlace = route[route.length - 1];
+                let additionalPlaces = [];
+                
+                if (useRecommended) {
+                    additionalPlaces = [...availableRecommended, ...availableOther];
+                } else {
+                    additionalPlaces = [...availableOther];
+                }
+                
+                additionalPlaces = additionalPlaces.filter(place => 
                     !usedPlacesInCurrentRoute.has(place.id)
                 );
                 
-                // Если рекомендуемых нет, ищем в обычных
-                if (placesToSearch.length === 0) {
-                    placesToSearch = availableOther.filter(place => 
-                        place.categories.includes(category) && 
-                        !usedPlacesInCurrentRoute.has(place.id)
-                    );
+                // Сортируем по расстоянию от последней точки
+                additionalPlaces.sort((a, b) => {
+                    const distA = calculateDistance(lastPlace.coordinates, a.coordinates);
+                    const distB = calculateDistance(lastPlace.coordinates, b.coordinates);
+                    return distA - distB;
+                });
+                
+                // Добавляем ближайшие места до достижения лимита
+                while (route.length < 4 && additionalPlaces.length > 0) {
+                    const nextPlace = additionalPlaces.shift();
+                    route.push(nextPlace);
+                    usedPlacesInCurrentRoute.add(nextPlace.id);
+                    usedPlacesHistory.add(nextPlace.id);
                 }
-            } else {
-                // Если не используем рекомендуемые, ищем только в обычных
-                placesToSearch = availableOther.filter(place => 
-                    place.categories.includes(category) && 
-                    !usedPlacesInCurrentRoute.has(place.id)
-                );
             }
 
-            if (placesToSearch.length > 0) {
-                // Находим ближайшее место в этой категории
-                const nearestPlace = placesToSearch.reduce((nearest, current) => {
-                    const nearestDist = calculateDistance(lastPlace.coordinates, nearest.coordinates);
-                    const currentDist = calculateDistance(lastPlace.coordinates, current.coordinates);
-                    return currentDist < nearestDist ? current : nearest;
-                });
+            // Оптимизируем порядок мест для автомобильного маршрута
+            route = optimizeCarRoute(route);
 
-                candidatePlaces.push({
-                    place: nearestPlace,
-                    distance: calculateDistance(lastPlace.coordinates, nearestPlace.coordinates),
-                    category: category,
-                    isRecommended: nearestPlace.categories.includes("Рекомендуем")
-                });
-            }
-        });
-
-        if (candidatePlaces.length === 0) break;
-
-        // Сортируем кандидатов: сначала рекомендуемые, потом по расстоянию
-        candidatePlaces.sort((a, b) => {
-            if (a.isRecommended && !b.isRecommended) return -1;
-            if (!a.isRecommended && b.isRecommended) return 1;
-            return a.distance - b.distance;
-        });
-
-        const nextPlace = candidatePlaces[0].place;
-
-        route.push(nextPlace);
-        usedPlacesInCurrentRoute.add(nextPlace.id);
-        usedPlacesHistory.add(nextPlace.id);
-        nextPlace.categories.forEach(cat => {
-            if (cat !== "Рекомендуем") {
-                usedCategoriesInCurrentRoute.add(cat);
-            }
-        });
-    }
-
-    // Если у нас мало мест в маршруте, добавляем дополнительные места
-    if (route.length < 3) {
-        const lastPlace = route[route.length - 1];
-        let additionalPlaces = [];
-        
-        if (useRecommended) {
-            additionalPlaces = [...availableRecommended, ...availableOther];
-        } else {
-            additionalPlaces = [...availableOther];
+            showRoute(route);
         }
-        
-        additionalPlaces = additionalPlaces.filter(place => 
-            !usedPlacesInCurrentRoute.has(place.id)
-        );
-        
-        // Сортируем по расстоянию от последней точки
-        additionalPlaces.sort((a, b) => {
-            const distA = calculateDistance(lastPlace.coordinates, a.coordinates);
-            const distB = calculateDistance(lastPlace.coordinates, b.coordinates);
-            return distA - distB;
-        });
-        
-        // Добавляем ближайшие места до достижения лимита
-        while (route.length < 4 && additionalPlaces.length > 0) {
-            const nextPlace = additionalPlaces.shift();
-            route.push(nextPlace);
-            usedPlacesInCurrentRoute.add(nextPlace.id);
-            usedPlacesHistory.add(nextPlace.id);
-        }
-    }
 
-    // Оптимизируем порядок мест для автомобильного маршрута
-    route = optimizeCarRoute(route);
-
-    showRoute(route);
-}
         // Оптимизация порядка мест для автомобильного маршрута
         function optimizeCarRoute(route) {
             if (route.length <= 1) return route;
@@ -1542,6 +1763,7 @@ function generateRoute() {
                         <div class="route-place-rating">⭐ ${place.rating}</div>
                         <div class="route-place-price">${place.price}</div>
                     </div>
+                    <button class="replace-place-button" onclick="openReplaceModal(${index})">Заменить это место</button>
                 `;
                 
                 routeContainer.appendChild(placeElement);
@@ -1659,6 +1881,259 @@ function generateRoute() {
                     alert('Скопируйте этот текст:\n\n' + text);
                 }
             }
+        }
+
+        // Функции для замены места в маршруте
+        function openReplaceModal(index) {
+            currentReplacementIndex = index;
+            selectedReplacementPlace = null;
+            
+            const currentPlace = currentRoute[index];
+            const modal = document.getElementById('replaceModal');
+            const replaceOptions = document.getElementById('replaceOptions');
+            
+            // Находим альтернативные места той же категории
+            const currentCategories = currentPlace.categories.filter(cat => cat !== "Рекомендуем");
+            const alternativePlaces = findAlternativePlaces(currentPlace, currentCategories);
+            
+            // Очищаем контейнер опций
+            replaceOptions.innerHTML = '';
+            
+            if (alternativePlaces.length === 0) {
+                replaceOptions.innerHTML = '<div style="color: #a0aec0; text-align: center; padding: 20px;">Нет подходящих альтернатив для замены</div>';
+            } else {
+                // Показываем альтернативные места
+                alternativePlaces.forEach(place => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'replace-option';
+                    optionElement.onclick = () => selectReplacementPlace(place, optionElement);
+                    
+                    const isRecommended = place.categories.includes("Рекомендуем");
+                    
+                    optionElement.innerHTML = `
+                        <div class="replace-option-header">
+                            <div class="replace-option-icon" style="background: linear-gradient(45deg, ${getRandomColor()})">
+                                ${place.icon}
+                            </div>
+                            <div class="replace-option-info">
+                                <div class="replace-option-name">
+                                    ${place.name}
+                                    ${isRecommended ? '<span class="recommended-badge">Рекомендуем</span>' : ''}
+                                </div>
+                                <div class="replace-option-category">${place.categories.filter(cat => cat !== "Рекомендуем").join(', ')}</div>
+                                <div class="replace-option-address">${place.address}</div>
+                            </div>
+                        </div>
+                        <div class="replace-option-description">${place.description}</div>
+                        <div class="replace-option-details">
+                            <div class="replace-option-rating">⭐ ${place.rating}</div>
+                            <div class="replace-option-price">${place.price}</div>
+                        </div>
+                    `;
+                    
+                    replaceOptions.appendChild(optionElement);
+                });
+            }
+            
+            // Показываем модальное окно
+            modal.style.display = 'flex';
+        }
+
+        function findAlternativePlaces(currentPlace, categories) {
+            // Ищем места с такими же категориями, но не включая текущее место и уже использованные в маршруте
+            return placesDatabase.filter(place => {
+                // Исключаем текущее место
+                if (place.id === currentPlace.id) return false;
+                
+                // Исключаем места, уже находящиеся в текущем маршруте
+                if (currentRoute.some(p => p.id === place.id)) return false;
+                
+                // Ищем места с хотя бы одной общей категорией (исключая "Рекомендуем")
+                const placeCategories = place.categories.filter(cat => cat !== "Рекомендуем");
+                const hasCommonCategory = placeCategories.some(cat => categories.includes(cat));
+                
+                return hasCommonCategory;
+            }).slice(0, 5); // Ограничиваем количество вариантов
+        }
+
+        function selectReplacementPlace(place, element) {
+            // Снимаем выделение со всех опций
+            document.querySelectorAll('.replace-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Выделяем выбранную опцию
+            element.classList.add('selected');
+            selectedReplacementPlace = place;
+        }
+
+        function confirmReplace() {
+            if (currentReplacementIndex === -1 || !selectedReplacementPlace) {
+                alert('Пожалуйста, выберите место для замены');
+                return;
+            }
+            
+            // Заменяем место в маршруте
+            currentRoute[currentReplacementIndex] = selectedReplacementPlace;
+            
+            // Обновляем историю использованных мест
+            usedPlacesHistory.add(selectedReplacementPlace.id);
+            
+            // Закрываем модальное окно
+            closeReplaceModal();
+            
+            // Перестраиваем маршрут и обновляем интерфейс (только showRoute, без повторного initMap)
+            updateRouteDisplay();
+        }
+
+        function updateRouteDisplay() {
+            const routeContainer = document.getElementById('routeContainer');
+            routeContainer.innerHTML = '';
+
+            if (currentRoute.length === 0) {
+                routeContainer.innerHTML = '<div class="route-place"><div class="route-place-description">Не удалось составить маршрут. Попробуйте выбрать другие категории.</div></div>';
+                return;
+            }
+
+            currentRoute.forEach((place, index) => {
+                const placeElement = document.createElement('div');
+                placeElement.className = 'route-place';
+                placeElement.style.animationDelay = `${index * 0.2}s`;
+                placeElement.onclick = () => highlightPlaceOnMap(place.id);
+                
+                // Проверяем, является ли место рекомендуемым
+                const isRecommended = place.categories.includes("Рекомендуем");
+                
+                placeElement.innerHTML = `
+                    <div class="route-place-header">
+                        <div class="route-place-icon" style="background: linear-gradient(45deg, ${getRandomColor()})">
+                            ${place.icon}
+                        </div>
+                        <div class="route-place-info">
+                            <div class="route-place-name">
+                                ${index + 1}. ${place.name}
+                                ${isRecommended ? '<span class="recommended-badge">Рекомендуем</span>' : ''}
+                            </div>
+                            <div class="route-place-category">${place.categories.filter(cat => cat !== "Рекомендуем").join(', ')}</div>
+                            <div class="route-place-address">${place.address}</div>
+                        </div>
+                    </div>
+                    <div class="route-place-description">${place.description}</div>
+                    <div class="route-place-features">
+                        ${place.features.map(feature => 
+                            `<span class="route-feature-tag">${feature}</span>`
+                        ).join('')}
+                    </div>
+                    <div class="route-place-details">
+                        <div class="route-place-rating">⭐ ${place.rating}</div>
+                        <div class="route-place-price">${place.price}</div>
+                    </div>
+                    <button class="replace-place-button" onclick="openReplaceModal(${index})">Заменить это место</button>
+                `;
+                
+                routeContainer.appendChild(placeElement);
+            });
+
+            // Обновляем карту без создания новой
+            updateMap();
+        }
+
+        function updateMap() {
+            if (!map || !currentRoute || currentRoute.length === 0) return;
+            
+            // Очищаем существующие объекты на карте
+            map.geoObjects.removeAll();
+            
+            // Создаем кастомные метки с номерами
+            currentRoute.forEach((place, index) => {
+                const placemark = new ymaps.Placemark(
+                    place.coordinates,
+                    {
+                        // Минимальная информация в балуне
+                        balloonContent: `
+                            <div style="color: #333; padding: 8px; max-width: 200px;">
+                                <strong style="color: #667eea; font-size: 14px;">${index + 1}. ${place.name}</strong>
+                                <div style="font-size: 12px; margin-top: 4px; color: #666;">${place.categories.join(', ')}</div>
+                                <div style="font-size: 11px; margin-top: 2px; color: #888;">${place.address}</div>
+                            </div>
+                        `,
+                        // Подпись с номером
+                        iconCaption: `${index + 1}`
+                    },
+                    {
+                        // Кастомные иконки с цветами приложения и подписями
+                        preset: 'islands#circleIcon',
+                        iconColor: getPlaceColor(index),
+                        iconCaptionMaxWidth: 30
+                    }
+                );
+                
+                map.geoObjects.add(placemark);
+            });
+            
+            // Строим автомобильный маршрут между точками
+            if (currentRoute.length > 1) {
+                // Создаем мультимаршрут для автомобиля
+                const multiRoute = new ymaps.multiRouter.MultiRoute({
+                    referencePoints: currentRoute.map(place => place.coordinates),
+                    params: {
+                        routingMode: 'auto' // Автомобильный маршрут
+                    }
+                }, {
+                    boundsAutoApply: true,
+                    // Настройки для сплошной линии маршрута с цветами приложения
+                    routeActiveStrokeWidth: 6,
+                    routeActiveStrokeColor: "#667eea",
+                    routeActiveStrokeStyle: 'solid',
+                    routeStrokeWidth: 6,
+                    routeStrokeColor: "#667eea",
+                    routeStrokeStyle: 'solid',
+                    // Убираем ВСЕ точки и подписи маршрута
+                    wayPointStartIconFillColor: 'transparent',
+                    wayPointStartIconStrokeColor: 'transparent',
+                    wayPointFinishIconFillColor: 'transparent',
+                    wayPointFinishIconStrokeColor: 'transparent',
+                    viaPointIconFillColor: 'transparent',
+                    viaPointIconStrokeColor: 'transparent',
+                    pinIconFillColor: 'transparent',
+                    pinIconStrokeColor: 'transparent',
+                    // Скрываем все элементы интерфейса маршрута
+                    wayPointVisible: false,
+                    viaPointVisible: false,
+                    pinVisible: false
+                });
+                
+                // Добавляем маршрут на карту
+                map.geoObjects.add(multiRoute);
+                
+                // Получаем информацию о маршруте
+                multiRoute.model.events.add('requestsuccess', function() {
+                    const activeRoute = multiRoute.getActiveRoute();
+                    if (activeRoute) {
+                        const routeLength = (activeRoute.properties.get("distance").value / 1000).toFixed(1);
+                        const routeTime = Math.round(activeRoute.properties.get("duration").value / 60);
+                        
+                        updateRouteInfo(routeLength, routeTime, currentRoute.length);
+                        
+                        // Масштабируем карту чтобы показать весь маршрут
+                        map.setBounds(multiRoute.getBounds(), {
+                            checkZoomRange: true,
+                            zoomMargin: 30
+                        });
+                    }
+                });
+            } else {
+                // Если только одно место, центрируем на нем
+                map.setCenter(currentRoute[0].coordinates, 15);
+                updateRouteInfo(0, 0, 1);
+            }
+        }
+
+        function closeReplaceModal() {
+            const modal = document.getElementById('replaceModal');
+            modal.style.display = 'none';
+            currentReplacementIndex = -1;
+            selectedReplacementPlace = null;
         }
 
         // Инициализация приложения после загрузки базы данных
