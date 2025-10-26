@@ -18,11 +18,11 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 50%, #d8e7f3 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            color: white;
+            color: #2d3748;
             overflow-x: hidden;
         }
 
@@ -50,10 +50,10 @@
         .title {
             font-size: 1.8rem;
             font-weight: bold;
-            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
+            background: linear-gradient(45deg, #667eea, #4a6fa5, #6a93cb);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            text-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
             margin-bottom: 4px;
         }
 
@@ -61,7 +61,7 @@
             font-size: 0.75rem;
             opacity: 0.8;
             font-weight: 300;
-            color: #cccccc;
+            color: #718096;
         }
 
         /* СТРАНИЦА 1: Мини-профили */
@@ -77,16 +77,16 @@
         }
 
         .profile-card {
-            background: rgba(30, 30, 46, 0.8);
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 6px;
             padding: 6px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            border: 1px solid rgba(102, 126, 234, 0.1);
             transition: all 0.2s ease;
             cursor: pointer;
             opacity: 0;
             transform: translateY(10px);
-            color: white;
+            color: #2d3748;
         }
 
         .profile-card.visible {
@@ -96,8 +96,9 @@
 
         .profile-card:hover {
             transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
-            background: rgba(40, 40, 60, 0.9);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+            background: rgba(255, 255, 255, 1);
+            border-color: rgba(102, 126, 234, 0.2);
         }
 
         .profile-header {
@@ -116,12 +117,13 @@
             justify-content: center;
             font-size: 0.7rem;
             flex-shrink: 0;
+            color: white;
         }
 
         .profile-1 .profile-icon { background: linear-gradient(45deg, #ff6b6b, #ee5a52); }
         .profile-2 .profile-icon { background: linear-gradient(45deg, #48dbfb, #0abde3); }
         .profile-3 .profile-icon { background: linear-gradient(45deg, #1dd1a1, #10ac84); }
-        .profile-4 .profile-icon { background: linear-gradient(45deg, #f368e0, #ff9ff3); }
+        .profile-4 .profile-icon { background: linear-gradient(45deg, #6a93cb, #4a6fa5); }
         .profile-5 .profile-icon { background: linear-gradient(45deg, #ff9f43, #feca57); }
 
         .profile-info {
@@ -132,19 +134,19 @@
         .profile-name {
             font-size: 0.65rem;
             font-weight: bold;
-            color: white;
+            color: #2d3748;
             margin-bottom: 1px;
         }
 
         .profile-category {
             font-size: 0.55rem;
-            color: #a0aec0;
+            color: #718096;
             margin-bottom: 2px;
         }
 
         .profile-address {
             font-size: 0.5rem;
-            color: #888;
+            color: #a0aec0;
             margin-top: 1px;
         }
 
@@ -159,14 +161,14 @@
             display: flex;
             align-items: center;
             gap: 1px;
-            color: #f6e05e;
+            color: #f6ad55;
             font-weight: bold;
             font-size: 0.55rem;
         }
 
         .profile-price {
             font-size: 0.55rem;
-            color: #a0aec0;
+            color: #718096;
             background: rgba(160, 174, 192, 0.1);
             padding: 1px 3px;
             border-radius: 3px;
@@ -174,7 +176,7 @@
 
         /* Кнопка на странице 1 */
         .start-button {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #667eea, #4a6fa5);
             color: white;
             border: none;
             padding: 10px 25px;
@@ -182,10 +184,10 @@
             font-weight: bold;
             border-radius: 45px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
             transition: all 0.3s ease;
             margin-top: 10px;
-            border: 2px solid rgba(102, 126, 234, 0.25);
+            border: 2px solid rgba(102, 126, 234, 0.15);
             width: 100%;
             max-width: 280px;
             opacity: 0;
@@ -199,7 +201,7 @@
 
         .start-button:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.5);
+            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.35);
         }
 
         /* СТРАНИЦА 2: Категории */
@@ -216,31 +218,31 @@
             padding: 5px;
         }
 
-        /* Темный скроллбар */
+        /* Светлый скроллбар */
         .categories-container::-webkit-scrollbar {
             width: 6px;
         }
 
         .categories-container::-webkit-scrollbar-track {
-            background: rgba(30, 30, 46, 0.5);
+            background: rgba(255, 255, 255, 0.5);
             border-radius: 3px;
         }
 
         .categories-container::-webkit-scrollbar-thumb {
-            background: rgba(102, 126, 234, 0.6);
+            background: rgba(102, 126, 234, 0.4);
             border-radius: 3px;
         }
 
         .categories-container::-webkit-scrollbar-thumb:hover {
-            background: rgba(102, 126, 234, 0.8);
+            background: rgba(102, 126, 234, 0.6);
         }
 
         .category-card {
-            background: rgba(30, 30, 46, 0.8);
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 16px;
             padding: 15px 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            border: 2px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 2px solid rgba(102, 126, 234, 0.1);
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -250,7 +252,7 @@
             gap: 8px;
             opacity: 0;
             transform: translateY(10px);
-            color: white;
+            color: #2d3748;
         }
 
         .category-card.visible {
@@ -260,15 +262,15 @@
 
         .category-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-            border-color: rgba(102, 126, 234, 0.4);
-            background: rgba(40, 40, 60, 0.9);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            border-color: rgba(102, 126, 234, 0.3);
+            background: rgba(255, 255, 255, 1);
         }
 
         .category-card.selected {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #667eea, #4a6fa5);
             color: white;
-            border-color: rgba(102, 126, 234, 0.6);
+            border-color: rgba(102, 126, 234, 0.4);
         }
 
         .category-icon {
@@ -285,7 +287,7 @@
 
         /* Кнопка на странице 2 */
         .next-button {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #667eea, #4a6fa5);
             color: white;
             border: none;
             padding: 12px 30px;
@@ -293,10 +295,10 @@
             font-weight: bold;
             border-radius: 45px;
             cursor: pointer;
-            box-shadow: 0 6px 18px rgba(102, 126, 234, 0.35);
+            box-shadow: 0 6px 18px rgba(102, 126, 234, 0.25);
             transition: all 0.3s ease;
             margin-top: 10px;
-            border: 2px solid rgba(102, 126, 234, 0.25);
+            border: 2px solid rgba(102, 126, 234, 0.15);
             width: 100%;
             max-width: 280px;
             opacity: 0;
@@ -310,14 +312,15 @@
 
         .next-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.35);
         }
 
         .next-button:disabled {
-            background: #4a5568;
+            background: #cbd5e0;
+            color: #718096;
             cursor: not-allowed;
             transform: none;
-            box-shadow: 0 4px 12px rgba(74, 85, 104, 0.35);
+            box-shadow: 0 4px 12px rgba(203, 213, 224, 0.35);
         }
 
         /* Стили для страницы маршрута */
@@ -334,11 +337,11 @@
         }
 
         .route-place {
-            background: rgba(30, 30, 46, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
             padding: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            border: 2px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 2px solid rgba(102, 126, 234, 0.1);
             text-align: left;
             transition: all 0.3s ease;
             cursor: pointer;
@@ -346,13 +349,13 @@
 
         .route-place:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-            border-color: rgba(102, 126, 234, 0.4);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+            border-color: rgba(102, 126, 234, 0.2);
         }
 
         .route-place.active {
             border-color: #667eea;
-            background: rgba(102, 126, 234, 0.1);
+            background: rgba(102, 126, 234, 0.05);
         }
 
         .route-place-header {
@@ -371,6 +374,7 @@
             justify-content: center;
             font-size: 1.2rem;
             flex-shrink: 0;
+            color: white;
         }
 
         .route-place-info {
@@ -380,7 +384,7 @@
         .route-place-name {
             font-size: 1rem;
             font-weight: bold;
-            color: white;
+            color: #2d3748;
             margin-bottom: 3px;
             display: flex;
             align-items: center;
@@ -390,13 +394,13 @@
 
         .route-place-category {
             font-size: 0.8rem;
-            color: #a0aec0;
+            color: #718096;
             margin-bottom: 2px;
         }
 
         .route-place-address {
             font-size: 0.75rem;
-            color: #888;
+            color: #a0aec0;
             margin-top: 2px;
         }
 
@@ -411,14 +415,14 @@
             display: flex;
             align-items: center;
             gap: 5px;
-            color: #f6e05e;
+            color: #f6ad55;
             font-weight: bold;
             font-size: 0.85rem;
         }
 
         .route-place-price {
             font-size: 0.8rem;
-            color: #a0aec0;
+            color: #718096;
             background: rgba(160, 174, 192, 0.1);
             padding: 4px 8px;
             border-radius: 6px;
@@ -427,7 +431,7 @@
         .route-place-description {
             margin-top: 8px;
             font-size: 0.8rem;
-            color: #cbd5e0;
+            color: #4a5568;
             line-height: 1.4;
         }
 
@@ -439,8 +443,8 @@
         }
 
         .route-feature-tag {
-            background: rgba(102, 126, 234, 0.2);
-            color: #90cdf4;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
             padding: 3px 6px;
             border-radius: 4px;
             font-size: 0.7rem;
@@ -455,7 +459,7 @@
         }
 
         .route-button {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #667eea, #4a6fa5);
             color: white;
             border: none;
             padding: 12px 20px;
@@ -463,23 +467,25 @@
             font-weight: bold;
             border-radius: 45px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
             transition: all 0.3s ease;
-            border: 2px solid rgba(102, 126, 234, 0.25);
+            border: 2px solid rgba(102, 126, 234, 0.15);
         }
 
         .route-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(102, 126, 234, 0.5);
+            box-shadow: 0 6px 18px rgba(102, 126, 234, 0.35);
         }
 
         .route-button.secondary {
-            background: rgba(74, 85, 104, 0.8);
+            background: rgba(203, 213, 224, 0.8);
+            color: #4a5568;
         }
 
         .route-button.tertiary {
-            background: rgba(102, 126, 234, 0.3);
-            border: 2px solid rgba(102, 126, 234, 0.5);
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border: 2px solid rgba(102, 126, 234, 0.3);
         }
 
         /* Стили для карты */
@@ -488,8 +494,8 @@
             height: 300px;
             border-radius: 12px;
             margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            border: 2px solid rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 2px solid rgba(102, 126, 234, 0.2);
             transition: all 0.3s ease;
         }
 
@@ -500,12 +506,13 @@
         }
 
         .route-info {
-            background: rgba(30, 30, 46, 0.8);
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 12px;
             padding: 12px;
             margin-bottom: 15px;
             text-align: left;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
 
         .route-info-item {
@@ -520,11 +527,11 @@
         }
 
         .route-info-label {
-            color: #a0aec0;
+            color: #718096;
         }
 
         .route-info-value {
-            color: white;
+            color: #2d3748;
             font-weight: bold;
         }
 
@@ -539,28 +546,31 @@
             width: 100%;
             padding: 12px 15px;
             border-radius: 25px;
-            border: 2px solid rgba(102, 126, 234, 0.3);
-            background: rgba(30, 30, 46, 0.8);
-            color: white;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+            color: #2d3748;
             font-size: 0.9rem;
             outline: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
 
         .search-input:focus {
             border-color: #667eea;
+            background: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
         }
 
         .search-input::placeholder {
             color: #a0aec0;
         }
 
-        /* Темная тема карты с цветами приложения */
+        /* Светлая тема карты */
         .ymaps-2-1-79-map {
-            filter: invert(0.9) hue-rotate(180deg) contrast(1.2) brightness(0.8) saturate(1.4) sepia(0.1);
+            filter: none;
         }
 
         .ymaps-2-1-79-inner-panes {
-            filter: invert(0.9) hue-rotate(180deg) contrast(1.2) brightness(0.8) saturate(1.4) sepia(0.1);
+            filter: none;
         }
 
         /* Скрываем элементы Яндекс Карт */
@@ -587,7 +597,7 @@
 
         /* Стиль для надписи "Рекомендуем" */
         .recommended-badge {
-            background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+            background: linear-gradient(45deg, #4a6fa5, #6a93cb, #4a6fa5);
             background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -597,7 +607,7 @@
             font-size: 0.7rem;
             padding: 2px 6px;
             border-radius: 4px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
+            border: 1px solid rgba(74, 111, 165, 0.3);
         }
 
         /* Стили для модального окна замены места */
@@ -607,7 +617,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.5);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -616,15 +626,15 @@
         }
 
         .modal-content {
-            background: rgba(30, 30, 46, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             border-radius: 16px;
             padding: 20px;
             max-width: 400px;
             width: 100%;
             max-height: 80vh;
             overflow-y: auto;
-            border: 2px solid rgba(102, 126, 234, 0.3);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
         .modal-header {
@@ -637,13 +647,13 @@
         .modal-title {
             font-size: 1.2rem;
             font-weight: bold;
-            color: white;
+            color: #2d3748;
         }
 
         .modal-close {
             background: none;
             border: none;
-            color: #a0aec0;
+            color: #718096;
             font-size: 1.5rem;
             cursor: pointer;
             padding: 0;
@@ -655,7 +665,7 @@
         }
 
         .modal-close:hover {
-            color: white;
+            color: #2d3748;
         }
 
         .replace-options {
@@ -666,24 +676,25 @@
         }
 
         .replace-option {
-            background: rgba(40, 40, 60, 0.8);
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 12px;
             padding: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
             border: 2px solid transparent;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
 
         .replace-option:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            border-color: rgba(102, 126, 234, 0.4);
-            background: rgba(50, 50, 70, 0.9);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: rgba(102, 126, 234, 0.3);
+            background: rgba(255, 255, 255, 1);
         }
 
         .replace-option.selected {
             border-color: #667eea;
-            background: rgba(102, 126, 234, 0.1);
+            background: rgba(102, 126, 234, 0.05);
         }
 
         .replace-option-header {
@@ -702,22 +713,23 @@
             justify-content: center;
             font-size: 1rem;
             flex-shrink: 0;
+            color: white;
         }
 
         .replace-option-name {
             font-size: 0.9rem;
             font-weight: bold;
-            color: white;
+            color: #2d3748;
         }
 
         .replace-option-category {
             font-size: 0.75rem;
-            color: #a0aec0;
+            color: #718096;
         }
 
         .replace-option-address {
             font-size: 0.7rem;
-            color: #888;
+            color: #a0aec0;
             margin-top: 2px;
         }
 
@@ -732,14 +744,14 @@
             display: flex;
             align-items: center;
             gap: 3px;
-            color: #f6e05e;
+            color: #f6ad55;
             font-weight: bold;
             font-size: 0.8rem;
         }
 
         .replace-option-price {
             font-size: 0.75rem;
-            color: #a0aec0;
+            color: #718096;
             background: rgba(160, 174, 192, 0.1);
             padding: 3px 6px;
             border-radius: 4px;
@@ -748,7 +760,7 @@
         .replace-option-description {
             margin-top: 6px;
             font-size: 0.75rem;
-            color: #cbd5e0;
+            color: #4a5568;
             line-height: 1.3;
         }
 
@@ -768,25 +780,25 @@
         }
 
         .modal-button.primary {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #667eea, #4a6fa5);
             color: white;
         }
 
         .modal-button.secondary {
-            background: rgba(74, 85, 104, 0.8);
-            color: white;
+            background: rgba(203, 213, 224, 0.8);
+            color: #4a5568;
         }
 
         .modal-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         /* Кнопка замены в карточке места */
         .replace-place-button {
-            background: rgba(102, 126, 234, 0.2);
-            color: #90cdf4;
-            border: 1px solid rgba(102, 126, 234, 0.4);
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border: 1px solid rgba(102, 126, 234, 0.3);
             padding: 6px 12px;
             border-radius: 6px;
             font-size: 0.7rem;
@@ -797,7 +809,7 @@
         }
 
         .replace-place-button:hover {
-            background: rgba(102, 126, 234, 0.3);
+            background: rgba(102, 126, 234, 0.2);
             transform: translateY(-1px);
         }
 
@@ -1028,7 +1040,6 @@
                 
                 // Определяем иконку для категории
                 let icon = '📍';
-                // В функции initializeCategories обновите блок switch:
                 switch(category) {
                     case 'Рестораны': icon = '🍽️'; break;
                     case 'Бары': icon = '🍸'; break;
@@ -1171,7 +1182,7 @@
                 map.destroy();
             }
             
-            // Создаем карту с темной темой
+            // Создаем карту со светлой темой
             ymaps.ready(function() {
                 map = new ymaps.Map("map", {
                     center: [59.94, 30.31],
@@ -1282,32 +1293,32 @@
                     updateRouteInfo(0, 0, 1);
                 }
                 
-                // Применяем темную тему к карте
-                applyDarkTheme();
+                // Применяем светлую тему к карте
+                applyLightTheme();
             });
         }
 
         // Функция для цветов меток в стиле приложения
         function getPlaceColor(index) {
             const colors = [
-                '#667eea', '#764ba2', '#f093fb', '#ff6b6b', '#48dbfb',
+                '#667eea', '#4a6fa5', '#6a93cb', '#ff6b6b', '#48dbfb',
                 '#1dd1a1', '#feca57', '#ff9ff3', '#54a0ff', '#5f27cd'
             ];
             return colors[index % colors.length];
         }
 
-        // Функция для применения темной темы к карте
-        function applyDarkTheme() {
-            // Ждем немного для применения стилей
+        // Функция для применения светлой темы к карте
+        function applyLightTheme() {
+            // Убираем фильтры для светлой темы
             setTimeout(() => {
                 const mapContainer = document.querySelector('.ymaps-2-1-79-map');
                 const innerPanes = document.querySelector('.ymaps-2-1-79-inner-panes');
                 
                 if (mapContainer) {
-                    mapContainer.style.filter = 'invert(0.9) hue-rotate(180deg) contrast(1.2) brightness(0.8) saturate(1.4) sepia(0.1)';
+                    mapContainer.style.filter = 'none';
                 }
                 if (innerPanes) {
-                    innerPanes.style.filter = 'invert(0.9) hue-rotate(180deg) contrast(1.2) brightness(0.8) saturate(1.4) sepia(0.1)';
+                    innerPanes.style.filter = 'none';
                 }
                 
                 // Дополнительно скрываем элементы
@@ -1479,8 +1490,7 @@
             nextButton.disabled = selectedCategories.length === 0;
         }
 
-        // Генерация маршрута с новым алгоритмом (с учетом рекомендуемых мест)
-        // Генерация маршрута с обновленным алгоритмом
+        // Генерация маршрута
         function generateRoute() {
             // Проверяем, загружена ли база данных
             if (placesDatabase.length === 0) {
@@ -1792,7 +1802,7 @@
                 '#ff6b6b, #ee5a52',
                 '#48dbfb, #0abde3',
                 '#1dd1a1, #10ac84',
-                '#f368e0, #ff9ff3',
+                '#6a93cb, #4a6fa5',
                 '#ff9f43, #feca57'
             ];
             return colors[Math.floor(Math.random() * colors.length)];
@@ -1900,7 +1910,7 @@
             replaceOptions.innerHTML = '';
             
             if (alternativePlaces.length === 0) {
-                replaceOptions.innerHTML = '<div style="color: #a0aec0; text-align: center; padding: 20px;">Нет подходящих альтернатив для замены</div>';
+                replaceOptions.innerHTML = '<div style="color: #718096; text-align: center; padding: 20px;">Нет подходящих альтернатив для замены</div>';
             } else {
                 // Показываем альтернативные места
                 alternativePlaces.forEach(place => {
