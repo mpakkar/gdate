@@ -1014,8 +1014,8 @@
         let currentReplacementIndex = -1;
         let selectedReplacementPlace = null;
 
-        // Аналитика - ВАША ССЫЛКА
-        const ANALYTICS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyGFMsA1iRYxJRHskde_BAWOP8z5-QoF-8iDfa0lj12zWkhCvKs3flBcNIOl0lzDLnytg/exec';
+        // Аналитика - НОВЫЙ URL
+        const ANALYTICS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbx1rE66DWeh3BN1ktexs3VXlMdaOD0xh8Zmwox8KHejAOBbUSQx7KY7WHQjGTNLrp5MQQ/exec';
 
         const analytics = {
             sessionId: generateSessionId(),
@@ -1073,8 +1073,8 @@
             
             console.log('📊 Event tracked:', eventType, eventData);
             
-            // Отправляем данные сразу для тестирования
-            if (analytics.events.length >= 3) {
+            // Отправляем данные при накоплении 3+ событий или каждые 10 событий
+            if (analytics.events.length >= 3 && analytics.events.length % 3 === 0) {
                 sendAnalyticsData();
             }
         }
@@ -1098,7 +1098,7 @@
             };
         }
 
-        // Отправка данных аналитики
+        // УЛУЧШЕННАЯ ФУНКЦИЯ ОТПРАВКИ АНАЛИТИКИ
         async function sendAnalyticsData() {
             // Если мы работаем локально (file://), не отправляем аналитику
             if (window.location.protocol === 'file:') {
@@ -1133,29 +1133,92 @@
                 };
 
                 console.log('📤 Sending analytics to:', ANALYTICS_ENDPOINT);
-                console.log('Payload:', payload);
 
-                // Отправляем данные
-                const response = await fetch(ANALYTICS_ENDPOINT, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload)
-                });
+                // СПОСОБ 1: Пытаемся отправить как JSON (основной метод)
+                try {
+                    console.log('🔄 Trying JSON POST...');
+                    const response = await fetch(ANALYTICS_ENDPOINT, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(payload)
+                    });
 
-                console.log('📥 Response status:', response.status);
-                
-                if (response.ok) {
-                    console.log('✅ Analytics data sent successfully');
-                    // Сбрасываем аналитику после успешной отправки
-                    resetAnalytics();
-                } else {
-                    console.error('❌ Failed to send analytics:', response.status);
+                    console.log('📥 Response status:', response.status);
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        console.log('✅ Analytics data sent successfully via JSON:', result);
+                        resetAnalytics();
+                        return;
+                    } else {
+                        console.log('❌ JSON POST failed with status:', response.status);
+                    }
+                } catch (jsonError) {
+                    console.log('❌ JSON POST failed, trying alternative methods...', jsonError);
                 }
 
+                // СПОСОБ 2: Отправляем через FormData (обход CORS)
+                try {
+                    console.log('🔄 Trying FormData POST...');
+                    const formData = new FormData();
+                    formData.append('data', JSON.stringify(payload));
+                    
+                    const response = await fetch(ANALYTICS_ENDPOINT, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        console.log('✅ Analytics data sent via FormData:', result);
+                        resetAnalytics();
+                        return;
+                    } else {
+                        console.log('❌ FormData POST failed with status:', response.status);
+                    }
+                } catch (formError) {
+                    console.log('❌ FormData POST failed, trying final method...', formError);
+                }
+
+                // СПОСОБ 3: Используем XMLHttpRequest (самый надежный для CORS)
+                console.log('🔄 Trying XMLHttpRequest...');
+                return new Promise((resolve) => {
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', ANALYTICS_ENDPOINT, true);
+                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    
+                    xhr.onload = function() {
+                        if (xhr.status === 200) {
+                            console.log('✅ Analytics data sent via XMLHttpRequest');
+                            try {
+                                const result = JSON.parse(xhr.responseText);
+                                console.log('Server response:', result);
+                            } catch (e) {
+                                console.log('Raw response:', xhr.responseText);
+                            }
+                            resetAnalytics();
+                            resolve(true);
+                        } else {
+                            console.error('❌ XMLHttpRequest failed:', xhr.status);
+                            resolve(false);
+                        }
+                    };
+                    
+                    xhr.onerror = function() {
+                        console.error('❌ XMLHttpRequest network error');
+                        resolve(false);
+                    };
+                    
+                    // Отправляем как URL-encoded данные
+                    const urlEncodedData = 'data=' + encodeURIComponent(JSON.stringify(payload));
+                    xhr.send(urlEncodedData);
+                });
+
             } catch (error) {
-                console.error('🔴 Error sending analytics:', error);
+                console.error('🔴 All methods failed for analytics:', error);
+                return false;
             }
         }
 
@@ -2379,7 +2442,9 @@
             trackEvent('test_route_generation', { categories: ['Рестораны', 'Бары'] });
             
             // Немедленная отправка
-            sendAnalyticsData();
+            setTimeout(() => {
+                sendAnalyticsData();
+            }, 1000);
         }
 
         // Инициализация приложения после загрузки базы данных
@@ -2395,7 +2460,20 @@
                     // Отправляем отчет при закрытии приложения
                     window.addEventListener('beforeunload', () => {
                         if (analytics.events.length > 0) {
-                            sendAnalyticsData();
+                            // Используем synchronous XMLHttpRequest для надежности
+                            const xhr = new XMLHttpRequest();
+                            xhr.open('POST', ANALYTICS_ENDPOINT, false); // синхронный
+                            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                            
+                            const payload = {
+                                report: getAnalyticsReport(),
+                                placesData: {},
+                                timestamp: new Date().toISOString(),
+                                source: 'Great Date Web App - Page Unload'
+                            };
+                            
+                            const urlEncodedData = 'data=' + encodeURIComponent(JSON.stringify(payload));
+                            xhr.send(urlEncodedData);
                         }
                     });
                     
