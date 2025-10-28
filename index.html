@@ -1014,8 +1014,8 @@
         let currentReplacementIndex = -1;
         let selectedReplacementPlace = null;
 
-        // Аналитика - НОВЫЙ URL
-        const ANALYTICS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbx1rE66DWeh3BN1ktexs3VXlMdaOD0xh8Zmwox8KHejAOBbUSQx7KY7WHQjGTNLrp5MQQ/exec';
+        // Аналитика - НОВЫЙ URL с вашим деплоем
+        const ANALYTICS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxMYanKs35P2UZUopoPafVJGt4kvIK1UoUop9Cf4p8DQzo0Zezz8gC_k8bkPAGEamf-BQ/exec';
 
         const analytics = {
             sessionId: generateSessionId(),
@@ -1134,6 +1134,18 @@
 
                 console.log('📤 Sending analytics to:', ANALYTICS_ENDPOINT);
 
+                // Используем JSONP подход для обхода CORS
+                try {
+                    console.log('🔄 Trying JSONP approach...');
+                    await sendAnalyticsViaJSONP(payload);
+                    console.log('✅ Analytics data sent successfully via JSONP');
+                    resetAnalytics();
+                    return;
+                } catch (jsonpError) {
+                    console.log('❌ JSONP failed, trying alternative methods...', jsonpError);
+                }
+
+                // Если JSONP не сработал, пробуем обычные методы
                 // СПОСОБ 1: Пытаемся отправить как JSON (основной метод)
                 try {
                     console.log('🔄 Trying JSON POST...');
@@ -1182,43 +1194,130 @@
                     console.log('❌ FormData POST failed, trying final method...', formError);
                 }
 
-                // СПОСОБ 3: Используем XMLHttpRequest (самый надежный для CORS)
-                console.log('🔄 Trying XMLHttpRequest...');
-                return new Promise((resolve) => {
-                    const xhr = new XMLHttpRequest();
-                    xhr.open('POST', ANALYTICS_ENDPOINT, true);
-                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                    
-                    xhr.onload = function() {
-                        if (xhr.status === 200) {
-                            console.log('✅ Analytics data sent via XMLHttpRequest');
-                            try {
-                                const result = JSON.parse(xhr.responseText);
-                                console.log('Server response:', result);
-                            } catch (e) {
-                                console.log('Raw response:', xhr.responseText);
-                            }
-                            resetAnalytics();
-                            resolve(true);
-                        } else {
-                            console.error('❌ XMLHttpRequest failed:', xhr.status);
-                            resolve(false);
-                        }
-                    };
-                    
-                    xhr.onerror = function() {
-                        console.error('❌ XMLHttpRequest network error');
-                        resolve(false);
-                    };
-                    
-                    // Отправляем как URL-encoded данные
-                    const urlEncodedData = 'data=' + encodeURIComponent(JSON.stringify(payload));
-                    xhr.send(urlEncodedData);
-                });
+                // Если все методы не сработали, сохраняем данные в localStorage для отправки позже
+                console.log('💾 Saving analytics to localStorage for later');
+                saveAnalyticsToLocalStorage(payload);
 
             } catch (error) {
                 console.error('🔴 All methods failed for analytics:', error);
-                return false;
+                
+                // Сохраняем данные в localStorage
+                const report = getAnalyticsReport();
+                const payload = {
+                    report: report,
+                    timestamp: new Date().toISOString(),
+                    source: 'Great Date Web App - Error Fallback'
+                };
+                saveAnalyticsToLocalStorage(payload);
+            }
+        }
+
+        // Функция отправки через JSONP
+        function sendAnalyticsViaJSONP(payload) {
+            return new Promise((resolve, reject) => {
+                const callbackName = 'jsonp_callback_' + Date.now();
+                const script = document.createElement('script');
+                
+                // Формируем URL с callback
+                const url = ANALYTICS_ENDPOINT + 
+                    '?callback=' + callbackName + 
+                    '&data=' + encodeURIComponent(JSON.stringify(payload)) +
+                    '&_=' + Date.now();
+                
+                // Создаем глобальную callback функцию
+                window[callbackName] = function(response) {
+                    console.log('✅ Analytics response:', response);
+                    delete window[callbackName];
+                    document.body.removeChild(script);
+                    resolve(response);
+                };
+                
+                // Обработка ошибок
+                script.onerror = function() {
+                    console.log('❌ JSONP failed');
+                    delete window[callbackName];
+                    document.body.removeChild(script);
+                    reject(new Error('JSONP request failed'));
+                };
+                
+                script.src = url;
+                document.body.appendChild(script);
+                
+                // Таймаут на случай если callback не сработает
+                setTimeout(() => {
+                    if (window[callbackName]) {
+                        console.log('❌ JSONP timeout');
+                        delete window[callbackName];
+                        if (script.parentNode) {
+                            document.body.removeChild(script);
+                        }
+                        reject(new Error('JSONP timeout'));
+                    }
+                }, 5000);
+            });
+        }
+
+        // Функция для сохранения аналитики в localStorage
+        function saveAnalyticsToLocalStorage(payload) {
+            try {
+                // Получаем существующие данные
+                const storedAnalytics = JSON.parse(localStorage.getItem('pendingAnalytics') || '[]');
+                
+                // Добавляем новые данные
+                storedAnalytics.push({
+                    ...payload,
+                    storedAt: new Date().toISOString()
+                });
+                
+                // Сохраняем обратно (ограничиваем размер)
+                if (storedAnalytics.length > 50) {
+                    storedAnalytics.splice(0, storedAnalytics.length - 50);
+                }
+                
+                localStorage.setItem('pendingAnalytics', JSON.stringify(storedAnalytics));
+                console.log('💾 Analytics saved to localStorage. Total pending:', storedAnalytics.length);
+                
+            } catch (error) {
+                console.error('❌ Failed to save analytics to localStorage:', error);
+            }
+        }
+
+        // Функция для отправки накопленных данных
+        async function sendPendingAnalytics() {
+            try {
+                const storedAnalytics = JSON.parse(localStorage.getItem('pendingAnalytics') || '[]');
+                
+                if (storedAnalytics.length === 0) {
+                    return;
+                }
+                
+                console.log('🔄 Sending pending analytics:', storedAnalytics.length);
+                
+                // Отправляем каждую запись
+                for (const analyticData of storedAnalytics) {
+                    try {
+                        // Используем JSONP для отправки
+                        await sendAnalyticsViaJSONP(analyticData);
+                        
+                        // Удаляем отправленную запись
+                        const updatedAnalytics = JSON.parse(localStorage.getItem('pendingAnalytics') || '[]');
+                        const index = updatedAnalytics.findIndex(item => item.storedAt === analyticData.storedAt);
+                        if (index > -1) {
+                            updatedAnalytics.splice(index, 1);
+                            localStorage.setItem('pendingAnalytics', JSON.stringify(updatedAnalytics));
+                        }
+                        
+                        // Небольшая задержка между запросами
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        
+                    } catch (error) {
+                        console.error('❌ Failed to send pending analytic:', error);
+                        break; // Прерываем если одна не отправилась
+                    }
+                }
+                
+            } catch (error) {
+                console.error('❌ Failed to send pending analytics:', error);
             }
         }
 
@@ -1235,23 +1334,91 @@
             console.log('🔄 Analytics reset');
         }
 
-        // Автоматическая отправка каждые 24 часа
+        // Автоматическая отправка с обработкой накопленных данных
         function startAnalyticsScheduler() {
-            // Отправляем первый отчет через 2 минуты для тестирования
+            // Сначала отправляем накопленные данные
             setTimeout(() => {
-                if (analytics.events.length > 0) {
-                    sendAnalyticsData();
-                }
-            }, 2 * 60 * 1000);
+                sendPendingAnalytics();
+            }, 3000);
             
-            // Затем каждые 24 часа
+            // Отправляем текущие данные каждые 2 минуты
             setInterval(() => {
                 if (analytics.events.length > 0) {
                     sendAnalyticsData();
                 }
-            }, 24 * 60 * 60 * 1000);
+                // Также пытаемся отправить накопленные данные
+                sendPendingAnalytics();
+            }, 2 * 60 * 1000);
+            
+            // Отправляем при видимости страницы (когда пользователь возвращается на вкладку)
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    setTimeout(() => {
+                        sendPendingAnalytics();
+                    }, 1000);
+                }
+            });
+            
+            // Отправляем перед закрытием страницы
+            window.addEventListener('beforeunload', function() {
+                if (analytics.events.length > 0) {
+                    // Синхронный запрос для надежности
+                    const xhr = new XMLHttpRequest();
+                    const report = getAnalyticsReport();
+                    const payload = {
+                        report: report,
+                        timestamp: new Date().toISOString(),
+                        source: 'Great Date Web App - Page Unload'
+                    };
+                    
+                    const url = ANALYTICS_ENDPOINT + '?data=' + encodeURIComponent(JSON.stringify(payload));
+                    xhr.open('GET', url, false); // синхронный
+                    xhr.send();
+                }
+                
+                // Также пытаемся отправить накопленные данные
+                sendPendingAnalytics();
+            });
         }
 
+        // Функция для проверки статуса аналитики
+        function checkAnalyticsStatus() {
+            const status = {
+                eventsInSession: analytics.events.length,
+                pendingInStorage: JSON.parse(localStorage.getItem('pendingAnalytics') || '[]').length,
+                sessionId: analytics.sessionId,
+                lastEvent: analytics.events[analytics.events.length - 1]
+            };
+            
+            console.log('📊 Analytics Status:', status);
+            return status;
+        }
+
+        // Добавьте в глобальную область видимости для отладки
+        window.checkAnalyticsStatus = checkAnalyticsStatus;
+        window.getPendingAnalytics = function() {
+            return JSON.parse(localStorage.getItem('pendingAnalytics') || '[]');
+        };
+
+        // Функция для тестирования аналитики
+        function testAnalytics() {
+            console.log('🧪 Testing analytics...');
+            
+            // Генерируем тестовые события
+            trackEvent('test_category_click', { category: 'Рестораны' });
+            trackEvent('test_place_view', { placeId: 'test_place_1', placeName: 'Test Restaurant' });
+            trackEvent('test_route_generation', { categories: ['Рестораны', 'Бары'] });
+            
+            // Немедленная отправка
+            setTimeout(() => {
+                sendAnalyticsData();
+            }, 1000);
+        }
+
+        // Добавляем глобальную функцию для тестирования
+        window.testAnalytics = testAnalytics;
+
+        // Остальной код приложения остается без изменений
         // Функция для проверки загрузки базы данных
         function checkDatabaseLoaded() {
             if (window.placesDatabase && window.placesDatabase.length > 0) {
@@ -2432,21 +2599,6 @@
             selectedReplacementPlace = null;
         }
 
-        // Функция для тестирования аналитики
-        function testAnalytics() {
-            console.log('🧪 Testing analytics...');
-            
-            // Генерируем тестовые события
-            trackEvent('test_category_click', { category: 'Рестораны' });
-            trackEvent('test_place_view', { placeId: 'test_place_1', placeName: 'Test Restaurant' });
-            trackEvent('test_route_generation', { categories: ['Рестораны', 'Бары'] });
-            
-            // Немедленная отправка
-            setTimeout(() => {
-                sendAnalyticsData();
-            }, 1000);
-        }
-
         // Инициализация приложения после загрузки базы данных
         function initApp() {
             if (checkDatabaseLoaded()) {
@@ -2491,9 +2643,6 @@
         }
 
         window.onload = initApp;
-        
-        // Добавляем глобальную функцию для тестирования
-        window.testAnalytics = testAnalytics;
     </script>
 </body>
 </html>
