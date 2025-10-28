@@ -9,6 +9,8 @@
     <script src="https://api-maps.yandex.ru/2.1/?apikey=fc21015a-a988-4d6f-91b0-5c86c3db620b&lang=ru_RU" type="text/javascript"></script>
     <!-- Подключение базы данных -->
     <script src="places-database.js"></script>
+    <!-- Подключение шрифта Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -17,7 +19,7 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 50%, #d8e7f3 100%);
             min-height: 100vh;
             display: flex;
@@ -49,19 +51,21 @@
 
         .title {
             font-size: 1.8rem;
-            font-weight: bold;
-            background: linear-gradient(45deg, #667eea, #4a6fa5, #6a93cb);
+            font-weight: 600;
+            background: linear-gradient(45deg, #5a6fd8, #4a5fd0, #3a4fc8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+            text-shadow: 0 4px 15px rgba(90, 111, 216, 0.2);
             margin-bottom: 4px;
+            letter-spacing: -0.5px;
         }
 
         .subtitle {
             font-size: 0.75rem;
             opacity: 0.8;
-            font-weight: 300;
+            font-weight: 400;
             color: #718096;
+            letter-spacing: 0.2px;
         }
 
         /* СТРАНИЦА 1: Мини-профили */
@@ -81,7 +85,7 @@
             border-radius: 6px;
             padding: 6px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-            border: 1px solid rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(90, 111, 216, 0.1);
             transition: all 0.2s ease;
             cursor: pointer;
             opacity: 0;
@@ -98,7 +102,7 @@
             transform: translateY(-1px);
             box-shadow: 0 3px 8px rgba(0,0,0,0.12);
             background: rgba(255, 255, 255, 1);
-            border-color: rgba(102, 126, 234, 0.2);
+            border-color: rgba(90, 111, 216, 0.2);
         }
 
         .profile-header {
@@ -123,7 +127,7 @@
         .profile-1 .profile-icon { background: linear-gradient(45deg, #ff6b6b, #ee5a52); }
         .profile-2 .profile-icon { background: linear-gradient(45deg, #48dbfb, #0abde3); }
         .profile-3 .profile-icon { background: linear-gradient(45deg, #1dd1a1, #10ac84); }
-        .profile-4 .profile-icon { background: linear-gradient(45deg, #6a93cb, #4a6fa5); }
+        .profile-4 .profile-icon { background: linear-gradient(45deg, #5a6fd8, #4a5fd0); }
         .profile-5 .profile-icon { background: linear-gradient(45deg, #ff9f43, #feca57); }
 
         .profile-info {
@@ -133,7 +137,7 @@
 
         .profile-name {
             font-size: 0.65rem;
-            font-weight: bold;
+            font-weight: 600;
             color: #2d3748;
             margin-bottom: 1px;
         }
@@ -162,7 +166,7 @@
             align-items: center;
             gap: 1px;
             color: #f6ad55;
-            font-weight: bold;
+            font-weight: 600;
             font-size: 0.55rem;
         }
 
@@ -176,22 +180,23 @@
 
         /* Кнопка на странице 1 */
         .start-button {
-            background: linear-gradient(45deg, #667eea, #4a6fa5);
+            background: linear-gradient(45deg, #5a6fd8, #4a5fd0);
             color: white;
             border: none;
             padding: 10px 25px;
             font-size: 0.8rem;
-            font-weight: bold;
+            font-weight: 600;
             border-radius: 45px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+            box-shadow: 0 4px 12px rgba(90, 111, 216, 0.25);
             transition: all 0.3s ease;
             margin-top: 10px;
-            border: 2px solid rgba(102, 126, 234, 0.15);
+            border: 2px solid rgba(90, 111, 216, 0.15);
             width: 100%;
             max-width: 280px;
             opacity: 0;
             transform: translateY(10px);
+            font-family: 'Montserrat', sans-serif;
         }
 
         .start-button.visible {
@@ -201,7 +206,7 @@
 
         .start-button:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.35);
+            box-shadow: 0 6px 15px rgba(90, 111, 216, 0.35);
         }
 
         /* СТРАНИЦА 2: Категории */
@@ -229,12 +234,12 @@
         }
 
         .categories-container::-webkit-scrollbar-thumb {
-            background: rgba(102, 126, 234, 0.4);
+            background: rgba(90, 111, 216, 0.4);
             border-radius: 3px;
         }
 
         .categories-container::-webkit-scrollbar-thumb:hover {
-            background: rgba(102, 126, 234, 0.6);
+            background: rgba(90, 111, 216, 0.6);
         }
 
         .category-card {
@@ -242,7 +247,7 @@
             border-radius: 16px;
             padding: 15px 10px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            border: 2px solid rgba(102, 126, 234, 0.1);
+            border: 2px solid rgba(90, 111, 216, 0.1);
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -263,14 +268,14 @@
         .category-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-            border-color: rgba(102, 126, 234, 0.3);
+            border-color: rgba(90, 111, 216, 0.3);
             background: rgba(255, 255, 255, 1);
         }
 
         .category-card.selected {
-            background: linear-gradient(45deg, #667eea, #4a6fa5);
+            background: linear-gradient(45deg, #5a6fd8, #4a5fd0);
             color: white;
-            border-color: rgba(102, 126, 234, 0.4);
+            border-color: rgba(90, 111, 216, 0.4);
         }
 
         .category-icon {
@@ -280,29 +285,30 @@
 
         .category-name {
             font-size: 0.75rem;
-            font-weight: bold;
+            font-weight: 600;
             color: inherit;
             text-align: center;
         }
 
         /* Кнопка на странице 2 */
         .next-button {
-            background: linear-gradient(45deg, #667eea, #4a6fa5);
+            background: linear-gradient(45deg, #5a6fd8, #4a5fd0);
             color: white;
             border: none;
             padding: 12px 30px;
             font-size: 0.9rem;
-            font-weight: bold;
+            font-weight: 600;
             border-radius: 45px;
             cursor: pointer;
-            box-shadow: 0 6px 18px rgba(102, 126, 234, 0.25);
+            box-shadow: 0 6px 18px rgba(90, 111, 216, 0.25);
             transition: all 0.3s ease;
             margin-top: 10px;
-            border: 2px solid rgba(102, 126, 234, 0.15);
+            border: 2px solid rgba(90, 111, 216, 0.15);
             width: 100%;
             max-width: 280px;
             opacity: 0;
             transform: translateY(10px);
+            font-family: 'Montserrat', sans-serif;
         }
 
         .next-button.visible {
@@ -312,7 +318,7 @@
 
         .next-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.35);
+            box-shadow: 0 8px 25px rgba(90, 111, 216, 0.35);
         }
 
         .next-button:disabled {
@@ -341,7 +347,7 @@
             border-radius: 12px;
             padding: 15px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            border: 2px solid rgba(102, 126, 234, 0.1);
+            border: 2px solid rgba(90, 111, 216, 0.1);
             text-align: left;
             transition: all 0.3s ease;
             cursor: pointer;
@@ -350,12 +356,12 @@
         .route-place:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-            border-color: rgba(102, 126, 234, 0.2);
+            border-color: rgba(90, 111, 216, 0.2);
         }
 
         .route-place.active {
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.05);
+            border-color: #5a6fd8;
+            background: rgba(90, 111, 216, 0.05);
         }
 
         .route-place-header {
@@ -383,7 +389,7 @@
 
         .route-place-name {
             font-size: 1rem;
-            font-weight: bold;
+            font-weight: 600;
             color: #2d3748;
             margin-bottom: 3px;
             display: flex;
@@ -416,7 +422,7 @@
             align-items: center;
             gap: 5px;
             color: #f6ad55;
-            font-weight: bold;
+            font-weight: 600;
             font-size: 0.85rem;
         }
 
@@ -443,8 +449,8 @@
         }
 
         .route-feature-tag {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
+            background: rgba(90, 111, 216, 0.1);
+            color: #5a6fd8;
             padding: 3px 6px;
             border-radius: 4px;
             font-size: 0.7rem;
@@ -459,22 +465,23 @@
         }
 
         .route-button {
-            background: linear-gradient(45deg, #667eea, #4a6fa5);
+            background: linear-gradient(45deg, #5a6fd8, #4a5fd0);
             color: white;
             border: none;
             padding: 12px 20px;
             font-size: 0.9rem;
-            font-weight: bold;
+            font-weight: 600;
             border-radius: 45px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+            box-shadow: 0 4px 12px rgba(90, 111, 216, 0.25);
             transition: all 0.3s ease;
-            border: 2px solid rgba(102, 126, 234, 0.15);
+            border: 2px solid rgba(90, 111, 216, 0.15);
+            font-family: 'Montserrat', sans-serif;
         }
 
         .route-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(102, 126, 234, 0.35);
+            box-shadow: 0 6px 18px rgba(90, 111, 216, 0.35);
         }
 
         .route-button.secondary {
@@ -483,9 +490,9 @@
         }
 
         .route-button.tertiary {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
-            border: 2px solid rgba(102, 126, 234, 0.3);
+            background: rgba(90, 111, 216, 0.1);
+            color: #5a6fd8;
+            border: 2px solid rgba(90, 111, 216, 0.3);
         }
 
         /* Стили для карты */
@@ -495,7 +502,7 @@
             border-radius: 12px;
             margin-bottom: 15px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border: 2px solid rgba(102, 126, 234, 0.2);
+            border: 2px solid rgba(90, 111, 216, 0.2);
             transition: all 0.3s ease;
         }
 
@@ -511,7 +518,7 @@
             padding: 12px;
             margin-bottom: 15px;
             text-align: left;
-            border: 1px solid rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(90, 111, 216, 0.1);
             box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
 
@@ -532,7 +539,7 @@
 
         .route-info-value {
             color: #2d3748;
-            font-weight: bold;
+            font-weight: 600;
         }
 
         /* Поиск */
@@ -546,18 +553,19 @@
             width: 100%;
             padding: 12px 15px;
             border-radius: 25px;
-            border: 2px solid rgba(102, 126, 234, 0.2);
+            border: 2px solid rgba(90, 111, 216, 0.2);
             background: rgba(255, 255, 255, 0.9);
             color: #2d3748;
             font-size: 0.9rem;
             outline: none;
             box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            font-family: 'Montserrat', sans-serif;
         }
 
         .search-input:focus {
-            border-color: #667eea;
+            border-color: #5a6fd8;
             background: white;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+            box-shadow: 0 4px 12px rgba(90, 111, 216, 0.15);
         }
 
         .search-input::placeholder {
@@ -597,17 +605,17 @@
 
         /* Стиль для надписи "Рекомендуем" */
         .recommended-badge {
-            background: linear-gradient(45deg, #4a6fa5, #6a93cb, #4a6fa5);
+            background: linear-gradient(45deg, #4a5fd0, #5a6fd8, #4a5fd0);
             background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: shimmer 2s ease infinite;
-            font-weight: bold;
+            font-weight: 600;
             font-size: 0.7rem;
             padding: 2px 6px;
             border-radius: 4px;
-            border: 1px solid rgba(74, 111, 165, 0.3);
+            border: 1px solid rgba(74, 95, 208, 0.3);
         }
 
         /* Стили для модального окна замены места */
@@ -633,7 +641,7 @@
             width: 100%;
             max-height: 80vh;
             overflow-y: auto;
-            border: 2px solid rgba(102, 126, 234, 0.2);
+            border: 2px solid rgba(90, 111, 216, 0.2);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
@@ -646,7 +654,7 @@
 
         .modal-title {
             font-size: 1.2rem;
-            font-weight: bold;
+            font-weight: 600;
             color: #2d3748;
         }
 
@@ -662,6 +670,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: 'Montserrat', sans-serif;
         }
 
         .modal-close:hover {
@@ -688,13 +697,13 @@
         .replace-option:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border-color: rgba(102, 126, 234, 0.3);
+            border-color: rgba(90, 111, 216, 0.3);
             background: rgba(255, 255, 255, 1);
         }
 
         .replace-option.selected {
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.05);
+            border-color: #5a6fd8;
+            background: rgba(90, 111, 216, 0.05);
         }
 
         .replace-option-header {
@@ -718,7 +727,7 @@
 
         .replace-option-name {
             font-size: 0.9rem;
-            font-weight: bold;
+            font-weight: 600;
             color: #2d3748;
         }
 
@@ -745,7 +754,7 @@
             align-items: center;
             gap: 3px;
             color: #f6ad55;
-            font-weight: bold;
+            font-weight: 600;
             font-size: 0.8rem;
         }
 
@@ -774,13 +783,14 @@
             padding: 12px;
             border: none;
             border-radius: 8px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
         }
 
         .modal-button.primary {
-            background: linear-gradient(45deg, #667eea, #4a6fa5);
+            background: linear-gradient(45deg, #5a6fd8, #4a5fd0);
             color: white;
         }
 
@@ -796,9 +806,9 @@
 
         /* Кнопка замены в карточке места */
         .replace-place-button {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
-            border: 1px solid rgba(102, 126, 234, 0.3);
+            background: rgba(90, 111, 216, 0.1);
+            color: #5a6fd8;
+            border: 1px solid rgba(90, 111, 216, 0.3);
             padding: 6px 12px;
             border-radius: 6px;
             font-size: 0.7rem;
@@ -806,10 +816,12 @@
             transition: all 0.3s ease;
             margin-top: 8px;
             width: 100%;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
         }
 
         .replace-place-button:hover {
-            background: rgba(102, 126, 234, 0.2);
+            background: rgba(90, 111, 216, 0.2);
             transform: translateY(-1px);
         }
 
@@ -1050,97 +1062,89 @@
                     case 'Джаз-клубы': icon = '🎷'; break;
                     case 'Винные бары': icon = '🍷'; break;
                     case 'Рекомендуем': icon = '⭐'; break;
-                    
-                    // Новые категории
-                    case 'конная прогулка': icon = '🐎'; break;
-                    case 'зоопарк': icon = '🦁'; break;
-                    case 'животно-кафе': icon = '🐱'; break;
-                    case 'ресторан': icon = '🍽️'; break;
-                    case 'кофейня': icon = '☕'; break;
-                    case 'бар': icon = '🍸'; break;
-                    case 'винный бар': icon = '🍷'; break;
-                    case 'ужин на крыше': icon = '🏙️'; break;
-                    case 'панорамный ресторан': icon = '🌆'; break;
-                    case 'необычный ресторан': icon = '🌟'; break;
-                    case 'чайная церемония': icon = '🍵'; break;
-                    case 'сквош': icon = '🎾'; break;
-                    case 'гольф': icon = '⛳'; break;
-                    case 'театр': icon = '🎭'; break;
-                    case 'музей': icon = '🏛️'; break;
-                    case 'галерея': icon = '🖼️'; break;
-                    case 'выставка': icon = '📰'; break;
-                    case 'кинотеатр': icon = '🎬'; break;
-                    case 'кинотеатр для двоих': icon = '💑'; break;
-                    case 'кино под открытым небом': icon = '🌌'; break;
-                    case 'автокинотеатр': icon = '🚗'; break;
-                    case 'сапы': icon = '🛶'; break;
-                    case 'аквапарк': icon = '🌊'; break;
-                    case 'флотариум': icon = '💫'; break;
-                    case 'аренда водного транспорта': icon = '⛵'; break;
-                    case 'катание на кораблях': icon = '🚢'; break;
-                    case 'серфинг': icon = '🏄'; break;
-                    case 'дайвинг': icon = '🤿'; break;
-                    case 'каток': icon = '⛸️'; break;
-                    case 'горнолыжный курорт': icon = '⛷️'; break;
-                    case 'ярмарки': icon = '🎪'; break;
-                    case 'пляж': icon = '🏖️'; break;
-                    case 'квест': icon = '🔍'; break;
-                    case 'гейм зона': icon = '🎮'; break;
-                    case 'бильярд': icon = '🎱'; break;
-                    case 'боулинг': icon = '🎳'; break;
+                    case 'Конные клубы': icon = '🐎'; break;
+                    case 'Зоопарки': icon = '🦁'; break;
+                    case 'Животно-кафе': icon = '🐱'; break;
+                    case 'Кофейни': icon = '☕'; break;
+                    case 'Ужин на крыше': icon = '🏙️'; break;
+                    case 'Панорамный ресторан': icon = '🌆'; break;
+                    case 'Необычный ресторан': icon = '🌟'; break;
+                    case 'Чайная церемония': icon = '🍵'; break;
+                    case 'Сквош': icon = '🎾'; break;
+                    case 'Гольф': icon = '⛳'; break;
+                    case 'Галереи': icon = '🖼️'; break;
+                    case 'ВыставкИ': icon = '📰'; break;
+                    case 'Кинотеатр для двоих': icon = '💑'; break;
+                    case 'Кино под открытым небом': icon = '🌌'; break;
+                    case 'Автокинотеатр': icon = '🚗'; break;
+                    case 'Сапы': icon = '🛶'; break;
+                    case 'Аквапарки': icon = '🌊'; break;
+                    case 'Флотариум': icon = '💫'; break;
+                    case 'Аренда водного транспорта': icon = '⛵'; break;
+                    case 'Водные прогулки': icon = '🚢'; break;
+                    case 'Серфинг': icon = '🏄'; break;
+                    case 'Дайвинг': icon = '🤿'; break;
+                    case 'Катки': icon = '⛸️'; break;
+                    case 'Горнолыжный курорт': icon = '⛷️'; break;
+                    case 'Ярмарки': icon = '🎪'; break;
+                    case 'Пляжи': icon = '🏖️'; break;
+                    case 'Квесты': icon = '🔍'; break;
+                    case 'Гейм зоны': icon = '🎮'; break;
+                    case 'Бильярд': icon = '🎱'; break;
+                    case 'Боулинг': icon = '🎳'; break;
                     case 'VR': icon = '🥽'; break;
-                    case 'пейнтбол': icon = '🔫'; break;
-                    case 'парки и сады': icon = '🌳'; break;
-                    case 'водопады': icon = '🌊'; break;
-                    case 'стендап': icon = '🎤'; break;
-                    case 'паблик ток': icon = '🗣️'; break;
-                    case 'лекции': icon = '🎓'; break;
-                    case 'караоке': icon = '🎤'; break;
-                    case 'студия звукозаписи': icon = '🎧'; break;
-                    case 'концерты': icon = '🎵'; break;
-                    case 'воздушный шар': icon = '🎈'; break;
-                    case 'вертолет': icon = '🚁'; break;
-                    case 'спа': icon = '🧖'; break;
-                    case 'аренда авто': icon = '🚗'; break;
-                    case 'мастер класс': icon = '🎨'; break;
-                    case 'дегустация вин': icon = '🍇'; break;
-                    case 'тур по барам': icon = '🍻'; break;
-                    case 'кальянные': icon = '💨'; break;
-                    case 'клубы': icon = '🎉'; break;
-                    case 'смотровые площадки': icon = '🏙️'; break;
-                    case 'лофт': icon = '🏭'; break;
-                    case 'мотоциклы': icon = '🏍️'; break;
-                    case 'банджи джампинг': icon = '🪂'; break;
-                    case 'прыжок с парашютом': icon = '🪂'; break;
-                    case 'zip line': icon = '🧗‍♀️'; break;
-                    case 'парк аттракционов': icon = '🎢'; break;
-                    case 'фотосессия': icon = '📸'; break;
-                    case 'планетарий': icon = '🌌'; break;
-                    case 'картинг': icon = '🏎️'; break;
-                    case 'стрельба из лука': icon = '🏹'; break;
-                    case 'стрельба из оружия': icon = '🔫'; break;
-                    case 'аэротруба': icon = '🌪️'; break;
-                    case 'параплан': icon = '🪂'; break;
-                    case 'скалолазание': icon = '🧗‍♂️'; break;
-                    case 'веревочный парк': icon = '🧗'; break;
+                    case 'Пейнтбол': icon = '🔫'; break;
+                    case 'Водопады': icon = '🌊'; break;
+                    case 'Стендап': icon = '🎤'; break;
+                    case 'Паблик ток': icon = '🗣️'; break;
+                    case 'Лекции': icon = '🎓'; break;
+                    case 'Караоке': icon = '🎤'; break;
+                    case 'Студия звукозаписи': icon = '🎧'; break;
+                    case 'Концерты': icon = '🎵'; break;
+                    case 'Воздушный шар': icon = '🎈'; break;
+                    case 'Вертолет': icon = '🚁'; break;
+                    case 'Спа': icon = '🧖'; break;
+                    case 'Аренда авто': icon = '🚗'; break;
+                    case 'Мастер классы': icon = '🎨'; break;
+                    case 'Дегустация вин': icon = '🍇'; break;
+                    case 'Тур по барам': icon = '🍻'; break;
+                    case 'Кальянные': icon = '💨'; break;
+                    case 'Ночные Клубы': icon = '🎉'; break;
+                    case 'Смотровые площадки': icon = '🏙️'; break;
+                    case 'Лофт': icon = '🏭'; break;
+                    case 'Мотоциклы': icon = '🏍️'; break;
+                    case 'Банджи джампинг': icon = '🪂'; break;
+                    case 'Прыжок с парашютом': icon = '🪂'; break;
+                    case 'Zip line': icon = '🧗‍♀️'; break;
+                    case 'Парк аттракционов': icon = '🎢'; break;
+                    case 'Фотосессия': icon = '📸'; break;
+                    case 'Планетарий': icon = '🌌'; break;
+                    case 'Картинг': icon = '🏎️'; break;
+                    case 'Стрельба из лука': icon = '🏹'; break;
+                    case 'Стрельба из оружия': icon = '🔫'; break;
+                    case 'Аэротруба': icon = '🌪️'; break;
+                    case 'Параплан': icon = '🪂'; break;
+                    case 'Скалолазание': icon = '🧗‍♂️'; break;
+                    case 'Веревочные парки': icon = '🧗'; break;
                     case 'необычное': icon = '🌟'; break;
-                    case 'комната разгрома': icon = '💥'; break;
-                    case 'глэмпинг': icon = '⛺'; break;
-                    case 'обсерватория': icon = '🔭'; break;
-                    case 'оранжерея': icon = '🌺'; break;
-                    case 'массаж': icon = '💆‍♀️'; break;
-                    case 'отель': icon = '🏨'; break;
-                    case 'ночной клуб': icon = '🌃'; break;
-                    case 'скейт парк': icon = '🛹'; break;
-                    case 'криокапсула': icon = '❄️'; break;
-                    case 'соляная пещера': icon = '🧂'; break;
-                    case 'ароматерапия': icon = '🌸'; break;
-                    case 'лазертаг': icon = '🎯'; break;
-                    case 'батуты': icon = '🤸‍♀️'; break;
-                    case 'авиасимулятор': icon = '✈️'; break;
-                    case 'научное шоу': icon = '🔬'; break;
-                    case 'экскурсии по заводам': icon = '🏭'; break;
-                    case 'необычные магазины': icon = '🛍️'; break;
+                    case 'Комната разгрома': icon = '💥'; break;
+                    case 'Глэмпинг': icon = '⛺'; break;
+                    case 'Обсерватории': icon = '🔭'; break;
+                    case 'Оранжереи': icon = '🌺'; break;
+                    case 'Массаж': icon = '💆‍♀️'; break;
+                    case 'Отели': icon = '🏨'; break;
+                    case 'Скейт парки': icon = '🛹'; break;
+                    case 'Криокапсулы': icon = '❄️'; break;
+                    case 'Соляные пещеры': icon = '🧂'; break;
+                    case 'Ароматерапия': icon = '🌸'; break;
+                    case 'Лазертаг': icon = '🎯'; break;
+                    case 'Батуты': icon = '🤸‍♀️'; break;
+                    case 'Авиасимуляторы': icon = '✈️'; break;
+                    case 'Научные шоу': icon = '🔬'; break;
+                    case 'Заводы': icon = '🏭'; break;
+                    case 'Необычные магазины': icon = '🛍️'; break;
+                    case 'Йога': icon = '🧘‍♀️'; break;
+                    case 'Кафе': icon = '🍽️'; break;
 
                     default: icon = '📍'; break;
                 }
@@ -1209,7 +1213,7 @@
                             // Минимальная информация в балуне
                             balloonContent: `
                                 <div style="color: #333; padding: 8px; max-width: 200px;">
-                                    <strong style="color: #667eea; font-size: 14px;">${index + 1}. ${place.name}</strong>
+                                    <strong style="color: #5a6fd8; font-size: 14px;">${index + 1}. ${place.name}</strong>
                                     <div style="font-size: 12px; margin-top: 4px; color: #666;">${place.categories.join(', ')}</div>
                                     <div style="font-size: 11px; margin-top: 2px; color: #888;">${place.address}</div>
                                 </div>
@@ -1240,10 +1244,10 @@
                         boundsAutoApply: true,
                         // Настройки для сплошной линии маршрута с цветами приложения
                         routeActiveStrokeWidth: 6,
-                        routeActiveStrokeColor: "#667eea",
+                        routeActiveStrokeColor: "#5a6fd8",
                         routeActiveStrokeStyle: 'solid',
                         routeStrokeWidth: 6,
-                        routeStrokeColor: "#667eea",
+                        routeStrokeColor: "#5a6fd8",
                         routeStrokeStyle: 'solid',
                         // Убираем ВСЕ точки и подписи маршрута
                         wayPointStartIconFillColor: 'transparent',
@@ -1301,7 +1305,7 @@
         // Функция для цветов меток в стиле приложения
         function getPlaceColor(index) {
             const colors = [
-                '#667eea', '#4a6fa5', '#6a93cb', '#ff6b6b', '#48dbfb',
+                '#5a6fd8', '#4a5fd0', '#3a4fc8', '#ff6b6b', '#48dbfb',
                 '#1dd1a1', '#feca57', '#ff9ff3', '#54a0ff', '#5f27cd'
             ];
             return colors[index % colors.length];
@@ -1802,7 +1806,7 @@
                 '#ff6b6b, #ee5a52',
                 '#48dbfb, #0abde3',
                 '#1dd1a1, #10ac84',
-                '#6a93cb, #4a6fa5',
+                '#5a6fd8, #4a5fd0',
                 '#ff9f43, #feca57'
             ];
             return colors[Math.floor(Math.random() * colors.length)];
@@ -2062,7 +2066,7 @@
                         // Минимальная информация в балуне
                         balloonContent: `
                             <div style="color: #333; padding: 8px; max-width: 200px;">
-                                <strong style="color: #667eea; font-size: 14px;">${index + 1}. ${place.name}</strong>
+                                <strong style="color: #5a6fd8; font-size: 14px;">${index + 1}. ${place.name}</strong>
                                 <div style="font-size: 12px; margin-top: 4px; color: #666;">${place.categories.join(', ')}</div>
                                 <div style="font-size: 11px; margin-top: 2px; color: #888;">${place.address}</div>
                             </div>
@@ -2093,10 +2097,10 @@
                     boundsAutoApply: true,
                     // Настройки для сплошной линии маршрута с цветами приложения
                     routeActiveStrokeWidth: 6,
-                    routeActiveStrokeColor: "#667eea",
+                    routeActiveStrokeColor: "#5a6fd8",
                     routeActiveStrokeStyle: 'solid',
                     routeStrokeWidth: 6,
-                    routeStrokeColor: "#667eea",
+                    routeStrokeColor: "#5a6fd8",
                     routeStrokeStyle: 'solid',
                     // Убираем ВСЕ точки и подписи маршрута
                     wayPointStartIconFillColor: 'transparent',
