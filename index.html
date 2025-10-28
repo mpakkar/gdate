@@ -982,6 +982,17 @@
             <button class="route-button" onclick="shareRoute()">
                 Поделиться
             </button>
+            
+            <!-- Новые кнопки аналитики -->
+            <button class="route-button secondary" onclick="testConnection()" style="margin-top: 10px;">
+                🔍 Тест соединения
+            </button>
+            <button class="route-button secondary" onclick="testRealAnalytics()" style="margin-top: 5px;">
+                🧪 Создать тест данные
+            </button>
+            <button class="route-button" onclick="sendDailyReport()" style="margin-top: 5px;">
+                📊 Отправить аналитику
+            </button>
         </div>
     </div>
 
@@ -1013,6 +1024,314 @@
         let placesDatabase = []; // Инициализируем пустым массивом
         let currentReplacementIndex = -1;
         let selectedReplacementPlace = null;
+
+        // Аналитика
+        const ANALYTICS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyeKJZPNOWUuyg9olD8cA_HiksSXqsfYjorDMcByrmqN6zvueprimPXLOqNcNkbUkv_Hw/exec';
+
+        const analytics = {
+            sessionId: generateSessionId(),
+            startTime: new Date(),
+            events: [],
+            categoryClicks: {},
+            placeViews: {},
+            placeReplacements: {},
+            mapOpens: 0,
+            routeGenerations: 0
+        };
+
+        // Генерация ID сессии
+        function generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Трекинг событий
+        function trackEvent(eventType, eventData = {}) {
+            const event = {
+                type: eventType,
+                timestamp: new Date().toISOString(),
+                sessionId: analytics.sessionId,
+                userData: Telegram.WebApp.initDataUnsafe?.user || {},
+                ...eventData
+            };
+            
+            analytics.events.push(event);
+            
+            // Обновляем агрегированные данные
+            switch(eventType) {
+                case 'category_click':
+                    const category = eventData.category;
+                    analytics.categoryClicks[category] = (analytics.categoryClicks[category] || 0) + 1;
+                    break;
+                    
+                case 'place_view':
+                    const placeId = eventData.placeId;
+                    analytics.placeViews[placeId] = (analytics.placeViews[placeId] || 0) + 1;
+                    break;
+                    
+                case 'place_replacement':
+                    const replacedPlaceId = eventData.placeId;
+                    analytics.placeReplacements[replacedPlaceId] = (analytics.placeReplacements[replacedPlaceId] || 0) + 1;
+                    break;
+                    
+                case 'map_open':
+                    analytics.mapOpens++;
+                    break;
+                    
+                case 'route_generation':
+                    analytics.routeGenerations++;
+                    break;
+            }
+            
+            console.log('📊 Event tracked:', event);
+        }
+
+        // Получение отчета
+        function getAnalyticsReport() {
+            const sessionDuration = new Date() - analytics.startTime;
+            
+            return {
+                sessionId: analytics.sessionId,
+                sessionDuration: sessionDuration,
+                totalEvents: analytics.events.length,
+                summary: {
+                    categoryClicks: analytics.categoryClicks,
+                    placeViews: analytics.placeViews,
+                    placeReplacements: analytics.placeReplacements,
+                    mapOpens: analytics.mapOpens,
+                    routeGenerations: analytics.routeGenerations
+                },
+                events: analytics.events
+            };
+        }
+
+        // Отправка реального отчета аналитики
+        async function sendDailyReport() {
+            try {
+                console.log('📊 Preparing analytics report...');
+
+                // Получаем собранную аналитику
+                const report = getAnalyticsReport();
+                console.log('Analytics report:', report);
+
+                // Собираем информацию о местах для красивых названий
+                const placesData = {};
+                if (window.placesDatabase && window.placesDatabase.length > 0) {
+                    window.placesDatabase.forEach(place => {
+                        placesData[place.id] = {
+                            name: place.name,
+                            categories: place.categories
+                        };
+                    });
+                }
+
+                // Формируем payload с реальными данными
+                const payload = {
+                    report: report,
+                    placesData: placesData,
+                    timestamp: new Date().toISOString(),
+                    source: 'Great Date Web App'
+                };
+
+                console.log('📤 Sending analytics to:', ANALYTICS_ENDPOINT);
+                console.log('Payload:', payload);
+
+                // Ключевое исправление: используем text/plain вместо application/json
+                const response = await fetch(ANALYTICS_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8',
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                console.log('📥 Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('📥 Server response:', result);
+
+                // Показываем результат пользователю
+                if (result.status === 'success') {
+                    if (result.telegramSent) {
+                        alert('✅ Аналитика отправлена! Отчет уже в Telegram.');
+                    } else {
+                        alert('⚠️ Данные получены, но не отправлены в Telegram. Проверьте логи.');
+                    }
+                } else {
+                    alert('❌ Ошибка: ' + (result.error || 'Неизвестная ошибка'));
+                }
+
+                // Сбрасываем аналитику после успешной отправки
+                if (response.ok) {
+                    resetAnalytics();
+                }
+
+            } catch (error) {
+                console.error('🔴 Error sending analytics:', error);
+                
+                // Пробуем альтернативный метод
+                console.log('🔄 Trying alternative method...');
+                sendWithAlternativeMethod();
+            }
+        }
+
+        // Альтернативный метод отправки
+        function sendWithAlternativeMethod() {
+            try {
+                const report = getAnalyticsReport();
+                
+                const placesData = {};
+                if (window.placesDatabase && window.placesDatabase.length > 0) {
+                    window.placesDatabase.forEach(place => {
+                        placesData[place.id] = {
+                            name: place.name,
+                            categories: place.categories
+                        };
+                    });
+                }
+                
+                const payload = {
+                    report: report,
+                    placesData: placesData,
+                    timestamp: new Date().toISOString(),
+                    source: 'Great Date Web App (Alternative)'
+                };
+
+                // Используем XMLHttpRequest как запасной вариант
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', ANALYTICS_ENDPOINT, true);
+                xhr.setRequestHeader('Content-Type', 'text/plain;charset=utf-8');
+                
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        console.log('XMLHttpRequest status:', xhr.status);
+                        console.log('XMLHttpRequest response:', xhr.responseText);
+                        
+                        if (xhr.status === 200) {
+                            try {
+                                const result = JSON.parse(xhr.responseText);
+                                if (result.status === 'success') {
+                                    alert('✅ Аналитика отправлена! Отчет в Telegram.');
+                                    resetAnalytics();
+                                } else {
+                                    alert('❌ Ошибка: ' + (result.error || 'Неизвестная ошибка'));
+                                }
+                            } catch (e) {
+                                alert('⚠️ Ответ получен: ' + xhr.responseText);
+                            }
+                        } else {
+                            alert('❌ Ошибка сети: ' + xhr.status);
+                        }
+                    }
+                };
+                
+                xhr.onerror = function() {
+                    alert('❌ Ошибка сети при отправке через XMLHttpRequest');
+                };
+                
+                xhr.send(JSON.stringify(payload));
+                
+            } catch (error) {
+                console.error('🔴 Alternative method error:', error);
+                alert('❌ Все методы отправки не сработали: ' + error.message);
+            }
+        }
+
+        // Сброс аналитики
+        function resetAnalytics() {
+            analytics.sessionId = generateSessionId();
+            analytics.startTime = new Date();
+            analytics.events = [];
+            analytics.categoryClicks = {};
+            analytics.placeViews = {};
+            analytics.placeReplacements = {};
+            analytics.mapOpens = 0;
+            analytics.routeGenerations = 0;
+        }
+
+        // Автоматическая отправка каждые 24 часа
+        function startAnalyticsScheduler() {
+            // Отправляем первый отчет через 24 часа
+            setTimeout(() => {
+                if (analytics.events.length > 0) {
+                    sendDailyReport();
+                }
+                // Затем каждые 24 часа
+                setInterval(() => {
+                    if (analytics.events.length > 0) {
+                        sendDailyReport();
+                    }
+                }, 24 * 60 * 60 * 1000);
+            }, 24 * 60 * 60 * 1000);
+        }
+
+        // Функция для тестирования с реальными данными
+        function testRealAnalytics() {
+            // Создаем тестовые события аналитики
+            trackEvent('category_click', { category: 'Рестораны' });
+            trackEvent('category_click', { category: 'Рестораны' });
+            trackEvent('category_click', { category: 'Бары' });
+            trackEvent('category_click', { category: 'Кофейни' });
+            trackEvent('category_click', { category: 'Музеи' });
+            
+            trackEvent('map_open', {});
+            trackEvent('map_open', {});
+            
+            trackEvent('route_generation', { categories: ['Рестораны', 'Бары'] });
+            trackEvent('route_generation', { categories: ['Кофейни', 'Музеи'] });
+            
+            // Добавляем просмотры мест (если есть база данных)
+            if (window.placesDatabase && window.placesDatabase.length > 0) {
+                for (let i = 0; i < Math.min(5, window.placesDatabase.length); i++) {
+                    const place = window.placesDatabase[i];
+                    trackEvent('place_view', {
+                        placeId: place.id,
+                        placeName: place.name
+                    });
+                }
+                
+                // Добавляем несколько замен мест
+                trackEvent('place_replacement', {
+                    oldPlaceId: window.placesDatabase[0].id,
+                    newPlaceId: window.placesDatabase[1].id
+                });
+            }
+            
+            console.log('🧪 Created test analytics data');
+            alert('🧪 Тестовые данные аналитики созданы! Теперь нажмите "Отправить аналитику".');
+        }
+
+        // Тестирование соединения с сервером
+        async function testConnection() {
+            try {
+                console.log('🔍 Testing connection to Google Apps Script...');
+                
+                const response = await fetch(ANALYTICS_ENDPOINT, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8',
+                    }
+                });
+                
+                if (response.ok) {
+                    const result = await response.text();
+                    console.log('✅ Connection test successful:', result);
+                    alert('✅ Соединение с сервером работает! Сервер отвечает: ' + result);
+                    return true;
+                } else {
+                    console.log('❌ Connection test failed:', response.status);
+                    alert('❌ Соединение с сервером не работает. Статус: ' + response.status);
+                    return false;
+                }
+            } catch (error) {
+                console.error('🔴 Connection test error:', error);
+                alert('❌ Ошибка соединения: ' + error.message);
+                return false;
+            }
+        }
 
         // Функция для проверки загрузки базы данных
         function checkDatabaseLoaded() {
@@ -1490,12 +1809,24 @@
                 element.classList.add('selected');
             }
             
+            // Трекинг
+            trackEvent('category_click', {
+                category: categoryName,
+                selected: selectedCategories.includes(categoryName)
+            });
+            
             const nextButton = document.getElementById('nextButton');
             nextButton.disabled = selectedCategories.length === 0;
         }
 
         // Генерация маршрута
         function generateRoute() {
+            // Трекинг
+            trackEvent('route_generation', {
+                categories: [...selectedCategories],
+                timestamp: new Date().toISOString()
+            });
+            
             // Проверяем, загружена ли база данных
             if (placesDatabase.length === 0) {
                 alert('База данных еще не загружена. Пожалуйста, подождите...');
@@ -1744,6 +2075,18 @@
                 return;
             }
 
+            // Трекинг
+            trackEvent('map_open');
+            
+            route.forEach((place, index) => {
+                trackEvent('place_view', {
+                    placeId: place.id,
+                    placeName: place.name,
+                    positionInRoute: index,
+                    categories: place.categories
+                });
+            });
+
             route.forEach((place, index) => {
                 const placeElement = document.createElement('div');
                 placeElement.className = 'route-place';
@@ -1888,6 +2231,12 @@
             const modal = document.getElementById('replaceModal');
             const replaceOptions = document.getElementById('replaceOptions');
             
+            // Трекинг инициации замены
+            trackEvent('place_replacement_init', {
+                placeId: currentPlace.id,
+                placeName: currentPlace.name
+            });
+            
             // Находим альтернативные места той же категории
             const currentCategories = currentPlace.categories.filter(cat => cat !== "Рекомендуем");
             const alternativePlaces = findAlternativePlaces(currentPlace, currentCategories);
@@ -1965,9 +2314,19 @@
 
         function confirmReplace() {
             if (currentReplacementIndex === -1 || !selectedReplacementPlace) {
-                alert('Пожалуйста, выберите место для замены');
+                alert('Пожалуйста, выберите место для замену');
                 return;
             }
+            
+            const oldPlace = currentRoute[currentReplacementIndex];
+            
+            // Трекинг замены
+            trackEvent('place_replacement', {
+                oldPlaceId: oldPlace.id,
+                oldPlaceName: oldPlace.name,
+                newPlaceId: selectedReplacementPlace.id,
+                newPlaceName: selectedReplacementPlace.name
+            });
             
             // Заменяем место в маршруте
             currentRoute[currentReplacementIndex] = selectedReplacementPlace;
@@ -2137,8 +2496,17 @@
             if (checkDatabaseLoaded()) {
                 initTelegram();
                 setTimeout(animateFirstPage, 500);
+                
+                // Запускаем аналитику
+                startAnalyticsScheduler();
+                
+                // Отправляем отчет при закрытии приложения
+                window.addEventListener('beforeunload', () => {
+                    if (analytics.events.length > 0) {
+                        sendDailyReport();
+                    }
+                });
             } else {
-                // Если база данных еще не загружена, ждем и пробуем снова
                 setTimeout(initApp, 100);
             }
         }
