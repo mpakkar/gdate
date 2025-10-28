@@ -1014,7 +1014,7 @@
         let currentReplacementIndex = -1;
         let selectedReplacementPlace = null;
 
-        // Аналитика
+        // Аналитика - ВАША ССЫЛКА
         const ANALYTICS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyGFMsA1iRYxJRHskde_BAWOP8z5-QoF-8iDfa0lj12zWkhCvKs3flBcNIOl0lzDLnytg/exec';
 
         const analytics = {
@@ -1071,7 +1071,12 @@
                     break;
             }
             
-            console.log('📊 Event tracked:', event);
+            console.log('📊 Event tracked:', eventType, eventData);
+            
+            // Отправляем данные сразу для тестирования
+            if (analytics.events.length >= 3) {
+                sendAnalyticsData();
+            }
         }
 
         // Получение отчета
@@ -1093,14 +1098,20 @@
             };
         }
 
-        // Отправка реального отчета аналитики
-        async function sendDailyReport() {
+        // Отправка данных аналитики
+        async function sendAnalyticsData() {
+            // Если мы работаем локально (file://), не отправляем аналитику
+            if (window.location.protocol === 'file:') {
+                console.log('📊 Analytics disabled for local file system');
+                return;
+            }
+
             try {
-                console.log('📊 Preparing analytics report...');
+                console.log('📊 Sending analytics data...');
 
                 // Получаем собранную аналитику
                 const report = getAnalyticsReport();
-                console.log('Analytics report prepared');
+                console.log('Analytics events count:', analytics.events.length);
 
                 // Собираем информацию о местах для красивых названий
                 const placesData = {};
@@ -1122,7 +1133,9 @@
                 };
 
                 console.log('📤 Sending analytics to:', ANALYTICS_ENDPOINT);
+                console.log('Payload:', payload);
 
+                // Отправляем данные
                 const response = await fetch(ANALYTICS_ENDPOINT, {
                     method: 'POST',
                     headers: {
@@ -1133,16 +1146,12 @@
 
                 console.log('📥 Response status:', response.status);
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const result = await response.json();
-                console.log('📥 Server response:', result);
-
-                // Сбрасываем аналитику после успешной отправки
                 if (response.ok) {
+                    console.log('✅ Analytics data sent successfully');
+                    // Сбрасываем аналитику после успешной отправки
                     resetAnalytics();
+                } else {
+                    console.error('❌ Failed to send analytics:', response.status);
                 }
 
             } catch (error) {
@@ -1160,21 +1169,23 @@
             analytics.placeReplacements = {};
             analytics.mapOpens = 0;
             analytics.routeGenerations = 0;
+            console.log('🔄 Analytics reset');
         }
 
         // Автоматическая отправка каждые 24 часа
         function startAnalyticsScheduler() {
-            // Отправляем первый отчет через 24 часа
+            // Отправляем первый отчет через 2 минуты для тестирования
             setTimeout(() => {
                 if (analytics.events.length > 0) {
-                    sendDailyReport();
+                    sendAnalyticsData();
                 }
-                // Затем каждые 24 часа
-                setInterval(() => {
-                    if (analytics.events.length > 0) {
-                        sendDailyReport();
-                    }
-                }, 24 * 60 * 60 * 1000);
+            }, 2 * 60 * 1000);
+            
+            // Затем каждые 24 часа
+            setInterval(() => {
+                if (analytics.events.length > 0) {
+                    sendAnalyticsData();
+                }
             }, 24 * 60 * 60 * 1000);
         }
 
@@ -1182,10 +1193,17 @@
         function checkDatabaseLoaded() {
             if (window.placesDatabase && window.placesDatabase.length > 0) {
                 placesDatabase = window.placesDatabase;
-                console.log("База данных загружена успешно, мест:", placesDatabase.length);
+                console.log("✅ База данных загружена успешно, мест:", placesDatabase.length);
+                
+                // Трекинг успешной загрузки
+                trackEvent('app_loaded', {
+                    placesCount: placesDatabase.length,
+                    categoriesCount: getAllCategories().length
+                });
+                
                 return true;
             } else {
-                console.log("База данных еще не загружена, пробуем снова...");
+                console.log("⏳ База данных еще не загружена, пробуем снова...");
                 setTimeout(checkDatabaseLoaded, 100);
                 return false;
             }
@@ -1580,6 +1598,9 @@
             selectedCards.forEach(card => card.classList.remove('selected'));
             
             initializeCategories();
+            
+            // Трекинг перехода к категориям
+            trackEvent('page_view', { page: 'categories' });
         }
 
         // Переход к выбору категорий с третьей страницы
@@ -1600,6 +1621,9 @@
                 map.destroy();
                 map = null;
             }
+            
+            // Трекинг возврата к категориям
+            trackEvent('page_view', { page: 'categories_from_route' });
         }
 
         // Регенерация маршрута
@@ -1972,6 +1996,12 @@
             });
 
             initMap(route);
+            
+            // Трекинг просмотра страницы маршрута
+            trackEvent('page_view', { 
+                page: 'route',
+                routeLength: route.length
+            });
         }
 
         // Подсветка места на карте
@@ -2003,6 +2033,9 @@
         // Функция поделиться маршрутом - теперь отправляет ссылку на бота
         function shareRoute() {
             const botLink = 'https://t.me/great_date_bot';
+            
+            // Трекинг события "поделиться"
+            trackEvent('share_click');
             
             // Пытаемся использовать Web Share API если доступно
             if (navigator.share) {
@@ -2336,27 +2369,53 @@
             selectedReplacementPlace = null;
         }
 
+        // Функция для тестирования аналитики
+        function testAnalytics() {
+            console.log('🧪 Testing analytics...');
+            
+            // Генерируем тестовые события
+            trackEvent('test_category_click', { category: 'Рестораны' });
+            trackEvent('test_place_view', { placeId: 'test_place_1', placeName: 'Test Restaurant' });
+            trackEvent('test_route_generation', { categories: ['Рестораны', 'Бары'] });
+            
+            // Немедленная отправка
+            sendAnalyticsData();
+        }
+
         // Инициализация приложения после загрузки базы данных
         function initApp() {
             if (checkDatabaseLoaded()) {
                 initTelegram();
                 setTimeout(animateFirstPage, 500);
                 
-                // Запускаем аналитику
-                startAnalyticsScheduler();
+                // Запускаем аналитику только если не локальный файл
+                if (window.location.protocol !== 'file:') {
+                    startAnalyticsScheduler();
+                    
+                    // Отправляем отчет при закрытии приложения
+                    window.addEventListener('beforeunload', () => {
+                        if (analytics.events.length > 0) {
+                            sendAnalyticsData();
+                        }
+                    });
+                    
+                    console.log('📊 Analytics enabled');
+                } else {
+                    console.log('📍 Local file mode - analytics disabled');
+                }
                 
-                // Отправляем отчет при закрытии приложения
-                window.addEventListener('beforeunload', () => {
-                    if (analytics.events.length > 0) {
-                        sendDailyReport();
-                    }
-                });
+                // Для тестирования - кнопка в консоли
+                console.log('💡 For analytics testing, run: testAnalytics()');
+                
             } else {
                 setTimeout(initApp, 100);
             }
         }
 
         window.onload = initApp;
+        
+        // Добавляем глобальную функцию для тестирования
+        window.testAnalytics = testAnalytics;
     </script>
 </body>
 </html>
