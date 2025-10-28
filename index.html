@@ -1812,43 +1812,25 @@
             return colors[Math.floor(Math.random() * colors.length)];
         }
 
-        // Функция поделиться маршрутом
+        // Функция поделиться маршрутом - теперь отправляет ссылку на бота
         function shareRoute() {
-            if (currentRoute.length === 0) {
-                alert('Сначала создайте маршрут!');
-                return;
-            }
-
-            // Формируем текст для分享
-            let routeText = `🚀 Мой автомобильный маршрут для свидания:\n\n`;
+            const botLink = 'https://t.me/great_date_bot';
             
-            currentRoute.forEach((place, index) => {
-                const isRecommended = place.categories.includes("Рекомендуем");
-                routeText += `${index + 1}. ${place.name}${isRecommended ? ' ⭐ Рекомендуем' : ''}\n`;
-                routeText += `   📍 ${place.categories.filter(cat => cat !== "Рекомендуем").join(', ')}\n`;
-                routeText += `   🏠 ${place.address}\n`;
-                routeText += `   ⭐ ${place.rating} | ${place.price}\n`;
-                routeText += `   ${place.description}\n\n`;
-            });
-            
-            routeText += `📍 Общее расстояние: ${document.querySelector('.route-info-item:nth-child(2) .route-info-value')?.textContent || 'N/A'}\n`;
-            routeText += `⏱️ Время в пути: ${document.querySelector('.route-info-item:nth-child(3) .route-info-value')?.textContent || 'N/A'}`;
-
             // Пытаемся использовать Web Share API если доступно
             if (navigator.share) {
                 navigator.share({
-                    title: 'Мой автомобильный маршрут для свидания - Great Date',
-                    text: routeText,
-                    url: window.location.href
+                    title: 'Great Date - Лучшие места для свиданий',
+                    text: 'Нашел отличное приложение для планирования свиданий! Попробуй и ты - здесь можно составить идеальный маршрут для встречи.',
+                    url: botLink
                 }).then(() => {
-                    console.log('Маршрут успешно shared');
+                    console.log('Ссылка на бота успешно отправлена');
                 }).catch((error) => {
-                    // Fallback: копируем в буфер обмена
-                    copyToClipboard(routeText);
+                    // Fallback: копируем ссылку в буфер обмена
+                    copyToClipboard(botLink);
                 });
             } else {
-                // Fallback: копируем в буфер обмена
-                copyToClipboard(routeText);
+                // Fallback: копируем ссылку в буфер обмена
+                copyToClipboard(botLink);
             }
         }
 
@@ -1873,26 +1855,26 @@
                     if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
                         Telegram.WebApp.showPopup({
                             title: 'Успех!',
-                            message: 'Маршрут скопирован в буфер обмена! Отправьте его своему спутнику.',
+                            message: 'Ссылка на бота скопирована в буфер обмена! Теперь вы можете отправить ее друзьям.',
                             buttons: [{ type: 'ok' }]
                         });
                     } else {
-                        alert('✅ Маршрут скопирован! Теперь вы можете отправить его своему спутнику в любом мессенджере.');
+                        alert('✅ Ссылка на бота скопирована! Теперь вы можете отправить ее друзьям в любом мессенджере.');
                     }
                 } else {
                     throw new Error('Copy failed');
                 }
             } catch (err) {
                 document.body.removeChild(textarea);
-                // Последний fallback - показываем текст
+                // Последний fallback - показываем ссылку
                 if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
                     Telegram.WebApp.showPopup({
-                        title: 'Скопируйте маршрут',
+                        title: 'Скопируйте ссылку на бота',
                         message: text,
                         buttons: [{ type: 'ok' }]
                     });
                 } else {
-                    alert('Скопируйте этот текст:\n\n' + text);
+                    alert('Скопируйте эту ссылку:\n\n' + text);
                 }
             }
         }
