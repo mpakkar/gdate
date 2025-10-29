@@ -16,11 +16,11 @@ window.placesDatabase = [
         "website": "https://mansarda-restaurant.ru"
     },
     {
-        "id": 3, "name": "Birch", "categories": ["Рестораны"], "icon": "🍽️", "rating": 4.6, "price": "💰💰💰💰",
+        "id": 3, "name": "Birch", "categories": ["Рестораны", "Рекомендуем"], "icon": "🍽️", "rating": 4.6, "price": "💰💰💰💰",
         "description": "Современный ресторан с авторской кухней от известного шефа Владимира Чистякова",
         "features": ["Авторская кухня", "Премиум"], "coordinates": [59.943086, 30.358969],
         "address": "Лиговский пр., 30",
-        "website": "https://birchrestaurant.ru"
+        "website": "https://birchrestaurants.com/saintpetersburg"
     },
     {
         "id": 4, "name": "Khachapuri i Vino", "categories": ["Рестораны"], "icon": "🧀", "rating": 4.8, "price": "💰💰",
