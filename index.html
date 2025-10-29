@@ -456,6 +456,33 @@
             font-size: 0.7rem;
         }
 
+        /* Стили для сайта места */
+        .route-place-website {
+            margin-top: 8px;
+            font-size: 0.75rem;
+        }
+
+        .website-link {
+            color: #5a6fd8;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .website-link:hover {
+            color: #4a5fd0;
+            text-decoration: underline;
+            transform: translateY(-1px);
+        }
+
+        .website-icon {
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+
         .route-buttons {
             display: flex;
             flex-direction: column;
@@ -1784,6 +1811,16 @@
                 // Проверяем, является ли место рекомендуемым
                 const isRecommended = place.categories.includes("Рекомендуем");
                 
+                // Создаем HTML для сайта, если он есть
+                const websiteHTML = place.website ? `
+                    <div class="route-place-website">
+                        <a href="${place.website}" target="_blank" class="website-link">
+                            <span class="website-icon">🌐</span>
+                            <span>Сайт</span>
+                        </a>
+                    </div>
+                ` : '';
+                
                 placeElement.innerHTML = `
                     <div class="route-place-header">
                         <div class="route-place-icon" style="background: linear-gradient(45deg, ${getRandomColor()})">
@@ -1796,6 +1833,7 @@
                             </div>
                             <div class="route-place-category">${place.categories.filter(cat => cat !== "Рекомендуем").join(', ')}</div>
                             <div class="route-place-address">${place.address}</div>
+                            ${websiteHTML}
                         </div>
                     </div>
                     <div class="route-place-description">${place.description}</div>
@@ -2033,6 +2071,16 @@
                 // Проверяем, является ли место рекомендуемым
                 const isRecommended = place.categories.includes("Рекомендуем");
                 
+                // Создаем HTML для сайта, если он есть
+                const websiteHTML = place.website ? `
+                    <div class="route-place-website">
+                        <a href="${place.website}" target="_blank" class="website-link">
+                            <span class="website-icon">🌐</span>
+                            <span>Сайт</span>
+                        </a>
+                    </div>
+                ` : '';
+                
                 placeElement.innerHTML = `
                     <div class="route-place-header">
                         <div class="route-place-icon" style="background: linear-gradient(45deg, ${getRandomColor()})">
@@ -2045,6 +2093,7 @@
                             </div>
                             <div class="route-place-category">${place.categories.filter(cat => cat !== "Рекомендуем").join(', ')}</div>
                             <div class="route-place-address">${place.address}</div>
+                            ${websiteHTML}
                         </div>
                     </div>
                     <div class="route-place-description">${place.description}</div>
