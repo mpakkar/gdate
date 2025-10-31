@@ -853,8 +853,24 @@
         .ymaps-2-1-79-route-pedestrian-sign,
         .ymaps-2-1-79-route-pedestrian-title,
         .ymaps-2-1-79-route-pedestrian-via,
-        .ymaps-2-1-79-route-pedestrian-point {
+        .ymaps-2-1-79-route-pedestrian-point,
+        .ymaps-2-1-79-route-pedestrian,
+        .ymaps-2-1-79-route-pedestrian-route-view,
+        .ymaps-2-1-79-route-pedestrian-summary,
+        .ymaps-2-1-79-route-panel,
+        .ymaps-2-1-79-route-button,
+        [class*="pedestrian"],
+        [class*="walk"],
+        [class*="distance"],
+        [class*="duration"],
+        [class*="human"],
+        [class*="person"] {
             display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            width: 0 !important;
+            height: 0 !important;
+            pointer-events: none !important;
         }
 
         /* Скрываем человечков и другие пешеходные элементы */
@@ -1253,7 +1269,7 @@
             });
         }
 
-        // Инициализация Яндекс Карт с автомобильным маршрутом
+        // Инициализация Яндекс Карт с пешеходным маршрутом
         function initMap(routePlaces) {
             if (!routePlaces || routePlaces.length === 0) return;
             
@@ -1270,18 +1286,23 @@
                     center: routePlaces[0].coordinates,
                     zoom: 15
                 }, {
-                    // Убираем лишние элементы управления
+                    // Убираем ВСЕ элементы управления
                     suppressMapOpenBlock: true,
-                    suppressObsoleteBrowserNotifier: true
+                    suppressObsoleteBrowserNotifier: true,
+                    // Отключаем все стандартные элементы
+                    yandexMapDisablePoiInteractivity: true
                 });
 
-                // Оставляем только нужные элементы управления
+                // Убираем ВСЕ элементы управления с карты
                 map.controls.remove('geolocationControl');
                 map.controls.remove('trafficControl');
                 map.controls.remove('typeSelector');
                 map.controls.remove('rulerControl');
                 map.controls.remove('searchControl');
                 map.controls.remove('routeButtonControl');
+                map.controls.remove('fullscreenControl');
+                map.controls.remove('zoomControl');
+                map.controls.remove('miniMap');
 
                 // Создаем кастомные метки с номерами
                 routePlaces.forEach((place, index) => {
@@ -1303,23 +1324,30 @@
                             // Кастомные иконки с цветами приложения и подписями
                             preset: 'islands#circleIcon',
                             iconColor: index === 0 ? '#5a6fd8' : '#ff6b6b',
-                            iconCaptionMaxWidth: 30
+                            iconCaptionMaxWidth: 30,
+                            // Отключаем стандартное поведение
+                            hideIconOnBalloonOpen: false,
+                            openBalloonOnClick: false
                         }
                     );
                     
                     map.geoObjects.add(placemark);
                 });
                 
-                // Строим автомобильный маршрут между точками
+                // Строим пешеходный маршрут между точками
                 if (routePlaces.length > 1) {
-                    // Создаем мультимаршрут для автомобиля
+                    // Создаем мультимаршрут для пешехода
                     const multiRoute = new ymaps.multiRouter.MultiRoute({
                         referencePoints: routePlaces.map(place => place.coordinates),
                         params: {
-                            routingMode: 'auto' // Автомобильный маршрут
+                            routingMode: 'pedestrian' // ПЕШЕХОДНЫЙ маршрут
                         }
                     }, {
                         boundsAutoApply: true,
+                        // ОСНОВНОЙ ПАРАМЕТР: скрываем маркеры на маршруте 
+                        routeActiveMarkerVisible: false,
+                        // Дополнительно скрываем баллун при клике
+                        routeOpenBalloonOnClick: false,
                         // Настройки для сплошной линии маршрута с цветами приложения
                         routeActiveStrokeWidth: 6,
                         routeActiveStrokeColor: "#5a6fd8",
@@ -1339,7 +1367,9 @@
                         // Скрываем все элементы интерфейса маршрута
                         wayPointVisible: false,
                         viaPointVisible: false,
-                        pinVisible: false
+                        pinVisible: false,
+                        // Отключаем отображение баллунов с информацией о маршруте
+                        routeOpenBalloonOnClick: false
                     });
                     
                     // Добавляем маршрут на карту
@@ -1350,62 +1380,71 @@
                         checkZoomRange: true,
                         zoomMargin: 30
                     });
+
+                    // Слушаем событие обновления маршрута и скрываем все лишние элементы
+                    multiRoute.model.events.add('requestsuccess', function() {
+                        // Дополнительные меры для скрытия элементов
+                        setTimeout(hideAllRouteElements, 500);
+                    });
                 }
 
-                // Скрываем панель маршрутизации
-                setTimeout(() => {
-                    const routePanel = document.querySelector('.ymaps-2-1-79-route-panel');
-                    if (routePanel) {
-                        routePanel.style.display = 'none';
-                    }
-                }, 100);
+                // Сразу применяем скрытие элементов
+                setTimeout(hideAllRouteElements, 100);
                 
-                // Применяем светлую тему к карте
-                applyLightTheme();
+                // Дополнительные попытки скрытия
+                setTimeout(hideAllRouteElements, 500);
+                setTimeout(hideAllRouteElements, 1000);
             });
         }
 
-        // Функция для применения светлой темы к карте
-        function applyLightTheme() {
-            // Убираем фильтры для светлой темы
-            setTimeout(() => {
-                const mapContainer = document.querySelector('.ymaps-2-1-79-map');
-                const innerPanes = document.querySelector('.ymaps-2-1-79-inner-panes');
-                
-                if (mapContainer) {
-                    mapContainer.style.filter = 'none';
-                }
-                if (innerPanes) {
-                    innerPanes.style.filter = 'none';
-                }
-                
-                // Дополнительно скрываем элементы
-                hideMapElements();
-            }, 100);
-        }
-
-        // Функция для скрытия элементов карты
-        function hideMapElements() {
-            const elementsToHide = [
+        // Функция для полного скрытия всех элементов маршрута
+        function hideAllRouteElements() {
+            // Список всех селекторов, которые нужно скрыть
+            const selectorsToHide = [
                 '.ymaps-2-1-79-route-panel',
-                '.ymaps-2-1-79-route-button',
-                '.ymaps-2-1-79-islets_icon_content',
-                '.ymaps-2-1-79-route-pedestrian-icon',
                 '.ymaps-2-1-79-route-pedestrian-panel',
-                '.ymaps-2-1-79-copyrights-pane',
-                '.ymaps-2-1-79-route-pedestrian',
-                '.ymaps-2-1-79-route-pedestrian-route-view',
+                '.ymaps-2-1-79-route-pedestrian-summary',
+                '.ymaps-2-1-79-route-pedestrian-icon',
                 '.ymaps-2-1-79-route-pedestrian-view',
                 '.ymaps-2-1-79-route-pedestrian-sign',
                 '.ymaps-2-1-79-route-pedestrian-title',
                 '.ymaps-2-1-79-route-pedestrian-via',
-                '.ymaps-2-1-79-route-pedestrian-point'
+                '.ymaps-2-1-79-route-pedestrian-point',
+                '.ymaps-2-1-79-route-pedestrian',
+                '.ymaps-2-1-79-route-pedestrian-route-view',
+                '.ymaps-2-1-79-islets_icon_content',
+                '.ymaps-2-1-79-copyrights-pane',
+                '.ymaps-2-1-79-route-button',
+                // Селекторы для человечков и расстояний
+                '[class*="pedestrian"]',
+                '[class*="walk"]',
+                '[class*="distance"]',
+                '[class*="duration"]',
+                '[class*="human"]',
+                '[class*="person"]'
             ];
-            
-            elementsToHide.forEach(selector => {
-                const element = document.querySelector(selector);
-                if (element) {
+
+            selectorsToHide.forEach(selector => {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(element => {
                     element.style.display = 'none';
+                    element.style.visibility = 'hidden';
+                    element.style.opacity = '0';
+                    if (element.remove) element.remove();
+                });
+            });
+
+            // Дополнительно ищем элементы по содержанию текста
+            const allElements = document.querySelectorAll('*');
+            allElements.forEach(element => {
+                const text = element.textContent || '';
+                if (text.includes('м') || text.includes('метр') || 
+                    text.includes('пешком') || text.includes('walk') ||
+                    text.includes('человек') || text.includes('human') ||
+                    text.includes('расстояние') || text.includes('distance')) {
+                    element.style.display = 'none';
+                    element.style.visibility = 'hidden';
+                    if (element.remove) element.remove();
                 }
             });
         }
@@ -1695,17 +1734,17 @@
                 }
             }
 
-            // Оптимизируем порядок мест для автомобильного маршрута
-            route = optimizeCarRoute(route);
+            // Оптимизируем порядок мест для пешеходного маршрута
+            route = optimizePedestrianRoute(route);
 
             showRoute(route);
         }
 
-        // Оптимизация порядка мест для автомобильного маршрута
-        function optimizeCarRoute(route) {
+        // Оптимизация порядка мест для пешеходного маршрута
+        function optimizePedestrianRoute(route) {
             if (route.length <= 1) return route;
             
-            // Простой алгоритм ближайшего соседа для автомобильных маршрутов
+            // Простой алгоритм ближайшего соседа для пешеходных маршрутов
             let optimized = [route[0]];
             let remaining = route.slice(1);
             
