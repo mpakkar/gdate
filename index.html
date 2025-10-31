@@ -418,7 +418,7 @@
             flex-direction: column;
             align-items: center;
             position: relative;
-            height: 140px;
+            height: 200px;
         }
 
         .mini-profile-card {
@@ -503,6 +503,14 @@
             font-size: 0.75rem;
             color: #a0aec0;
             margin-top: 2px;
+        }
+
+        .mini-profile-description {
+            font-size: 0.75rem;
+            color: #4a5568;
+            margin-top: 8px;
+            line-height: 1.3;
+            font-style: italic;
         }
 
         .mini-profile-details {
@@ -1848,6 +1856,7 @@
                             </div>
                             <div class="mini-profile-category">${place.categories.filter(cat => cat !== "Рекомендуем").join(', ')}</div>
                             <div class="mini-profile-address">${place.address}</div>
+                            <div class="mini-profile-description">${place.description}</div>
                         </div>
                     </div>
                     <div class="mini-profile-details">
@@ -1872,30 +1881,36 @@
             const prevButton = document.getElementById('prevButton');
             const nextButton = document.getElementById('nextButton');
             
-            prevButton.disabled = currentPlaceIndex === 0;
-            nextButton.disabled = currentPlaceIndex === currentRoute.length - 1;
+            // Убираем disabled, так как теперь навигация циклическая
+            // Но оставляем логику для визуального отображения, если нужно
+            prevButton.disabled = false;
+            nextButton.disabled = false;
         }
 
-        // Переход к следующему месту
+        // Переход к следующему месту - ТЕПЕРЬ ЦИКЛИЧЕСКИЙ
         function nextPlace() {
-            if (currentPlaceIndex < currentRoute.length - 1) {
-                currentPlaceIndex++;
-                updateMiniProfiles();
-                updatePlaceCounter();
-                updateNavigationButtons();
-                updateMapForCurrentPlace();
-            }
+            if (currentRoute.length === 0) return;
+            
+            // Циклическая навигация: после последнего места переходим на первое
+            currentPlaceIndex = (currentPlaceIndex + 1) % currentRoute.length;
+            
+            updateMiniProfiles();
+            updatePlaceCounter();
+            updateNavigationButtons();
+            updateMapForCurrentPlace();
         }
 
-        // Переход к предыдущему месту
+        // Переход к предыдущему месту - ТЕПЕРЬ ЦИКЛИЧЕСКИЙ
         function prevPlace() {
-            if (currentPlaceIndex > 0) {
-                currentPlaceIndex--;
-                updateMiniProfiles();
-                updatePlaceCounter();
-                updateNavigationButtons();
-                updateMapForCurrentPlace();
-            }
+            if (currentRoute.length === 0) return;
+            
+            // Циклическая навигация: перед первым местом переходим на последнее
+            currentPlaceIndex = (currentPlaceIndex - 1 + currentRoute.length) % currentRoute.length;
+            
+            updateMiniProfiles();
+            updatePlaceCounter();
+            updateNavigationButtons();
+            updateMapForCurrentPlace();
         }
 
         // Вспомогательная функция для случайного цвета
@@ -2002,11 +2017,20 @@
             
             const oldPlace = currentRoute[currentReplacementIndex];
             
+            // Удаляем старое место из истории использованных мест
+            usedPlacesHistory.delete(oldPlace.id);
+            
             // Заменяем место в маршруте
             currentRoute[currentReplacementIndex] = selectedReplacementPlace;
             
-            // Обновляем историю использованных мест
+            // Добавляем новое место в историю использованных мест
             usedPlacesHistory.add(selectedReplacementPlace.id);
+            
+            // ПЕРЕСТРАИВАЕМ МАРШРУТ после замены места
+            currentRoute = optimizePedestrianRoute(currentRoute);
+            
+            // Сбрасываем текущий индекс на первое место
+            currentPlaceIndex = 0;
             
             // Закрываем модальное окно
             closeReplaceModal();
@@ -2014,6 +2038,9 @@
             // Обновляем мини-профили и карту
             updateMiniProfiles();
             updateMapForCurrentPlace();
+            
+            // Перерисовываем карту с новым маршрутом
+            initMap(currentRoute);
         }
 
         function closeReplaceModal() {
