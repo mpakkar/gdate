@@ -20,11 +20,11 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background: #000;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 50%, #d8e7f3 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            color: #fff;
+            color: #2d3748;
             overflow-x: hidden;
         }
 
@@ -64,7 +64,7 @@
             font-size: 0.75rem;
             opacity: 0.8;
             font-weight: 400;
-            color: #a0aec0;
+            color: #718096;
             letter-spacing: 0.2px;
         }
 
@@ -329,6 +329,36 @@
             box-shadow: 0 4px 12px rgba(203, 213, 224, 0.35);
         }
 
+        /* Поиск */
+        .search-container {
+            width: 100%;
+            max-width: 350px;
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 25px;
+            border: 2px solid rgba(90, 111, 216, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+            color: #2d3748;
+            font-size: 0.9rem;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .search-input:focus {
+            border-color: #5a6fd8;
+            background: white;
+            box-shadow: 0 4px 12px rgba(90, 111, 216, 0.15);
+        }
+
+        .search-input::placeholder {
+            color: #a0aec0;
+        }
+
         /* НОВАЯ СТРАНИЦА 3: Маршрут с картой на весь экран */
         #page3 {
             padding: 0;
@@ -499,12 +529,14 @@
             border-radius: 6px;
         }
 
-        /* Кнопки навигации */
+        /* Кнопки навигации - ВЫНЕСЕНЫ НА ВЕРХНИЙ СЛОЙ */
         .navigation-controls {
             display: flex;
             flex-direction: column;
             gap: 12px;
             align-items: center;
+            position: relative;
+            z-index: 10; /* Высокий z-index чтобы быть поверх мини-профилей */
         }
 
         .nav-buttons {
@@ -527,6 +559,7 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             transition: all 0.3s ease;
             color: #5a6fd8;
+            z-index: 11; /* Еще выше чем контейнер */
         }
 
         .nav-button:hover {
@@ -550,6 +583,7 @@
             padding: 8px 16px;
             border-radius: 20px;
             backdrop-filter: blur(10px);
+            z-index: 11;
         }
 
         /* Основные кнопки действий */
@@ -558,6 +592,7 @@
             gap: 10px;
             width: 100%;
             max-width: 320px;
+            z-index: 10;
         }
 
         .action-button {
@@ -1005,7 +1040,7 @@
                 <!-- Мини-профили будут генерироваться динамически -->
             </div>
 
-            <!-- Навигация и кнопки действий -->
+            <!-- Навигация и кнопки действий - ВЫНЕСЕНЫ НА ВЕРХНИЙ СЛОЙ -->
             <div class="navigation-controls">
                 <!-- Кнопки навигации вперед/назад -->
                 <div class="nav-buttons">
@@ -1383,9 +1418,6 @@
             
             // Центрируем карту на текущем месте
             map.setCenter(currentPlace.coordinates, 16);
-            
-            // Обновляем стиль меток (можно добавить выделение текущего места)
-            // Для простоты просто центрируем на текущем месте
         }
 
         function initTelegram() {
