@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Great Date</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Подключение API Яндекс Карт -->
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=fc21015a-a988-4d6f-91b0-5c86c3db620b&lang=ru_RU" type="text/javascript"></script>
+    <!-- ПОДКЛЮЧАЕМ LEAFLET С КАЧЕСТВЕННЫМИ КАРТАМИ -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <!-- Подключение базы данных -->
     <script src="places-database.js"></script>
     <!-- Подключение шрифта Montserrat -->
@@ -391,15 +392,6 @@
 
         .map-overlay * {
             pointer-events: auto;
-        }
-
-        /* Верхние кнопки */
-        .top-controls {
-            top: 0;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
         }
 
         /* Нижняя панель */
@@ -852,64 +844,62 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        /* Скрываем элементы Яндекс Карт */
-        .ymaps-2-1-79-copyrights-pane,
-        .ymaps-2-1-79-islets_icon_content,
-        .ymaps-2-1-79-route-pedestrian-icon,
-        .ymaps-2-1-79-route-pedestrian-panel,
-        .ymaps-2-1-79-route-pedestrian-view,
-        .ymaps-2-1-79-route-pedestrian-sign,
-        .ymaps-2-1-79-route-pedestrian-title,
-        .ymaps-2-1-79-route-pedestrian-via,
-        .ymaps-2-1-79-route-pedestrian-point,
-        .ymaps-2-1-79-route-pedestrian,
-        .ymaps-2-1-79-route-pedestrian-route-view,
-        .ymaps-2-1-79-route-pedestrian-summary,
-        .ymaps-2-1-79-route-panel,
-        .ymaps-2-1-79-route-button,
-        [class*="pedestrian"],
-        [class*="walk"],
-        [class*="distance"],
-        [class*="duration"],
-        [class*="human"],
-        [class*="person"] {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            width: 0 !important;
-            height: 0 !important;
-            pointer-events: none !important;
+        /* Стили Leaflet для кастомных маркеров */
+        .leaflet-custom-marker {
+            background: linear-gradient(45deg, #5a6fd8, #4a5fd0);
+            border: 3px solid white;
+            border-radius: 50%;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
-        /* Скрываем человечков и другие пешеходные элементы */
-        .ymaps-2-1-79-route-pedestrian {
-            display: none !important;
+        .leaflet-custom-marker.active {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            transform: scale(1.2);
+            z-index: 1000;
         }
 
-        .ymaps-2-1-79-route-pedestrian-route-view {
-            display: none !important;
-        }
-
-        /* Стили для верхних кнопок */
-        .top-button {
-            background: rgba(255, 255, 255, 0.9);
-            border: none;
-            padding: 10px 16px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            color: #2d3748;
+        /* Улучшенные стили для карты */
+        .leaflet-container {
+            background: #f8fafc;
             font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Стили для линии маршрута */
+        .route-line {
+            filter: drop-shadow(0 2px 4px rgba(90, 111, 216, 0.3));
+        }
+
+        /* Улучшенные стили для попапов */
+        .leaflet-popup-content-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid rgba(90, 111, 216, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .leaflet-popup-tip {
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
         }
 
-        .top-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(0,0,0,0.2);
-            background: white;
+        /* Кастомные контролы зума */
+        .leaflet-control-zoom a {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(90, 111, 216, 0.2) !important;
+            color: #5a6fd8 !important;
+            font-weight: 600;
+        }
+
+        .leaflet-control-zoom a:hover {
+            background: white !important;
+            color: #4a5fd0 !important;
         }
 
         @keyframes shimmer {
@@ -1047,16 +1037,6 @@
             <div id="map"></div>
         </div>
 
-        <!-- Верхние кнопки поверх карты -->
-        <div class="map-overlay top-controls">
-            <button class="top-button" onclick="goToCategoriesFromRoute()">
-                Выбор категорий
-            </button>
-            <button class="top-button" onclick="regenerateRoute()">
-                Поменять маршрут
-            </button>
-        </div>
-
         <!-- Нижняя панель с мини-профилями и кнопками -->
         <div class="map-overlay bottom-panel">
             <!-- Стек мини-профилей -->
@@ -1108,7 +1088,8 @@
         let selectedCategories = [];
         let usedPlacesHistory = new Set();
         let map;
-        let route;
+        let routeLayer;
+        let markers = [];
         let currentRoute = [];
         let userLocation = null;
         let placesDatabase = []; // Инициализируем пустым массивом
@@ -1277,7 +1258,7 @@
             });
         }
 
-        // Инициализация Яндекс Карт с пешеходным маршрутом
+        // Инициализация Leaflet карты с качественными тайлами CartoDB Voyager
         function initMap(routePlaces) {
             if (!routePlaces || routePlaces.length === 0) return;
             
@@ -1285,176 +1266,104 @@
             
             // Уничтожаем предыдущую карту, если она существует
             if (map) {
-                map.destroy();
+                map.remove();
+                markers = [];
             }
             
-            // Создаем карту со светлой темой
-            ymaps.ready(function() {
-                map = new ymaps.Map("map", {
-                    center: routePlaces[0].coordinates,
-                    zoom: 15
-                }, {
-                    // Убираем ВСЕ элементы управления
-                    suppressMapOpenBlock: true,
-                    suppressObsoleteBrowserNotifier: true,
-                    // Отключаем все стандартные элементы
-                    yandexMapDisablePoiInteractivity: true
-                });
-
-                // Убираем ВСЕ элементы управления с карты
-                map.controls.remove('geolocationControl');
-                map.controls.remove('trafficControl');
-                map.controls.remove('typeSelector');
-                map.controls.remove('rulerControl');
-                map.controls.remove('searchControl');
-                map.controls.remove('routeButtonControl');
-                map.controls.remove('fullscreenControl');
-                map.controls.remove('zoomControl');
-                map.controls.remove('miniMap');
-
-                // Создаем кастомные метки с номерами
-                routePlaces.forEach((place, index) => {
-                    const placemark = new ymaps.Placemark(
-                        place.coordinates,
-                        {
-                            // Минимальная информация в балуне
-                            balloonContent: `
-                                <div style="color: #333; padding: 8px; max-width: 200px;">
-                                    <strong style="color: #5a6fd8; font-size: 14px;">${index + 1}. ${place.name}</strong>
-                                    <div style="font-size: 12px; margin-top: 4px; color: #666;">${place.categories.join(', ')}</div>
-                                    <div style="font-size: 11px; margin-top: 2px; color: #888;">${place.address}</div>
-                                </div>
-                            `,
-                            // Подпись с номером
-                            iconCaption: `${index + 1}`
-                        },
-                        {
-                            // Кастомные иконки с цветами приложения и подписями
-                            preset: 'islands#circleIcon',
-                            iconColor: index === 0 ? '#5a6fd8' : '#ff6b6b',
-                            iconCaptionMaxWidth: 30,
-                            // Отключаем стандартное поведение
-                            hideIconOnBalloonOpen: false,
-                            openBalloonOnClick: false
-                        }
-                    );
-                    
-                    map.geoObjects.add(placemark);
-                });
+            // Создаем карту с центром на первом месте
+            map = L.map('map').setView(routePlaces[0].coordinates, 15);
+            
+            // ВАРИАНТ 1: CartoDB Voyager - СТИЛЬНЫЙ И СОВРЕМЕННЫЙ (РЕКОМЕНДУЮ)
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                maxZoom: 20,
+                subdomains: 'abcd'
+            }).addTo(map);
+            
+            // Улучшаем рендеринг карты
+            map.options.minZoom = 10;
+            map.options.maxZoom = 20;
+            map.options.zoomControl = false; // Скрываем стандартный zoom control
+            
+            // Создаем кастомные маркеры с номерами
+            routePlaces.forEach((place, index) => {
+                const isActive = index === currentPlaceIndex;
                 
-                // Строим пешеходный маршрут между точками
-                if (routePlaces.length > 1) {
-                    // Создаем мультимаршрут для пешехода
-                    const multiRoute = new ymaps.multiRouter.MultiRoute({
-                        referencePoints: routePlaces.map(place => place.coordinates),
-                        params: {
-                            routingMode: 'pedestrian' // ПЕШЕХОДНЫЙ маршрут
-                        }
-                    }, {
-                        boundsAutoApply: true,
-                        // ОСНОВНОЙ ПАРАМЕТР: скрываем маркеры на маршруте 
-                        routeActiveMarkerVisible: false,
-                        // Дополнительно скрываем баллун при клике
-                        routeOpenBalloonOnClick: false,
-                        // Настройки для сплошной линии маршрута с цветами приложения
-                        routeActiveStrokeWidth: 6,
-                        routeActiveStrokeColor: "#5a6fd8",
-                        routeActiveStrokeStyle: 'solid',
-                        routeStrokeWidth: 6,
-                        routeStrokeColor: "#5a6fd8",
-                        routeStrokeStyle: 'solid',
-                        // Убираем ВСЕ точки и подписи маршрута
-                        wayPointStartIconFillColor: 'transparent',
-                        wayPointStartIconStrokeColor: 'transparent',
-                        wayPointFinishIconFillColor: 'transparent',
-                        wayPointFinishIconStrokeColor: 'transparent',
-                        viaPointIconFillColor: 'transparent',
-                        viaPointIconStrokeColor: 'transparent',
-                        pinIconFillColor: 'transparent',
-                        pinIconStrokeColor: 'transparent',
-                        // Скрываем все элементы интерфейса маршрута
-                        wayPointVisible: false,
-                        viaPointVisible: false,
-                        pinVisible: false,
-                        // Отключаем отображение баллунов с информацией о маршруте
-                        routeOpenBalloonOnClick: false
-                    });
-                    
-                    // Добавляем маршрут на карту
-                    map.geoObjects.add(multiRoute);
-                    
-                    // Масштабируем карту чтобы показать весь маршрут
-                    map.setBounds(multiRoute.getBounds(), {
-                        checkZoomRange: true,
-                        zoomMargin: 30
-                    });
-
-                    // Слушаем событие обновления маршрута и скрываем все лишние элементы
-                    multiRoute.model.events.add('requestsuccess', function() {
-                        // Дополнительные меры для скрытия элементов
-                        setTimeout(hideAllRouteElements, 500);
-                    });
-                }
-
-                // Сразу применяем скрытие элементов
-                setTimeout(hideAllRouteElements, 100);
+                // Создаем кастомный маркер с улучшенным дизайном
+                const marker = L.marker(place.coordinates, {
+                    icon: L.divIcon({
+                        className: `leaflet-custom-marker ${isActive ? 'active' : ''}`,
+                        html: `
+                            <div style="
+                                width: 36px; 
+                                height: 36px; 
+                                display: flex; 
+                                align-items: center; 
+                                justify-content: center; 
+                                font-size: 14px; 
+                                font-weight: bold;
+                                background: ${isActive ? 'linear-gradient(45deg, #ff6b6b, #ee5a52)' : 'linear-gradient(45deg, #5a6fd8, #4a5fd0)'};
+                                border: 3px solid white;
+                                border-radius: 50%;
+                                box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+                                color: white;
+                                text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+                            ">${index + 1}</div>
+                        `,
+                        iconSize: [36, 36],
+                        iconAnchor: [18, 18]
+                    })
+                }).addTo(map);
                 
-                // Дополнительные попытки скрытия
-                setTimeout(hideAllRouteElements, 500);
-                setTimeout(hideAllRouteElements, 1000);
+                // Добавляем улучшенную всплывающую подсказку
+                marker.bindPopup(`
+                    <div style="color: #333; padding: 12px; max-width: 250px; font-family: 'Montserrat', sans-serif;">
+                        <strong style="color: #5a6fd8; font-size: 16px; display: block; margin-bottom: 8px;">${index + 1}. ${place.name}</strong>
+                        <div style="font-size: 13px; color: #666; margin-bottom: 6px;">${place.categories.join(', ')}</div>
+                        <div style="font-size: 12px; color: #888; margin-bottom: 8px;">📍 ${place.address}</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="color: #f6ad55; font-weight: 600;">⭐ ${place.rating}</span>
+                            <span style="background: #f7fafc; padding: 4px 8px; border-radius: 4px; font-size: 12px;">${place.price}</span>
+                        </div>
+                    </div>
+                `);
+                
+                markers.push(marker);
             });
-        }
-
-        // Функция для полного скрытия всех элементов маршрута
-        function hideAllRouteElements() {
-            // Список всех селекторов, которые нужно скрыть
-            const selectorsToHide = [
-                '.ymaps-2-1-79-route-panel',
-                '.ymaps-2-1-79-route-pedestrian-panel',
-                '.ymaps-2-1-79-route-pedestrian-summary',
-                '.ymaps-2-1-79-route-pedestrian-icon',
-                '.ymaps-2-1-79-route-pedestrian-view',
-                '.ymaps-2-1-79-route-pedestrian-sign',
-                '.ymaps-2-1-79-route-pedestrian-title',
-                '.ymaps-2-1-79-route-pedestrian-via',
-                '.ymaps-2-1-79-route-pedestrian-point',
-                '.ymaps-2-1-79-route-pedestrian',
-                '.ymaps-2-1-79-route-pedestrian-route-view',
-                '.ymaps-2-1-79-islets_icon_content',
-                '.ymaps-2-1-79-copyrights-pane',
-                '.ymaps-2-1-79-route-button',
-                // Селекторы для человечков и расстояний
-                '[class*="pedestrian"]',
-                '[class*="walk"]',
-                '[class*="distance"]',
-                '[class*="duration"]',
-                '[class*="human"]',
-                '[class*="person"]'
-            ];
-
-            selectorsToHide.forEach(selector => {
-                const elements = document.querySelectorAll(selector);
-                elements.forEach(element => {
-                    element.style.display = 'none';
-                    element.style.visibility = 'hidden';
-                    element.style.opacity = '0';
-                    if (element.remove) element.remove();
-                });
-            });
-
-            // Дополнительно ищем элементы по содержанию текста
-            const allElements = document.querySelectorAll('*');
-            allElements.forEach(element => {
-                const text = element.textContent || '';
-                if (text.includes('м') || text.includes('метр') || 
-                    text.includes('пешком') || text.includes('walk') ||
-                    text.includes('человек') || text.includes('human') ||
-                    text.includes('расстояние') || text.includes('distance')) {
-                    element.style.display = 'none';
-                    element.style.visibility = 'hidden';
-                    if (element.remove) element.remove();
+            
+            // Рисуем улучшенную линию маршрута между точками
+            if (routePlaces.length > 1) {
+                const routeCoordinates = routePlaces.map(place => place.coordinates);
+                
+                // Удаляем предыдущий маршрут, если есть
+                if (routeLayer) {
+                    map.removeLayer(routeLayer);
                 }
-            });
+                
+                // Создаем полилинию для маршрута с улучшенным стилем
+                routeLayer = L.polyline(routeCoordinates, {
+                    color: '#5a6fd8',
+                    weight: 6,
+                    opacity: 0.9,
+                    lineJoin: 'round',
+                    dashArray: '0',
+                    className: 'route-line'
+                }).addTo(map);
+                
+                // Масштабируем карту чтобы показать весь маршрут с отступами
+                map.fitBounds(routeLayer.getBounds(), {
+                    padding: [30, 30],
+                    maxZoom: 16
+                });
+            }
+            
+            // Центрируем на текущем месте
+            updateMapForCurrentPlace();
+            
+            // Добавляем кастомный контрол зума в правый нижний угол
+            L.control.zoom({
+                position: 'bottomright'
+            }).addTo(map);
         }
 
         // Обновление карты при смене текущего места
@@ -1463,8 +1372,24 @@
             
             const currentPlace = currentRoute[currentPlaceIndex];
             
-            // Центрируем карту на текущем месте
-            map.setCenter(currentPlace.coordinates, 16);
+            // Обновляем стили маркеров
+            markers.forEach((marker, index) => {
+                const isActive = index === currentPlaceIndex;
+                const iconElement = marker.getElement();
+                if (iconElement) {
+                    if (isActive) {
+                        iconElement.classList.add('active');
+                    } else {
+                        iconElement.classList.remove('active');
+                    }
+                }
+            });
+            
+            // Центрируем карту на текущем месте с анимацией
+            map.setView(currentPlace.coordinates, 16, {
+                animate: true,
+                duration: 0.5
+            });
         }
 
         function initTelegram() {
@@ -1499,8 +1424,9 @@
             nextButton.disabled = true;
             
             if (map) {
-                map.destroy();
+                map.remove();
                 map = null;
+                markers = [];
             }
         }
 
