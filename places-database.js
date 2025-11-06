@@ -70,7 +70,7 @@ window.placesDatabase = [
     {
         "id": 12, "name": "Duo Asia", "categories": ["Рестораны"], "icon": "🎻", "rating": 5.0, "price": "💰💰💰",
         "description": "Ресторан азиатской кухни на легендарной улице",
-        "features": ["Азиатская кухня"], "coordinates": [59.932500, 30.330833],
+        "features": ["Азиатская кухня"], "coordinates": [59.930065,30.344938],
         "address": "ул. Рубинштейна, 20", "website": "http://duoasia.ru/", "yandexlink": "https://yandex.ru/maps/org/106066698143"
     },
     {
