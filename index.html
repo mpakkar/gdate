@@ -1634,10 +1634,6 @@
                     }).addTo(placesMap);
                 });
                 
-                // Улучшаем рендеринг карты
-                placesMap.options.minZoom = 10;
-                placesMap.options.maxZoom = 20;
-                
                 // Добавляем маркеры всех мест
                 addPlacesToMap();
                 
@@ -1870,8 +1866,7 @@
 
                         // Подгоняем карту под весь маршрут
                         map.fitBounds(routeLayer.getBounds(), {
-                            padding: [30, 30],
-                            maxZoom: 16
+                            padding: [30, 30]
                         });
 
                         console.log(`✅ Пешеходный маршрут рассчитан: ${(route.distance / 1000).toFixed(2)} км, ${Math.ceil(route.duration / 60)} мин`);
@@ -1901,8 +1896,7 @@
             }).addTo(map);
 
             map.fitBounds(routeLayer.getBounds(), {
-                padding: [30, 30],
-                maxZoom: 16
+                padding: [30, 30]
             });
         }
 
@@ -1960,9 +1954,6 @@
                 return;
             }
             
-            // Улучшаем рендеринг карты
-            map.options.minZoom = 10;
-            map.options.maxZoom = 20;
             map.options.zoomControl = false; // Скрываем стандартный zoom control
             
             // Создаем кастомные маркеры с номерами
