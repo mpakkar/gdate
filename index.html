@@ -528,18 +528,23 @@
             pointer-events: none;
         }
 
-        .map-overlay * {
-            pointer-events: auto;
-        }
-
         /* Нижняя панель */
         .bottom-panel {
             bottom: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 400px;
+            background: transparent;
             padding: 20px 15px 30px;
             display: flex;
             flex-direction: column;
             gap: 20px;
+            pointer-events: none;
+        }
+
+        .bottom-panel * {
+            pointer-events: auto;
         }
 
         /* Мини-профили в виде стека */
