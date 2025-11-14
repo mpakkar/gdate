@@ -21,6 +21,15 @@
     <!-- ПОДКЛЮЧАЕМ БАЗУ ДАННЫХ ПОЛЬЗОВАТЕЛЕЙ -->
     <script src="users-database.js"></script>
     
+    <!-- ПОДКЛЮЧАЕМ БАЗУ ДАННЫХ ИСТОРИИ -->
+    <script src="history-database.js"></script>
+    
+    <!-- ПОДКЛЮЧАЕМ БАЗУ ДАННЫХ СТАТИСТИКИ -->
+    <script src="statistics-database.js"></script>
+    
+    <!-- ПОДКЛЮЧАЕМ СТАТИСТИКУ МЕСТ -->
+    <script src="place-statistics.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -352,6 +361,99 @@
             padding: 6px 15px;
             background: rgba(90, 111, 216, 0.1);
             border-radius: 20px;
+        }
+
+        .profile-statistics-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 2px solid rgba(90, 111, 216, 0.1);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .profile-stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(90, 111, 216, 0.1);
+        }
+
+        .profile-stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .profile-stat-label {
+            font-size: 0.95rem;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .profile-stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #5a6fd8;
+        }
+
+        .profile-statistics {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 2px solid rgba(90, 111, 216, 0.1);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .profile-stat-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .profile-categories-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .profile-category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: rgba(90, 111, 216, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(90, 111, 216, 0.1);
+        }
+
+        .profile-category-name {
+            font-size: 0.9rem;
+            color: #2d3748;
+            font-weight: 500;
+        }
+
+        .profile-category-count {
+            font-size: 0.9rem;
+            color: #5a6fd8;
+            font-weight: 600;
+            background: rgba(90, 111, 216, 0.1);
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        .profile-stat-text {
+            font-size: 0.9rem;
+            color: #718096;
+            text-align: center;
+            padding: 10px;
         }
 
         .profile-not-registered {
@@ -1766,6 +1868,68 @@
         let selectedUserType = null; // Выбранный тип пользователя при регистрации
         let currentUser = null; // Текущий пользователь
 
+        // ========== ФУНКЦИИ ОТСЛЕЖИВАНИЯ ДЕЙСТВИЙ ==========
+        
+        // Отслеживание действия пользователя
+        function trackAction(actionType, entityType, entityId, entityName, metadata = {}) {
+            try {
+                const user = getCurrentUser();
+                const userId = user ? (user.telegramId || user.name) : null;
+                const userType = user ? user.userType : null;
+                
+                // Записываем в историю
+                if (typeof addHistoryEntry === 'function') {
+                    addHistoryEntry({
+                        userId: userId,
+                        userType: userType,
+                        actionType: actionType,
+                        entityType: entityType,
+                        entityId: entityId,
+                        entityName: entityName,
+                        metadata: metadata
+                    });
+                }
+                
+                // Обновляем статистику
+                if (typeof incrementDailyStat === 'function') {
+                    incrementDailyStat(new Date(), actionType, 1);
+                    if (userType) {
+                        updateUserTypeStat(new Date(), userType, 1);
+                    }
+                }
+                
+                // Обновляем статистику пользователя
+                if (user && typeof incrementUserPlaceView === 'function') {
+                    if (actionType === 'place_view' && entityType === 'place') {
+                        const place = placesDatabase.find(p => p.id === entityId);
+                        if (place) {
+                            incrementUserPlaceView(user, entityId, entityName || place.name, place.categories);
+                        }
+                    } else if (actionType === 'route_view' && entityType === 'route') {
+                        if (typeof incrementUserRouteView === 'function') {
+                            incrementUserRouteView(user, entityId || 'route_' + Date.now());
+                        }
+                    }
+                }
+                
+                // Обновляем статистику мест
+                if (actionType === 'place_show' && entityType === 'place') {
+                    const place = placesDatabase.find(p => p.id === entityId);
+                    if (place && typeof incrementPlaceShowCount === 'function') {
+                        incrementPlaceShowCount(entityId, entityName || place.name, place.categories);
+                    }
+                }
+                
+                // Обновляем статистику категорий
+                if (metadata.category && typeof updateCategoryStat === 'function') {
+                    updateCategoryStat(new Date(), metadata.category, 1);
+                }
+                
+            } catch (error) {
+                console.error('Ошибка при отслеживании действия:', error);
+            }
+        }
+
         // Функция для проверки загрузки базы данных
         function checkDatabaseLoaded() {
             if (window.placesDatabase && window.placesDatabase.length > 0) {
@@ -2301,6 +2465,22 @@
                         </div>
                     </div>
                 `);
+                
+                // Отслеживаем просмотр места при открытии попапа
+                marker.on('popupopen', function() {
+                    trackAction('place_view', 'place', place.id, place.name, {
+                        category: place.categories ? place.categories.join(', ') : '',
+                        source: 'places_map',
+                        inRoute: false
+                    });
+                });
+                
+                // Отслеживаем показ места на карте
+                trackAction('place_show', 'place', place.id, place.name, {
+                    category: place.categories ? place.categories.join(', ') : '',
+                    source: 'places_map',
+                    inRoute: false
+                });
                 
                 // Добавляем маркер в кластер
                 placesMarkerCluster.addLayer(marker);
@@ -2979,6 +3159,11 @@
             const selectedCards = document.querySelectorAll('.category-card.selected');
             selectedCards.forEach(card => card.classList.remove('selected'));
             
+            // Отслеживаем просмотр страницы категорий
+            trackAction('category_view', 'category', 'categories_page', 'Страница категорий', {
+                action: 'view_categories_page'
+            });
+            
             initializeCategories();
         }
 
@@ -3036,6 +3221,12 @@
             } else {
                 selectedCategories.push(categoryName);
                 element.classList.add('selected');
+                
+                // Отслеживаем выбор категории
+                trackAction('category_view', 'category', categoryName, categoryName, {
+                    action: 'select_category',
+                    selectedCategories: selectedCategories.length
+                });
             }
             
             const nextButton = document.getElementById('nextButton');
@@ -3302,6 +3493,35 @@
             currentRoute = route;
             currentPlaceIndex = 0;
 
+            // Отслеживаем просмотр маршрута
+            if (route && route.length > 0) {
+                const routeId = 'route_' + Date.now() + '_' + route.map(p => p.id).join('_');
+                trackAction('route_view', 'route', routeId, `Маршрут из ${route.length} мест`, {
+                    placeCount: route.length,
+                    categories: route.flatMap(p => p.categories || []).filter((v, i, a) => a.indexOf(v) === i)
+                });
+                
+                // Отслеживаем показ каждого места в маршруте
+                route.forEach((place, index) => {
+                    trackAction('place_show', 'place', place.id, place.name, {
+                        category: place.categories ? place.categories.join(', ') : '',
+                        routeIndex: index,
+                        inRoute: true
+                    });
+                });
+                
+                // Отслеживаем просмотр первого места в маршруте
+                if (route[0]) {
+                    const firstPlace = route[0];
+                    trackAction('place_view', 'place', firstPlace.id, firstPlace.name, {
+                        category: firstPlace.categories ? firstPlace.categories.join(', ') : '',
+                        routeIndex: 0,
+                        inRoute: true,
+                        isFirstPlace: true
+                    });
+                }
+            }
+
             // Ждем, пока страница отрендерится, затем инициализируем карту
             setTimeout(() => {
                 // Инициализируем карту
@@ -3400,6 +3620,17 @@
             // Циклическая навигация: после последнего места переходим на первое
             currentPlaceIndex = (currentPlaceIndex + 1) % currentRoute.length;
             
+            // Отслеживаем просмотр места
+            if (currentRoute[currentPlaceIndex]) {
+                const place = currentRoute[currentPlaceIndex];
+                trackAction('place_view', 'place', place.id, place.name, {
+                    category: place.categories ? place.categories.join(', ') : '',
+                    routeIndex: currentPlaceIndex,
+                    inRoute: true,
+                    navigation: 'next'
+                });
+            }
+            
             updateMiniProfiles();
             updatePlaceCounter();
             updateNavigationButtons();
@@ -3412,6 +3643,17 @@
             
             // Циклическая навигация: перед первым местом переходим на последнее
             currentPlaceIndex = (currentPlaceIndex - 1 + currentRoute.length) % currentRoute.length;
+            
+            // Отслеживаем просмотр места
+            if (currentRoute[currentPlaceIndex]) {
+                const place = currentRoute[currentPlaceIndex];
+                trackAction('place_view', 'place', place.id, place.name, {
+                    category: place.categories ? place.categories.join(', ') : '',
+                    routeIndex: currentPlaceIndex,
+                    inRoute: true,
+                    navigation: 'prev'
+                });
+            }
             
             updateMiniProfiles();
             updatePlaceCounter();
@@ -3635,14 +3877,64 @@
             console.log('✅ У пользователя есть данные:', hasUserData);
             
             if (hasUserData) {
+                // Получаем статистику пользователя
+                let userStats = null;
+                if (typeof getUserStatistics === 'function') {
+                    userStats = getUserStatistics(user);
+                } else {
+                    // Если функция недоступна, используем данные напрямую
+                    userStats = {
+                        totalPlacesViewed: user.statistics?.totalPlacesViewed || 0,
+                        totalRoutesViewed: user.statistics?.totalRoutesViewed || 0,
+                        totalCategoriesViewed: user.statistics?.totalCategoriesViewed || 0,
+                        topCategories: []
+                    };
+                    if (user.statistics?.viewedCategories) {
+                        userStats.topCategories = Object.keys(user.statistics.viewedCategories)
+                            .map(category => ({
+                                category: category,
+                                count: user.statistics.viewedCategories[category]
+                            }))
+                            .sort((a, b) => b.count - a.count)
+                            .slice(0, 5);
+                    }
+                }
+                
                 // Показываем профиль зарегистрированного пользователя
                 const userTypeText = user.userType === 'user' ? 'Пользователь' : 'Представитель места';
+                const topCategoriesHtml = userStats && userStats.topCategories && userStats.topCategories.length > 0
+                    ? `
+                        <div class="profile-statistics">
+                            <div class="profile-stat-title">Самые просматриваемые категории</div>
+                            <div class="profile-categories-list">
+                                ${userStats.topCategories.map(cat => `
+                                    <div class="profile-category-item">
+                                        <span class="profile-category-name">${cat.category}</span>
+                                        <span class="profile-category-count">${cat.count}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `
+                    : '<div class="profile-statistics"><div class="profile-stat-text">Вы еще не просматривали категории</div></div>';
+                
                 profileContent.innerHTML = `
                     <div class="profile-info">
                         <div class="profile-avatar">👤</div>
                         <div class="profile-name">${user.name}</div>
                         <div class="profile-type">${userTypeText}</div>
                     </div>
+                    <div class="profile-statistics-section">
+                        <div class="profile-stat-item">
+                            <div class="profile-stat-label">Всего просмотрено мест</div>
+                            <div class="profile-stat-value">${userStats?.totalPlacesViewed || 0}</div>
+                        </div>
+                        <div class="profile-stat-item">
+                            <div class="profile-stat-label">Всего просмотрено маршрутов</div>
+                            <div class="profile-stat-value">${userStats?.totalRoutesViewed || 0}</div>
+                        </div>
+                    </div>
+                    ${topCategoriesHtml}
                 `;
                 console.log('✅ Профиль зарегистрированного пользователя отображен');
             } else {
@@ -3732,30 +4024,48 @@
                 return;
             }
             
-            // Получаем данные из Telegram, если доступно
-            let telegramId = null;
-            if (typeof Telegram !== 'undefined' && Telegram.WebApp && Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
-                telegramId = Telegram.WebApp.initDataUnsafe.user.id;
-            }
-            
-            // Регистрируем пользователя
-            const user = {
-                telegramId: telegramId,
-                name: name,
-                userType: selectedUserType,
-                registered: true,
-                registeredAt: new Date().toISOString()
-            };
-            
-            // Сохраняем в localStorage
+            // Используем функцию registerUser из users-database.js
             try {
-                localStorage.setItem('userData', JSON.stringify(user));
-                currentUser = user;
+                let user = null;
+                if (typeof registerUser === 'function') {
+                    user = registerUser(name, selectedUserType);
+                } else {
+                    // Если функция недоступна, создаем пользователя вручную
+                    const telegramId = (typeof Telegram !== 'undefined' && Telegram.WebApp && Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) 
+                        ? Telegram.WebApp.initDataUnsafe.user.id : null;
+                    user = {
+                        telegramId: telegramId,
+                        name: name,
+                        userType: selectedUserType,
+                        registered: true,
+                        registeredAt: new Date().toISOString(),
+                        statistics: {
+                            totalPlacesViewed: 0,
+                            totalRoutesViewed: 0,
+                            totalCategoriesViewed: 0,
+                            viewedCategories: {},
+                            viewedPlaces: {},
+                            viewedRoutes: [],
+                            lastActivity: new Date().toISOString()
+                        }
+                    };
+                    if (typeof saveUserToStorage === 'function') {
+                        saveUserToStorage(user);
+                    } else {
+                        localStorage.setItem('userData', JSON.stringify(user));
+                    }
+                }
                 
-                // Возвращаемся на страницу профиля
-                document.getElementById('page8').classList.remove('active');
-                document.getElementById('page7').classList.add('active');
-                showProfile();
+                if (user) {
+                    currentUser = user;
+                    
+                    // Возвращаемся на страницу профиля
+                    document.getElementById('page8').classList.remove('active');
+                    document.getElementById('page7').classList.add('active');
+                    showProfile();
+                } else {
+                    alert('Ошибка при регистрации. Пожалуйста, попробуйте еще раз.');
+                }
             } catch (error) {
                 console.error('Ошибка при сохранении данных пользователя:', error);
                 alert('Ошибка при сохранении данных. Пожалуйста, попробуйте еще раз.');
