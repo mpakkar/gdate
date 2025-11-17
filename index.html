@@ -83,10 +83,55 @@
 
         .subtitle {
             font-size: 0.75rem;
-            opacity: 0.8;
             font-weight: 400;
             color: #718096;
             letter-spacing: 0.2px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 0 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(90, 111, 216, 0.1);
+            max-width: 320px;
+            width: 100%;
+            margin: 0 auto;
+            line-height: 1.6;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease, padding 0.3s ease;
+        }
+        
+        .subtitle.show {
+            max-height: 500px;
+            opacity: 0.9;
+            margin-top: 10px;
+            margin-bottom: 0;
+            padding: 15px 20px;
+        }
+        
+        .more-info-button {
+            background: rgba(255, 255, 255, 0.95);
+            color: #718096;
+            border: 2px solid rgba(90, 111, 216, 0.2);
+            padding: 8px 16px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            max-width: 280px;
+            width: 100%;
+            margin: 8px auto 0 auto;
+            text-align: center;
+        }
+        
+        .more-info-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            background: white;
+            border-color: rgba(90, 111, 216, 0.3);
+            color: #5a6fd8;
         }
 
         /* Кнопка профиля на первой странице */
@@ -226,6 +271,16 @@
             flex: 1;
             overflow-y: auto;
             padding: 10px;
+            padding-bottom: 80px; /* Отступ снизу для кнопки "Назад" */
+        }
+        
+        /* Закрепляем кнопку "Назад" внизу страницы идей */
+        #page6 .buttons-container {
+            position: sticky;
+            bottom: 0;
+            padding: 15px 0 10px 0;
+            margin-top: -60px;
+            z-index: 10;
         }
 
         .idea-card {
@@ -662,7 +717,7 @@
             display: flex;
             gap: 10px;
             width: 100%;
-            max-width: 280px;
+            max-width: 320px;
             margin-top: 10px;
         }
 
@@ -1595,6 +1650,10 @@
         
         <div class="header">
             <h1 class="title">great date</h1>
+            <button class="more-info-button" onclick="toggleMoreInfo(this)">
+                Подробнее об этой странице
+            </button>
+            <p class="subtitle">Создайте идеальный маршрут для незабываемого свидания.<br>Выберите категории мест, воспользуйтесь готовыми сценариями<br>или вдохновитесь нашими идеями маршрутов</p>
         </div>
 
         <!-- НОВЫЙ КОНТЕЙНЕР С КНОПКАМИ -->
@@ -1625,7 +1684,10 @@
     <div class="page" id="page2">
         <div class="header">
             <h1 class="title">Выберите категории</h1>
-            <p class="subtitle">Отметьте интересные вам виды мест</p>
+            <button class="more-info-button" onclick="toggleMoreInfo(this)">
+                Подробнее об этой странице
+            </button>
+            <p class="subtitle">Отметьте интересные вам виды мест.<br>Мы подберем лучшие места по выбранным категориям<br>и построим оптимальный маршрут для вашей прогулки</p>
         </div>
 
         <div class="search-container">
@@ -1718,7 +1780,10 @@
     <div class="page" id="page5">
         <div class="header">
             <h1 class="title">Сценарии маршрутов</h1>
-            <p class="subtitle">Выберите подходящий сценарий</p>
+            <button class="more-info-button" onclick="toggleMoreInfo(this)">
+                Подробнее об этой странице
+            </button>
+            <p class="subtitle">Выберите подходящий сценарий для вашего свидания.<br>Мы автоматически подберем места и построим маршрут,<br>идеально подходящий для романтической пары, прогулки с детьми,<br>большой компании или туристического маршрута</p>
         </div>
 
         <!-- Контейнер с кнопками сценариев -->
@@ -1755,7 +1820,10 @@
     <div class="page" id="page6">
         <div class="header">
             <h1 class="title">Идеи маршрутов</h1>
-            <p class="subtitle">Выберите интересную идею для прогулки</p>
+            <button class="more-info-button" onclick="toggleMoreInfo(this)">
+                Подробнее об этой странице
+            </button>
+            <p class="subtitle">Выберите интересную идею для прогулки.<br>Каждая идея содержит готовый маршрут с тремя специально подобранными местами,<br>которые идеально сочетаются друг с другом для незабываемого свидания</p>
         </div>
 
         <!-- Контейнер с идеями маршрутов -->
@@ -1774,6 +1842,10 @@
     <div class="page" id="page7">
         <div class="header">
             <h1 class="title">Профиль</h1>
+            <button class="more-info-button" onclick="toggleMoreInfo(this)">
+                Подробнее об этой странице
+            </button>
+            <p class="subtitle">Просмотрите свою статистику: самые просматриваемые категории,<br>количество просмотренных мест и маршрутов.<br>Зарегистрируйтесь, чтобы сохранить свой прогресс</p>
         </div>
 
         <!-- Контент профиля -->
@@ -1792,7 +1864,10 @@
     <div class="page" id="page8">
         <div class="header">
             <h1 class="title">Регистрация</h1>
-            <p class="subtitle">Заполните данные для регистрации</p>
+            <button class="more-info-button" onclick="toggleMoreInfo(this)">
+                Подробнее об этой странице
+            </button>
+            <p class="subtitle">Заполните данные для регистрации.<br>Укажите ваше имя и тип пользователя, чтобы мы могли<br>персонализировать рекомендации и сохранить вашу статистику просмотров</p>
         </div>
 
         <!-- Форма регистрации -->
@@ -2619,11 +2694,12 @@
             
             map.options.zoomControl = false; // Скрываем стандартный zoom control
             
-            // Создаем кастомные маркеры с номерами
+            // Создаем кастомные маркеры с иконками мест
             routePlaces.forEach((place, index) => {
                 const isActive = index === currentPlaceIndex;
+                const placeIcon = getPlaceIcon(place);
                 
-                // Создаем кастомный маркер с улучшенным дизайном
+                // Создаем кастомный маркер с иконкой места
                 const marker = L.marker(place.coordinates, {
                     icon: L.divIcon({
                         className: `leaflet-custom-marker ${isActive ? 'active' : ''}`,
@@ -2634,15 +2710,12 @@
                                 display: flex; 
                                 align-items: center; 
                                 justify-content: center; 
-                                font-size: 14px; 
-                                font-weight: bold;
+                                font-size: 20px; 
                                 background: ${isActive ? 'linear-gradient(45deg, #ff6b6b, #ee5a52)' : 'linear-gradient(45deg, #5a6fd8, #4a5fd0)'};
-                                border: 3px solid white;
+                                border: 2px solid white;
                                 border-radius: 50%;
                                 box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-                                color: white;
-                                text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-                            ">${index + 1}</div>
+                            ">${placeIcon}</div>
                         `,
                         iconSize: [36, 36],
                         iconAnchor: [18, 18]
@@ -2931,6 +3004,20 @@
         function goBackToMainFromPlacesMap() {
             document.getElementById('page4').classList.remove('active');
             document.getElementById('page1').classList.add('active');
+        }
+        
+        // Переключение видимости описания страницы
+        function toggleMoreInfo(button) {
+            const header = button.closest('.header');
+            const subtitle = header.querySelector('.subtitle');
+            
+            if (subtitle.classList.contains('show')) {
+                subtitle.classList.remove('show');
+                button.textContent = 'Подробнее об этой странице';
+            } else {
+                subtitle.classList.add('show');
+                button.textContent = 'Скрыть описание';
+            }
         }
 
         // Переход к сценариям маршрутов
